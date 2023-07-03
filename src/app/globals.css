@@ -105,3 +105,10 @@ a {
     color-scheme: dark;
   }
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}

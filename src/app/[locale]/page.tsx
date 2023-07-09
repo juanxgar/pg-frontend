@@ -22,7 +22,7 @@ import Image from "next/image";
 import { LoginSchema } from "@/schemas";
 import { useTranslations } from "next-intl";
 import { SignInRequest } from "@/types/request.type";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import LogoSkeleton from "@/components/login/LogoSkeleton";
 import FormSkeleton from "@/components/login/FormSkeleton";
 import SnackbarComponent from "@/components/general/SnackbarComponent";
@@ -34,8 +34,7 @@ interface Props {
 }
 
 export default function Page(props: Props) {
-  const { status } = useSession();
-  const router = useRouter();
+  const { data: session, status } = useSession();
   const t = useTranslations();
 
   const [show, setShow] = useState(false);
@@ -61,7 +60,7 @@ export default function Page(props: Props) {
     setOpenSnackbar(true);
   };
 
-  const handleClose = () => {
+  const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
 
@@ -77,7 +76,7 @@ export default function Page(props: Props) {
       if (res?.url != null) {
         handleOpenSnackbar("success", t("login.correctLogin"));
         setTimeout(() => {
-          router.push(`/${props.params.locale}/home`);
+          window.location.reload();
         }, 2000);
       } else {
         handleOpenSnackbar("error", t("login.incorrectLogin"));
@@ -88,7 +87,11 @@ export default function Page(props: Props) {
   };
 
   if (status === "authenticated") {
-    redirect(`/${props.params.locale}/home`);
+    if (session?.accessToken.role === "Estudiante") {
+      redirect(`/${props.params.locale}/admin`);
+    } else {
+      redirect(`/${props.params.locale}/home`);
+    }
   }
 
   return (
@@ -102,7 +105,7 @@ export default function Page(props: Props) {
         >
           <SnackbarComponent
             open={openSnackbar}
-            handleClose={handleClose}
+            handleClose={handleCloseSnackbar}
             severity={severitySnackbar}
             message={messageSnackbar}
           />
@@ -244,7 +247,7 @@ export default function Page(props: Props) {
                             </LinkMaterial>
                             <Box
                               sx={{
-                                width: "50%",
+                                width: lg ? "50%" : "80%",
                                 marginTop: "30px",
                                 float: "right",
                               }}

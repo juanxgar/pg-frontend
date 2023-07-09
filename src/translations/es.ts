@@ -11,6 +11,7 @@ export const es = {
     description: "Inicio de sesión",
     forgotPassword: "¿Olvidó su contraseña?",
     logIn: "Iniciar sesión",
+    logOut: "Cerrar sesión",
     incorrectLogin: "Usuario o contraseña incorrectos",
     correctLogin: "Inicio de sesión exitoso",
   },

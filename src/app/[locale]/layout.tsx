@@ -1,8 +1,8 @@
 "use client";
 
-import { notFound } from "next/navigation";
+import { notFound, usePathname } from "next/navigation";
 import { createTranslator, NextIntlClientProvider } from "next-intl";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { es } from "@/translations";
 import { NextAuthProvider } from "../providers";
 
@@ -37,10 +37,25 @@ export function generateMetadata({ params: { locale } }: Props) {
 
 export default function LocaleLayout({ children, params: { locale } }: Props) {
   const messages = getMessages(locale);
+  const pathname = usePathname();
+
+  const [background, setBackground] = useState("white");
+
+  useEffect(() => {
+    if (pathname == `/${locale}`) {
+      setBackground("linear-gradient(to right, white, #048014)");
+    } else {
+      setBackground("white");
+    }
+  }, [pathname]);
 
   return (
     <html lang={locale}>
-      <body style={{ background: "linear-gradient(to right, white, #048014)" }}>
+      <body
+        style={{
+          background: background,
+        }}
+      >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <NextAuthProvider>{children}</NextAuthProvider>
         </NextIntlClientProvider>

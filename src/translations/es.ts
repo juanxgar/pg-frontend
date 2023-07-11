@@ -14,6 +14,7 @@ export const es = {
     logOut: "Cerrar sesión",
     incorrectLogin: "Usuario o contraseña incorrectos",
     correctLogin: "Inicio de sesión exitoso",
+    sessionClosed: "Sesión terminada",
   },
   user: {
     email: "Correo electrónico",

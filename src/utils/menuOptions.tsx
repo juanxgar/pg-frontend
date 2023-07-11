@@ -1,9 +1,10 @@
 "use client";
 
 import { ReactElement } from "react";
-import { People, Person } from "@mui/icons-material";
+import { MedicalInformation, People, Person } from "@mui/icons-material";
+import { MenuOptions } from "@/types/common.type";
 
-export const MenuOptionsEs = [
+export const MenuOptionsAdminEs: Array<MenuOptions> = [
   {
     name: "Gestión de Usuarios",
     pathname: undefined,
@@ -21,4 +22,14 @@ export const MenuOptionsEs = [
       },
     ],
   },
+  {
+    name: "Especialidades",
+    pathname: "/specialities",
+    icon: (): ReactElement => <MedicalInformation />,
+    items: [],
+  },
 ];
+
+export const MenuOptionsStudentEs: Array<MenuOptions> = [];
+
+export const MenuOptionsProfessorEs: Array<MenuOptions> = [];

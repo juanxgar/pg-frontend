@@ -1,10 +1,14 @@
 "use client";
 
-import { notFound, usePathname } from "next/navigation";
+import { notFound, redirect, usePathname } from "next/navigation";
 import { createTranslator, NextIntlClientProvider } from "next-intl";
 import { ReactNode, useEffect, useState } from "react";
 import { es } from "@/translations";
 import { NextAuthProvider } from "../providers";
+import { useSession } from "next-auth/react";
+import { lightTheme } from "@/themes";
+import { useMediaQuery } from "@mui/material";
+import Layout from "@/components/general/layouts/layout";
 
 type Props = {
   children?: ReactNode;
@@ -35,14 +39,15 @@ export function generateMetadata({ params: { locale } }: Props) {
   };
 }
 
-export default function LocaleLayout({ children, params: { locale } }: Props) {
-  const messages = getMessages(locale);
+export default function LocaleLayout(props: Props) {
+  const { children, params } = props;
+  const messages = getMessages(params.locale);
   const pathname = usePathname();
 
   const [background, setBackground] = useState("white");
 
   useEffect(() => {
-    if (pathname == `/${locale}`) {
+    if (pathname == `/${params.locale}`) {
       setBackground("linear-gradient(to right, white, #048014)");
     } else {
       setBackground("white");
@@ -50,14 +55,16 @@ export default function LocaleLayout({ children, params: { locale } }: Props) {
   }, [pathname]);
 
   return (
-    <html lang={locale}>
+    <html lang={params.locale}>
       <body
         style={{
           background: background,
         }}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <NextAuthProvider>{children}</NextAuthProvider>
+        <NextIntlClientProvider locale={params.locale} messages={messages}>
+          <NextAuthProvider>
+            <Layout params={{ locale: params.locale }}>{children}</Layout>
+          </NextAuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

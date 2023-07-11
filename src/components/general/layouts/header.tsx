@@ -76,7 +76,7 @@ export default function Header(props: Props) {
           open={openSnackbar}
           handleClose={handleCloseSnackbar}
           severity={"info"}
-          message={t("Sesión terminada")}
+          message={t("login.sessionClosed")}
         />
         <Toolbar>
           <Grid

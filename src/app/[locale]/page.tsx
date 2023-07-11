@@ -22,7 +22,6 @@ import Image from "next/image";
 import { LoginSchema } from "@/schemas";
 import { useTranslations } from "next-intl";
 import { SignInRequest } from "@/types/request.type";
-import { redirect } from "next/navigation";
 import LogoSkeleton from "@/components/login/LogoSkeleton";
 import FormSkeleton from "@/components/login/FormSkeleton";
 import SnackbarComponent from "@/components/general/SnackbarComponent";
@@ -34,7 +33,8 @@ interface Props {
 }
 
 export default function Page(props: Props) {
-  const { data: session, status } = useSession();
+  const { params } = props;
+  const { status, update } = useSession();
   const t = useTranslations();
 
   const [show, setShow] = useState(false);
@@ -74,9 +74,10 @@ export default function Page(props: Props) {
       });
 
       if (res?.url != null) {
+        update();
         handleOpenSnackbar("success", t("login.correctLogin"));
         setTimeout(() => {
-          window.location.reload();
+          window.location.href = `/${params.locale}/home`;
         }, 2000);
       } else {
         handleOpenSnackbar("error", t("login.incorrectLogin"));
@@ -85,14 +86,6 @@ export default function Page(props: Props) {
       handleOpenSnackbar("error", t("commons.apiError"));
     }
   };
-
-  if (status === "authenticated") {
-    if (session?.accessToken.role === "Estudiante") {
-      redirect(`/${props.params.locale}/admin`);
-    } else {
-      redirect(`/${props.params.locale}/home`);
-    }
-  }
 
   return (
     <>

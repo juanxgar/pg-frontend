@@ -4,9 +4,9 @@ import { Box, Divider, useMediaQuery } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
-import Navbar from "@/components/general/layouts/navbar";
-import Header from "@/components/general/layouts/header";
-import Footer from "@/components/general/Footer";
+import Navbar from "@/components/general/layout/Navbar";
+import Header from "@/components/general/layout/Header";
+import Footer from "@/components/general/layout/Footer";
 import { redirect } from "next/navigation";
 import { lightTheme } from "@/themes";
 

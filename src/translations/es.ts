@@ -6,6 +6,8 @@ export const es = {
     validations: {
       requiredField: "Campo requerido",
     },
+    students: "Estudiantes",
+    professors: "Docentes",
   },
   login: {
     description: "Inicio de sesión",

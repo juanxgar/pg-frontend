@@ -1,11 +1,11 @@
 "use client";
 
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 
 interface Props {
   params: { locale: string };
 }
 
 export default function Page(props: Props) {
-  return <Box>{props.params.locale} home</Box>;
+  return <Box></Box>;
 }

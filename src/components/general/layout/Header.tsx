@@ -8,6 +8,8 @@ import {
   useMediaQuery,
   Avatar,
   MenuItem,
+  Typography,
+  Tooltip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import {
@@ -88,7 +90,7 @@ export default function Header(props: Props) {
             <Grid item xs={1}>
               {open ? (
                 <IconButton
-                  style={{ backgroundColor: "#048014" }}
+                  style={{ backgroundColor: "#048014", color: "#FFFFFF" }}
                   aria-label="open drawer"
                   onClick={onDrawerToggle}
                   edge="start"
@@ -97,7 +99,7 @@ export default function Header(props: Props) {
                 </IconButton>
               ) : (
                 <IconButton
-                  style={{ backgroundColor: "#048014" }}
+                  style={{ backgroundColor: "#048014", color: "#FFFFFF" }}
                   aria-label="open drawer"
                   onClick={onDrawerToggle}
                   edge="start"
@@ -108,7 +110,7 @@ export default function Header(props: Props) {
             </Grid>
             <Grid item xs={11}>
               <Grid container spacing={0}>
-                <Grid item xs={11} lg={10}>
+                <Grid item xs={11} lg={9}>
                   <Box
                     sx={{
                       width: "100%",
@@ -126,20 +128,9 @@ export default function Header(props: Props) {
                       src={Images.logo}
                       alt="Logo UCEVA"
                     />
-                    {lg && (
-                      <Image
-                        style={{
-                          marginLeft: "20px",
-                          maxWidth: xs ? "150px" : "200px",
-                          height: "40px",
-                        }}
-                        src={Images.logo}
-                        alt="Logo UCEVA"
-                      />
-                    )}
                   </Box>
                 </Grid>
-                <Grid item xs={1} lg={2}>
+                <Grid item xs={1} lg={3}>
                   <Box
                     sx={{
                       width: "100%",
@@ -149,12 +140,23 @@ export default function Header(props: Props) {
                       alignItems: "center",
                     }}
                   >
+                    {lg && (
+                      <Typography
+                        paddingTop={1}
+                        paddingBottom={1}
+                        fontWeight="bold"
+                        fontSize="18px"
+                        color="#048014"
+                        marginRight={lg ? "15px" : "0px"}
+                      >
+                        Nombre de usuario
+                      </Typography>
+                    )}
                     <IconButton
                       aria-label="open drawer"
                       onClick={handleOpenMenu}
                       edge="start"
                     >
-                      {" "}
                       {lg && (
                         <Avatar
                           sx={{

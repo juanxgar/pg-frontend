@@ -1,14 +1,11 @@
 "use client";
 
-import { notFound, redirect, usePathname } from "next/navigation";
+import { notFound, usePathname } from "next/navigation";
 import { createTranslator, NextIntlClientProvider } from "next-intl";
 import { ReactNode, useEffect, useState } from "react";
 import { es } from "@/translations";
 import { NextAuthProvider } from "../providers";
-import { useSession } from "next-auth/react";
-import { lightTheme } from "@/themes";
-import { useMediaQuery } from "@mui/material";
-import Layout from "@/components/general/layouts/layout";
+import Layout from "@/components/general/layout/Layout";
 
 type Props = {
   children?: ReactNode;
@@ -56,7 +53,7 @@ export default function LocaleLayout(props: Props) {
 
   return (
     <html lang={params.locale}>
-      <body
+      <body 
         style={{
           background: background,
         }}

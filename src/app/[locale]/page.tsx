@@ -1,6 +1,6 @@
 "use client";
 
-import Footer from "@/components/general/Footer";
+import Footer from "@/components/general/layout/Footer";
 import { Images } from "@/utils";
 import {
   Box,
@@ -24,7 +24,7 @@ import { useTranslations } from "next-intl";
 import { SignInRequest } from "@/types/request.type";
 import LogoSkeleton from "@/components/login/LogoSkeleton";
 import FormSkeleton from "@/components/login/FormSkeleton";
-import SnackbarComponent from "@/components/general/SnackbarComponent";
+import SnackbarComponent from "@/components/general/snackbarComponent";
 import { useEffect, useState } from "react";
 
 interface Props {

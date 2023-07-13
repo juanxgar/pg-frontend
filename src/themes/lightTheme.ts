@@ -9,6 +9,7 @@ const initialTheme = createTheme({
     },
   },
   typography: {
+    fontFamily: `Roboto`,
     h5: {
       fontWeight: 500,
       fontSize: 30,
@@ -42,6 +43,23 @@ export const lightTheme = {
         },
       },
     },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          "&$selected": {
+            backgroundColor: "red",
+            "&:hover": {
+              backgroundColor: "orange",
+            },
+          },
+        },
+        button: {
+          "&:hover": {
+            backgroundColor: "yellow",
+          },
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -72,12 +90,14 @@ export const lightTheme = {
       styleOverrides: {
         root: {
           textTransform: "none",
-          margin: "0 16px",
-          minWidth: 0,
-          padding: 0,
-          [initialTheme.breakpoints.up("md")]: {
-            padding: 0,
-            minWidth: 0,
+          color: "#048014",
+          fontWeight: "600",
+          fontSize: '18px',          
+          padding: 10,
+          "&.Mui-selected": {
+            backgroundColor: "#048014",
+            color: "#ffffff",
+            borderRadius: '0px 0px 12px 12px'
           },
         },
       },
@@ -107,7 +127,14 @@ export const lightTheme = {
       styleOverrides: {
         root: {
           "&.Mui-selected": {
-            color: "#FFFFFF",
+            color: "#000000",
+            background: "#EFEFEF",
+          },
+          "&.Mui-selected:hover": {
+            background: "#EFEFEF",
+          },
+          "&:hover": {
+            background: "#EFEFEF",
           },
         },
       },
@@ -123,7 +150,7 @@ export const lightTheme = {
     MuiListItemIcon: {
       styleOverrides: {
         root: {
-          color: "inherit",
+          color: "blue",
           minWidth: "auto",
           marginRight: initialTheme.spacing(2),
           "& svg": {

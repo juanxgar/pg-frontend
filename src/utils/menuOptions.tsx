@@ -1,10 +1,17 @@
 "use client";
 
 import { ReactElement } from "react";
-import { MedicalInformation, People, Person } from "@mui/icons-material";
+import { Home, MedicalInformation, People, Person } from "@mui/icons-material";
 import { MenuOptions } from "@/types/common.type";
 
 export const MenuOptionsAdminEs: Array<MenuOptions> = [
+  
+  {
+    name: "Inicio",
+    pathname: "/home",
+    icon: (): ReactElement => <Home />,
+    items: [],
+  },
   {
     name: "Gestión de Usuarios",
     pathname: undefined,
@@ -12,19 +19,19 @@ export const MenuOptionsAdminEs: Array<MenuOptions> = [
     items: [
       {
         name: "Usuarios",
-        pathname: "/users",
+        pathname: "/admin/users",
         icon: (): ReactElement => <Person />,
       },
       {
         name: "Grupos",
-        pathname: "/groups",
+        pathname: "/admin/groups",
         icon: (): ReactElement => <People />,
       },
     ],
   },
   {
     name: "Especialidades",
-    pathname: "/specialities",
+    pathname: "/admin/specialities",
     icon: (): ReactElement => <MedicalInformation />,
     items: [],
   },

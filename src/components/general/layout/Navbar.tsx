@@ -1,11 +1,17 @@
 "use client";
 
 import { MenuOptions } from "@/types/common.type";
-import { MenuOptionsAdminEs, MenuOptionsProfessorEs, MenuOptionsStudentEs } from "@/utils";
+import {
+  Images,
+  MenuOptionsAdminEs,
+  MenuOptionsProfessorEs,
+  MenuOptionsStudentEs,
+} from "@/utils";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Box,
   Collapse,
+  Divider,
   Drawer,
   List,
   ListItem,
@@ -17,7 +23,8 @@ import {
 } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -30,6 +37,8 @@ export default function Navbar(props: Props) {
   const { open, onClose, locale } = props;
 
   const { data: session, status } = useSession();
+
+  const actualPathname = usePathname();
 
   const router = useRouter();
 
@@ -81,21 +90,47 @@ export default function Navbar(props: Props) {
         variant={lg ? "persistent" : "temporary"}
         style={{ width: "200px", minHeight: "98vh" }}
       >
+        <Box
+          sx={{
+            direction: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            display: "flex",
+            marginTop: "20px",
+            marginBottom: "30px",
+          }}
+        >
+          <Image
+            style={{
+              maxWidth: "150px",
+              height: "40px",
+            }}
+            src={Images.logo}
+            alt="Logo UCEVA"
+          />
+        </Box>
+        {!lg && (
+          <Box
+            sx={{
+              direction: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              display: "flex",
+              marginBottom: "10px",
+            }}
+          >
+            <Typography
+              paddingTop={1}
+              paddingBottom={1}
+              fontWeight="bold"
+              fontSize="18px"
+              color="#048014"
+            >
+              Nombre de usuario
+            </Typography>
+          </Box>
+        )}
         <List style={{ width: "256px" }}>
-          <ListItem>
-            <ListItemText sx={{ textAlign: "center" }}>
-              <Typography
-                paddingTop={1}
-                paddingBottom={1}
-                fontWeight="bold"
-                fontSize="25px"
-                fontFamily={"DejaVuSans, sans-serif"}
-                color="#048014"
-              >
-                Nombre usuario
-              </Typography>
-            </ListItemText>
-          </ListItem>
           {menuOptions?.map(({ name, icon, items, pathname }, i) => (
             <Box key={name}>
               <ListItemButton
@@ -104,12 +139,13 @@ export default function Navbar(props: Props) {
                     ? () => handleMenu(i)
                     : () => router.push(`/${locale}/${pathname}`)
                 }
+                selected={
+                  actualPathname === `/${locale}${pathname}` ? true : false
+                }
               >
                 <ListItemIcon sx={{ color: "#048014" }}>{icon()}</ListItemIcon>
                 <ListItemText sx={{ color: "black" }}>
-                  <Typography fontFamily={"DejaVuSans, sans-serif"}>
-                    {name}
-                  </Typography>
+                  <Typography>{name}</Typography>
                 </ListItemText>
 
                 {items.length != 0 && (
@@ -132,18 +168,18 @@ export default function Navbar(props: Props) {
                     <div key={name}>
                       <ListItem>
                         <ListItemButton
+                          selected={
+                            actualPathname === `/${locale}${pathname}`
+                              ? true
+                              : false
+                          }
                           onClick={() => router.push(`/${locale}/${pathname}`)}
                         >
                           <ListItemIcon sx={{ color: "#048014" }}>
                             {icon()}
                           </ListItemIcon>
-                          <ListItemText>
-                            <Typography
-                              fontFamily={"DejaVuSans, sans-serif"}
-                              fontSize="14px"
-                            >
-                              {name}
-                            </Typography>
+                          <ListItemText sx={{ color: "black" }}>
+                            <Typography>{name}</Typography>
                           </ListItemText>
                         </ListItemButton>
                       </ListItem>

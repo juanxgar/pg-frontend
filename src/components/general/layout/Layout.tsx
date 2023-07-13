@@ -6,9 +6,9 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import { redirect, usePathname } from "next/navigation";
 import { lightTheme } from "@/themes";
-import Navbar from "./navbar";
-import Header from "./header";
-import Footer from "../Footer";
+import Navbar from "./Navbar";
+import Header from "./Header";
+import Footer from "./Footer";
 
 interface Props {
   children?: ReactNode;

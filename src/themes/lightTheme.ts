@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material/styles";
 const initialTheme = createTheme({
   palette: {
     primary: {
-      light: "#63ccff",
+      light: "#048014",
       main: "#009be5",
       dark: "#006db3",
     },
@@ -92,12 +92,12 @@ export const lightTheme = {
           textTransform: "none",
           color: "#048014",
           fontWeight: "600",
-          fontSize: '18px',          
+          fontSize: "18px",
           padding: 10,
           "&.Mui-selected": {
             backgroundColor: "#048014",
             color: "#ffffff",
-            borderRadius: '0px 0px 12px 12px'
+            borderRadius: "0px 0px 12px 12px",
           },
         },
       },
@@ -164,6 +164,18 @@ export const lightTheme = {
         root: {
           width: 32,
           height: 32,
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            "&:hover": {
+              backgroundColor: "#CCCCCC",
+            },
+            backgroundColor: "#DDDDDD",
+          },
         },
       },
     },

@@ -1,8 +1,8 @@
 "use client";
 
 import { Box, Divider, useMediaQuery } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { ThemeProvider } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import Navbar from "@/components/general/layout/Navbar";
 import Header from "@/components/general/layout/Header";
@@ -10,18 +10,17 @@ import Footer from "@/components/general/layout/Footer";
 import { redirect } from "next/navigation";
 import { lightTheme } from "@/themes";
 
-
 interface Props {
   children?: ReactNode;
   params: { locale: string };
 }
 
-export default function AdminLayout(props: Props) {
+export default function AdminLayout(props: Props): ReactElement {
   const { children, params } = props;
-  const { status } = useSession();
-  const [open, setOpen] = useState(true);
-  const [show, setShow] = useState(false);
-  const xs = useMediaQuery(lightTheme.breakpoints.up("xs"));
+  const { status }: { status: string } = useSession<boolean>();
+  const [open, setOpen] = useState<boolean>(true);
+  const [show, setShow] = useState<boolean>(false);
+  const xs: boolean = useMediaQuery(lightTheme.breakpoints.up("xs"));
 
   const handleDrawer = () => {
     setOpen(!open);

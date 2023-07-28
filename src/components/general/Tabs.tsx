@@ -1,8 +1,5 @@
-"use client";
-
-import { Box, Tab, Tabs, useMediaQuery } from "@mui/material";
-import { ReactNode, SyntheticEvent } from "react";
-import { useTheme } from "@mui/material/styles";
+import { Box, Tab, Tabs } from "@mui/material";
+import { ReactElement, ReactNode, SyntheticEvent } from "react";
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -10,7 +7,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function CustomTabPanel(props: TabPanelProps) {
+function CustomTabPanel(props: TabPanelProps): ReactElement {
   const { children, value, index, ...other } = props;
 
   return (
@@ -33,11 +30,8 @@ interface Props {
   children?: ReactNode;
 }
 
-export default function tabs(props: Props) {
+export default function tabs(props: Props): ReactElement {
   const { value, handleChange, tabsTitle, children } = props;
-
-  const theme = useTheme();
-  const lg = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -47,8 +41,8 @@ export default function tabs(props: Props) {
           borderColor: "transparent",
           direction: "column",
           alignItems: "center",
-          marginLeft: lg ? "45px" : "0px",
-          justifyContent: lg ? "flex-start" : "center",
+          marginLeft: { lg: "45px", xs: "0px" },
+          justifyContent: { lg: "flex-start", xs: "center" },
           display: "flex",
         }}
       >

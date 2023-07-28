@@ -1,17 +1,14 @@
 import { Alert, AlertColor, Snackbar } from "@mui/material";
-import React from "react";
+import React, { ReactElement } from "react";
 
-export default function SnackbarComponent({
-  open,
-  handleClose,
-  severity,
-  message,
-}: {
-  open: any;
-  handleClose: any;
+interface Props {
+  open: boolean;
+  handleClose: () => void;
   severity: AlertColor;
   message: string;
-}) {
+}
+export default function SnackbarComponent(props: Props): ReactElement {
+  const { handleClose, message, open, severity } = props;
   return (
     <Snackbar
       open={open}
@@ -19,11 +16,7 @@ export default function SnackbarComponent({
       onClose={handleClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
-      <Alert
-        onClose={handleClose}
-        severity={severity}
-        sx={{ width: "300%"}}
-      >
+      <Alert onClose={handleClose} severity={severity} sx={{ width: "300%" }}>
         {message}
       </Alert>
     </Snackbar>

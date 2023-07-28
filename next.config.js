@@ -6,4 +6,9 @@ module.exports = {
         locales: ["es"],
         defaultLocale: "es",
     },
+    cssModules: true,
+    cssLoaderOptions: {
+        importLoaders: 1,
+        localIdentName: "[]",
+    },
 }

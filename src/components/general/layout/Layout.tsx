@@ -1,7 +1,7 @@
 "use client";
 
-import { Box, Divider, useMediaQuery } from "@mui/material";
-import { ReactNode, useEffect, useState } from "react";
+import { Box, CssBaseline, Divider, useMediaQuery } from "@mui/material";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import { redirect, usePathname } from "next/navigation";
@@ -9,20 +9,38 @@ import { lightTheme } from "@/themes";
 import Navbar from "./Navbar";
 import Header from "./Header";
 import Footer from "./Footer";
+import { useUser } from "@/hooks/user.queries";
+import { UserItem } from "@/types/entities.type";
 
 interface Props {
   children?: ReactNode;
   params: { locale: string };
 }
 
-export default function Layout(props: Props) {
+export default function Layout(props: Props): ReactElement {
   const { children, params } = props;
-  const pathname = usePathname();
-  const { status } = useSession();
-  const [open, setOpen] = useState(true);
-  const [show, setShow] = useState(false);
-  const [showLayout, setShowLayout] = useState(false);
-  const xs = useMediaQuery(lightTheme.breakpoints.up("xs"));
+
+  const { useLoggedUser } = useUser();
+
+  const pathname: string = usePathname();
+
+  const { status }: { status: string } = useSession<boolean>();
+
+  const [open, setOpen] = useState<boolean>(true);
+  const [show, setShow] = useState<boolean>(false);
+  const [showLayout, setShowLayout] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>("");
+
+  const xs: boolean = useMediaQuery(lightTheme.breakpoints.up("xs"));
+
+  const {
+    data,
+    isLoading,
+  }: {
+    data: UserItem | undefined;
+    isLoading: boolean;
+    refetch: () => void;
+  } = useLoggedUser();
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -40,10 +58,14 @@ export default function Layout(props: Props) {
     if (status === "authenticated") {
       setShowLayout(true);
       if (pathname == `/${params.locale}`) {
-          redirect(`/${props.params.locale}/home`);        
+        redirect(`/${props.params.locale}/home`);
       }
     }
-  }, [status]);
+
+    if (!isLoading) {
+      setUserName(data ? data.name + " " + data.lastname : "");
+    }
+  }, [status, isLoading]);
 
   useEffect(() => {
     if (xs) {
@@ -55,6 +77,7 @@ export default function Layout(props: Props) {
     <>
       {show && showLayout ? (
         <ThemeProvider theme={lightTheme}>
+          <CssBaseline />
           <Box sx={{ display: "flex", minHeight: "98vh" }}>
             <Box
               component="nav"
@@ -67,6 +90,7 @@ export default function Layout(props: Props) {
                 open={open}
                 onClose={handleDrawer}
                 locale={params.locale}
+                userName={userName}
               />
             </Box>
             <Box
@@ -81,6 +105,7 @@ export default function Layout(props: Props) {
                 open={open}
                 onDrawerToggle={handleDrawer}
                 locale={params.locale}
+                userName={userName}
               />
               <Divider />
               <Box
@@ -101,7 +126,7 @@ export default function Layout(props: Props) {
           </Box>
         </ThemeProvider>
       ) : (
-        children
+        show && children
       )}
     </>
   );

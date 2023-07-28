@@ -9,7 +9,7 @@ import {
   Avatar,
   MenuItem,
   Typography,
-  Tooltip,
+  Theme,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import {
@@ -21,29 +21,32 @@ import {
 } from "@mui/icons-material";
 import Image from "next/image";
 import { Images } from "@/utils";
-import React, { useState } from "react";
+import { MouseEvent, ReactElement, useState } from "react";
 import { useTranslations } from "next-intl";
 import { signOut } from "next-auth/react";
 import SnackbarComponent from "../SnackbarComponent";
 
 interface Props {
-  onDrawerToggle: any;
-  open: any;
+  onDrawerToggle: () => void;
+  open: boolean;
   locale: string;
+  userName: string;
 }
-export default function Header(props: Props) {
-  const { onDrawerToggle, open, locale } = props;
-  const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.up("xs"));
-  const lg = useMediaQuery(theme.breakpoints.up("lg"));
+export default function Header(props: Props): ReactElement {
+  const { onDrawerToggle, open, locale, userName } = props;
+  const theme: Theme = useTheme();
+  const xs: boolean = useMediaQuery(theme.breakpoints.up("xs"));
+  const lg: boolean = useMediaQuery(theme.breakpoints.up("lg"));
   const t = useTranslations();
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<null | HTMLElement>(null);
   const isOpenMenu = Boolean(openMenu);
-  const handleOpenMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleOpenMenu = (e: MouseEvent<HTMLButtonElement>) => {
     setOpenMenu(e.currentTarget);
   };
+
   const handleCloseMenu = () => {
     setOpenMenu(null);
   };
@@ -148,8 +151,9 @@ export default function Header(props: Props) {
                         fontSize="18px"
                         color="#048014"
                         marginRight={lg ? "15px" : "0px"}
+                        textAlign="center"
                       >
-                        Nombre de usuario
+                        {userName}
                       </Typography>
                     )}
                     <IconButton

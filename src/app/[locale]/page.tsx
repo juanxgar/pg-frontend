@@ -14,6 +14,7 @@ import {
   useMediaQuery,
   AlertColor,
   CircularProgress,
+  Theme,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Form, Formik } from "formik";
@@ -24,29 +25,30 @@ import { useTranslations } from "next-intl";
 import { SignInRequest } from "@/types/request.type";
 import LogoSkeleton from "@/components/login/LogoSkeleton";
 import FormSkeleton from "@/components/login/FormSkeleton";
-import SnackbarComponent from "@/components/general/snackbarComponent";
-import { useEffect, useState } from "react";
+import SnackbarComponent from "@/components/general/SnackbarComponent";
+import { ReactElement, useEffect, useState } from "react";
 
 interface Props {
   params: { locale: string };
   csrfToken?: string;
 }
 
-export default function Page(props: Props) {
+export default function Page(props: Props): ReactElement {
   const { params } = props;
-  const { status, update } = useSession();
+  const { status, update }: { status: string; update: () => void } =
+    useSession<boolean>();
   const t = useTranslations();
 
-  const [show, setShow] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [show, setShow] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [messageSnackbar, setMessageSnackbar] = useState<string>("");
   const [severitySnackbar, setSeveritySnackbar] =
     useState<AlertColor>("success");
 
-  const theme = useTheme();
-  const lg = useMediaQuery(theme.breakpoints.up("lg"));
-  const xs = useMediaQuery(theme.breakpoints.up("xs"));
+  const theme: Theme = useTheme();
+  const lg: boolean = useMediaQuery(theme.breakpoints.up("lg"));
+  const xs: boolean = useMediaQuery(theme.breakpoints.up("xs"));
 
   useEffect(() => {
     if (lg || xs) {
@@ -93,7 +95,7 @@ export default function Page(props: Props) {
         <Grid
           container
           sx={{
-            maxHeight: lg ? "98vh" : "100%",
+            maxHeight: { lg: "98vh", xs: "100%" },
           }}
         >
           <SnackbarComponent
@@ -136,16 +138,16 @@ export default function Page(props: Props) {
                 alignItems: "center",
                 justifyContent: "center",
                 display: "flex",
-                minHeight: lg ? "95vh" : "100%",
-                marginTop: lg ? "0px" : "20px",
-                marginBottom: lg ? "0px" : "80px",
+                minHeight: { lg: "95vh", xs: "100%" },
+                marginTop: { lg: "0px", xs: "20px" },
+                marginBottom: { lg: "0px", xs: "80px" },
               }}
             >
               <Paper
                 elevation={3}
                 sx={{
                   p: 5,
-                  width: lg ? "60%" : "80%",
+                  width: { lg: "60%", xs: "80%" },
                   height: "100%",
                 }}
               >
@@ -161,7 +163,7 @@ export default function Page(props: Props) {
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
-                          marginBottom: lg ? "0px" : "20px",
+                          marginBottom: { lg: "0px", xs: "20px" },
                         }}
                       >
                         <Typography component="h1" variant="h5">
@@ -240,7 +242,7 @@ export default function Page(props: Props) {
                             </LinkMaterial>
                             <Box
                               sx={{
-                                width: lg ? "50%" : "80%",
+                                width: { lg: "50%", xs: "80%" },
                                 marginTop: "30px",
                                 float: "right",
                               }}
@@ -273,7 +275,7 @@ export default function Page(props: Props) {
               </Paper>
             </Box>
           </Grid>
-          <Grid item xs={12} marginTop={lg ? "0px" : "50px"}>
+          <Grid item xs={12} sx={{ marginTop: { lg: "0px", xs: "50px" } }}>
             <Footer />
           </Grid>
         </Grid>

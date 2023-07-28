@@ -1,7 +1,7 @@
 import { LinearProgress } from "@mui/material";
-import React from "react";
+import React, { ReactElement } from "react";
 
-export default function LinearProgressComponent() {
+export default function LinearProgressComponent(): ReactElement {
   return (
     <>
       <LinearProgress

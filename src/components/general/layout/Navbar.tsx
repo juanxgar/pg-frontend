@@ -1,5 +1,3 @@
-"use client";
-
 import { MenuOptions } from "@/types/common.type";
 import {
   Images,
@@ -11,7 +9,6 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Box,
   Collapse,
-  Divider,
   Drawer,
   List,
   ListItem,
@@ -22,25 +19,29 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 interface Props {
-  open: any;
-  onClose: any;
+  open: boolean;
+  onClose: () => void;
   locale: string;
+  userName: string;
 }
 
-export default function Navbar(props: Props) {
-  const { open, onClose, locale } = props;
+export default function Navbar(props: Props): ReactElement {
+  const { open, onClose, locale, userName } = props;
 
-  const { data: session, status } = useSession();
+  const { data: session, status }: { data: Session | null; status: string } =
+    useSession<boolean>();
 
-  const actualPathname = usePathname();
+  const actualPathname: string = usePathname();
 
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
 
   const [menuOptions, setMenuOptions] = useState<Array<MenuOptions> | null>(
     null
@@ -52,15 +53,15 @@ export default function Navbar(props: Props) {
   useEffect(() => {
     if (locale === "es") {
       if (status === "authenticated") {
-        if (session.accessToken.role === "Administrador") {
+        if (session?.accessToken.role === "Administrador") {
           setOpenMenu(Array(MenuOptionsAdminEs.length).fill(false));
           setMenuOptions(MenuOptionsAdminEs);
         }
-        if (session.accessToken.role === "Estudiante") {
+        if (session?.accessToken.role === "Estudiante") {
           setOpenMenu(Array(MenuOptionsStudentEs.length).fill(false));
           setMenuOptions(MenuOptionsStudentEs);
         }
-        if (session.accessToken.role === "Profesor") {
+        if (session?.accessToken.role === "Profesor") {
           setOpenMenu(Array(MenuOptionsProfessorEs.length).fill(false));
           setMenuOptions(MenuOptionsProfessorEs);
         }
@@ -126,7 +127,7 @@ export default function Navbar(props: Props) {
               fontSize="18px"
               color="#048014"
             >
-              Nombre de usuario
+              {userName}
             </Typography>
           </Box>
         )}

@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
+import { ReactElement, ReactNode } from "react";
 import { NextAuthProvider } from "./providers";
 
-type Props = {
+interface Props {
   children: ReactNode;
-};
+}
 
-export default function RootLayout({ children }: Props) {
+export default function RootLayout({ children }: Props): ReactElement {
   return <NextAuthProvider>{children}</NextAuthProvider>;
 }

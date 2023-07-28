@@ -87,7 +87,7 @@ export default function ProfessorsView(props: Props): ReactElement {
     professor_speciality: [],
   });
 
-  const modalContentDelete = {
+  const modalContentDelete: ContentModal = {
     title: t("modals.deleteTitle") + t("user.user"),
     description: t("modals.deleteRegister"),
   };

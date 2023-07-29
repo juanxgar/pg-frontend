@@ -7,7 +7,7 @@ interface Props {
   navigator: Array<Navigator>;
 }
 
-export default function Breadcrumb(props: Props): ReactElement {
+export function Breadcrumb(props: Props): ReactElement {
   const { navigator } = props;
 
   return (

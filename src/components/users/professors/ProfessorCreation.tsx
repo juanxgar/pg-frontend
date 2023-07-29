@@ -1,6 +1,4 @@
-import CancelButton from "@/components/general/CancelButton";
-import CreateButton from "@/components/general/CreateButton";
-import InputComponent from "@/components/general/InputComponent";
+import { CancelButton, CreateButton, InputComponent } from "@/components";
 import { useSpeciality } from "@/hooks/speciality.queries";
 import { useUser } from "@/hooks/user.queries";
 import { ProfessorCreationSchema } from "@/schemas";
@@ -19,7 +17,7 @@ interface Props {
   refetch: () => void;
 }
 
-export default function ProfessorCreation(props: Props): ReactElement {
+export function ProfessorCreation(props: Props): ReactElement {
   const {
     toggleDrawer,
     refetch,

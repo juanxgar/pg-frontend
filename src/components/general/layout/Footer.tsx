@@ -1,9 +1,8 @@
-"use client";
 import { Typography, Link as LinkMaterial } from "@mui/material";
 import { useTranslations } from "next-intl";
 import React, { ReactElement } from "react";
 
-export default function Footer(): ReactElement {
+export function Footer(): ReactElement {
   const t = useTranslations();
   return (
     <Typography variant="body2" color="textSecondary" align="center">

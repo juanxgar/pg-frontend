@@ -1,9 +1,19 @@
-"use client";
-
-import Breadcrumb from "@/components/general/Breadcrumb";
-import CreateButton from "@/components/general/CreateButton";
-import PageTitle from "@/components/general/PageTitle";
-import InputComponent from "@/components/general/InputComponent";
+import {
+  Breadcrumb,
+  CreateButton,
+  PageTitle,
+  InputComponent,
+  CleanSearchButton,
+  DeleteButton,
+  DrawerComponent,
+  EditButtonOuted,
+  InactivateButton,
+  ModalComponent,
+  ProfessorCreation,
+  ProfessorUpdate,
+  ProfessorsTable,
+  SnackbarComponent,
+} from "@/components";
 import { UserSearchSchema } from "@/schemas";
 import { ContentModal, Navigator } from "@/types";
 import {
@@ -24,27 +34,17 @@ import React, {
   useRef,
   useState,
 } from "react";
-import ProfessorsTable from "./ProfessorsTable";
 import { useTheme } from "@mui/material/styles";
-import CleanSearchButton from "@/components/general/CleanSearchButton";
-import EditButtonOuted from "@/components/general/EditButtonOuted";
-import InactivateButton from "@/components/general/InactivateButton";
-import DeleteButton from "@/components/general/DeleteButton";
 import { useUser } from "@/hooks/user.queries";
-import DrawerComponent from "@/components/general/DrawerComponent";
-import ProfessorCreation from "./ProfessorCreation";
-import SnackbarComponent from "@/components/general/SnackbarComponent";
-import ProfessorUpdate from "./ProfessorUpdate";
 import { PaginatedResult } from "@/types/result.types";
 import { ProfessorItem } from "@/types/entities.type";
-import ModalComponent from "@/components/general/ModalComponent";
 
 interface Props {
   locale: string;
   setLoading: (loading: boolean) => void;
 }
 
-export default function ProfessorsView(props: Props): ReactElement {
+export function ProfessorsView(props: Props): ReactElement {
   const { locale, setLoading } = props;
   const t = useTranslations();
   const {

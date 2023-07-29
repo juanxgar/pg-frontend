@@ -6,7 +6,7 @@ import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { es } from "@/translations";
 import { NextAuthProvider } from "../providers";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Layout from "@/components/general/layout/Layout";
+import { Layout } from "@/components";
 
 interface Props {
   children?: ReactNode;
@@ -40,7 +40,7 @@ export function generateMetadata({ params: { locale } }: Props) {
 export default function LocaleLayout(props: Props): ReactElement {
   const { children, params } = props;
   const messages = getMessages(params.locale);
-  const pathname:string = usePathname();
+  const pathname: string = usePathname();
 
   const [background, setBackground] = useState<string>("#000000");
   const queryClient = new QueryClient();

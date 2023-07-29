@@ -1,11 +1,13 @@
 "use client";
 
-import LinearProgressComponent from "@/components/general/LinearProgressComponent";
-import TabsComponent from "@/components/general/Tabs";
+import {
+  LinearProgressComponent,
+  TabsComponent,
+  ProfessorsView,
+} from "@/components";
 import { Theme, Typography, useMediaQuery } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { ReactElement, SyntheticEvent, useEffect, useState } from "react";
-import ProfessorsView from "@/components/users/professors/ProfessorsView";
 import { useTheme } from "@mui/material/styles";
 
 interface Props {

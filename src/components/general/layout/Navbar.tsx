@@ -33,7 +33,7 @@ interface Props {
   userName: string;
 }
 
-export default function Navbar(props: Props): ReactElement {
+export function Navbar(props: Props): ReactElement {
   const { open, onClose, locale, userName } = props;
 
   const { data: session, status }: { data: Session | null; status: string } =

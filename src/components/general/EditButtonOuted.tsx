@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { useTranslations } from "next-intl";
 import { ReactElement } from "react";
 
-export default function EditButtonOuted(props: ButtonProps): ReactElement {
+export function EditButtonOuted(props: ButtonProps): ReactElement {
   const theme = useTheme();
   const lg = useMediaQuery(theme.breakpoints.up("lg"));
   const t = useTranslations();

@@ -2,7 +2,7 @@ import Drawer from "@mui/material/Drawer";
 import { ReactElement } from "react";
 import { Box, IconButton, styled, Toolbar, Typography } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import LinearProgressComponent from "./LinearProgressComponent";
+import { LinearProgressComponent } from "@/components";
 
 interface Props {
   open: boolean;
@@ -26,7 +26,7 @@ const styleCloseButton = {
   borderRadius: "12.5953px 0px 0px 12.5953px",
 };
 
-export default function DrawerComponent(props: Props): ReactElement {
+export function DrawerComponent(props: Props): ReactElement {
   const { toggleDrawer, open, children, title, isLoading } = props;
 
   return (

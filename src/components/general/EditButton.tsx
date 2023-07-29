@@ -3,7 +3,7 @@ import { Box, Button, ButtonProps } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { ReactElement } from "react";
 
-export default function EditButton(props: ButtonProps): ReactElement {
+export function EditButton(props: ButtonProps): ReactElement {
   const t = useTranslations();
 
   return (

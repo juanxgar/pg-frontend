@@ -1,7 +1,7 @@
 import { Box, Grid, Skeleton } from "@mui/material";
 import { ReactElement } from "react";
 
-export default function FormSkeleton(): ReactElement {
+export function FormSkeleton(): ReactElement {
   return (
     <Grid
       container

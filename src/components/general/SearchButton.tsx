@@ -1,11 +1,9 @@
-"use client";
-
 import { Search } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { ReactElement } from "react";
 
-export default function SearchButton(): ReactElement {
+export function SearchButton(): ReactElement {
   const t = useTranslations();
   return (
     <Button

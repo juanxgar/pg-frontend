@@ -7,7 +7,7 @@ interface Props {
   state?: boolean;
   buttonProps: ButtonProps;
 }
-export default function InactivateButton(props: Props): ReactElement {
+export function InactivateButton(props: Props): ReactElement {
   const theme: Theme = useTheme();
   const lg: boolean = useMediaQuery(theme.breakpoints.up("lg"));
   const { state, buttonProps } = props;

@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 interface Props {
   lg: boolean;
 }
-export default function LogoSkeleton(props: Props): ReactElement {
+export function LogoSkeleton(props: Props): ReactElement {
   const { lg } = props;
   return (
     <Grid

@@ -1,5 +1,4 @@
-import { StyledTableCell } from "@/components/general/StyledTableCell";
-import TablePagination from "@/components/table/TablePagination";
+import { StyledTableCell, TablePagination } from "@/components";
 import { ProfessorItem } from "@/types/entities.type";
 import { PaginatedResult } from "@/types/result.types";
 import { Check, CloseSharp } from "@mui/icons-material";
@@ -24,7 +23,7 @@ interface Props {
   setLimit: (page: number) => void;
   setDataProfessor: (dataProfessor: ProfessorItem) => void;
 }
-export default function ProfessorsTable(props: Props): ReactElement {
+export function ProfessorsTable(props: Props): ReactElement {
   const {
     checked,
     handleCheck,

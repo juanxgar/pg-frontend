@@ -6,7 +6,7 @@ import { ReactElement } from "react";
 interface Props {
   clearFunction: () => void;
 }
-export default function CleanSearchButton(props: Props): ReactElement {
+export function CleanSearchButton(props: Props): ReactElement {
   const { clearFunction } = props;
 
   const t = useTranslations();

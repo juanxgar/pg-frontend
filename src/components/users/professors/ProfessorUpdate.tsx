@@ -1,6 +1,4 @@
-import CancelButton from "@/components/general/CancelButton";
-import EditButton from "@/components/general/EditButton";
-import InputComponent from "@/components/general/InputComponent";
+import { CancelButton, EditButton, InputComponent } from "@/components";
 import { useSpeciality } from "@/hooks/speciality.queries";
 import { useUser } from "@/hooks/user.queries";
 import { ProfessorCreationSchema } from "@/schemas";
@@ -20,7 +18,7 @@ interface Props {
   dataProfessor: ProfessorItem;
 }
 
-export default function ProfessorUpdate(props: Props) {
+export function ProfessorUpdate(props: Props) {
   const {
     toggleDrawer,
     refetch,

@@ -27,7 +27,7 @@ type Props = {
 
 const rowsPerPageList = [5, 10, 30, 50];
 
-export default function TablePagination(props: Props): ReactElement {
+export function TablePagination(props: Props): ReactElement {
   const { currentPage, totalPages, rowsPerPage, setPage, setLimit } = props;
   const t = useTranslations();
 

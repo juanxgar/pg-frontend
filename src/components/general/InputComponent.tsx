@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { FormControl, TextField, TextFieldProps } from "@mui/material";
 
-export default function InputComponent(props: TextFieldProps): ReactElement {
+export function InputComponent(props: TextFieldProps): ReactElement {
   return (
     <FormControl fullWidth>
       <TextField

@@ -23,7 +23,7 @@ const styleModal = {
   alignItems: "center",
 };
 
-export default function ModalComponent(props: Props): ReactElement {
+export function ModalComponent(props: Props): ReactElement {
   const { open, onClose, content, onSubmit } = props;
   const t = useTranslations();
 

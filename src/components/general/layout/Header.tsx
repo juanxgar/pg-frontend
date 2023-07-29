@@ -24,7 +24,7 @@ import { Images } from "@/utils";
 import { MouseEvent, ReactElement, useState } from "react";
 import { useTranslations } from "next-intl";
 import { signOut } from "next-auth/react";
-import SnackbarComponent from "../SnackbarComponent";
+import { SnackbarComponent } from "@/components";
 
 interface Props {
   onDrawerToggle: () => void;
@@ -32,7 +32,7 @@ interface Props {
   locale: string;
   userName: string;
 }
-export default function Header(props: Props): ReactElement {
+export function Header(props: Props): ReactElement {
   const { onDrawerToggle, open, locale, userName } = props;
   const theme: Theme = useTheme();
   const xs: boolean = useMediaQuery(theme.breakpoints.up("xs"));

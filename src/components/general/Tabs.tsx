@@ -30,7 +30,7 @@ interface Props {
   children?: ReactNode;
 }
 
-export default function tabs(props: Props): ReactElement {
+export function TabsComponent(props: Props): ReactElement {
   const { value, handleChange, tabsTitle, children } = props;
 
   return (

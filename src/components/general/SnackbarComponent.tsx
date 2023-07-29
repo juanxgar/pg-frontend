@@ -7,7 +7,7 @@ interface Props {
   severity: AlertColor;
   message: string;
 }
-export default function SnackbarComponent(props: Props): ReactElement {
+export function SnackbarComponent(props: Props): ReactElement {
   const { handleClose, message, open, severity } = props;
   return (
     <Snackbar

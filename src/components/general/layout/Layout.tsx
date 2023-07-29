@@ -6,9 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
 import { redirect, usePathname } from "next/navigation";
 import { lightTheme } from "@/themes";
-import Navbar from "./Navbar";
-import Header from "./Header";
-import Footer from "./Footer";
+import { Footer, Header, Navbar } from "@/components";
 import { useUser } from "@/hooks/user.queries";
 import { UserItem } from "@/types/entities.type";
 
@@ -17,7 +15,7 @@ interface Props {
   params: { locale: string };
 }
 
-export default function Layout(props: Props): ReactElement {
+export function Layout(props: Props): ReactElement {
   const { children, params } = props;
 
   const { useLoggedUser } = useUser();

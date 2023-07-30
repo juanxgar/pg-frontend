@@ -9,6 +9,7 @@ import { lightTheme } from "@/themes";
 import { Footer, Header, Navbar } from "@/components";
 import { useUser } from "@/hooks/user.queries";
 import { UserItem } from "@/types/entities.type";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 interface Props {
   children?: ReactNode;
@@ -18,9 +19,8 @@ interface Props {
 export function Layout(props: Props): ReactElement {
   const { children, params } = props;
 
-  const { useLoggedUser } = useUser();
-
   const pathname: string = usePathname();
+  const queryClient = new QueryClient();
 
   const { status }: { status: string } = useSession<boolean>();
 
@@ -30,15 +30,6 @@ export function Layout(props: Props): ReactElement {
   const [userName, setUserName] = useState<string>("");
 
   const xs: boolean = useMediaQuery(lightTheme.breakpoints.up("xs"));
-
-  const {
-    data,
-    isLoading,
-  }: {
-    data: UserItem | undefined;
-    isLoading: boolean;
-    refetch: () => void;
-  } = useLoggedUser();
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -59,11 +50,7 @@ export function Layout(props: Props): ReactElement {
         redirect(`/${props.params.locale}/home`);
       }
     }
-
-    if (!isLoading) {
-      setUserName(data ? data.name + " " + data.lastname : "");
-    }
-  }, [status, isLoading]);
+  }, [status]);
 
   useEffect(() => {
     if (xs) {
@@ -72,15 +59,18 @@ export function Layout(props: Props): ReactElement {
   }, [xs]);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       {show && showLayout ? (
         <ThemeProvider theme={lightTheme}>
           <CssBaseline />
-          <Box sx={{ display: "flex", minHeight: "98vh" }}>
+          <Box sx={{ display: "flex", minHeight: "100vh" }}>
             <Box
               component="nav"
               sx={{
-                width: { xs: xs ? "0px" : "256px", lg: open ? "256px" : "0px" },
+                width: {
+                  xs: xs ? "0px" : "256px",
+                  lg: open ? "256px" : "0px",
+                },
                 transition: "width 300ms ease",
               }}
             >
@@ -88,7 +78,7 @@ export function Layout(props: Props): ReactElement {
                 open={open}
                 onClose={handleDrawer}
                 locale={params.locale}
-                userName={userName}
+                setUserName={setUserName}
               />
             </Box>
             <Box
@@ -126,6 +116,6 @@ export function Layout(props: Props): ReactElement {
       ) : (
         show && children
       )}
-    </>
+    </QueryClientProvider>
   );
 }

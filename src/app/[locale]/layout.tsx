@@ -1,11 +1,8 @@
-"use client";
-
-import { notFound, usePathname } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createTranslator, NextIntlClientProvider } from "next-intl";
-import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { ReactElement, ReactNode } from "react";
 import { es } from "@/translations";
 import { NextAuthProvider } from "../providers";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { Layout } from "@/components";
 
 interface Props {
@@ -46,31 +43,18 @@ export function generateMetadata({ params: { locale } }: Props): {
 export default function LocaleLayout(props: Props): ReactElement {
   const { children, params } = props;
   const messages = getMessages(params.locale);
-  const pathname: string = usePathname();
-
-  const [background, setBackground] = useState<string>("#000000");
-  const queryClient = new QueryClient();
-
-  useEffect(() => {
-    if (pathname == `/${params.locale}`) {
-      setBackground("linear-gradient(to right, white, #048014)");
-    } else {
-      setBackground("white");
-    }
-  }, [pathname]);
 
   return (
     <html lang={params.locale}>
       <body
         style={{
-          background: background,
+          margin: "0px",
+          background: "linear-gradient(to right, white, #048014)",
         }}
       >
         <NextIntlClientProvider locale={params.locale} messages={messages}>
           <NextAuthProvider>
-            <QueryClientProvider client={queryClient}>
-              <Layout params={{ locale: params.locale }}>{children}</Layout>
-            </QueryClientProvider>
+            <Layout params={{ locale: params.locale }}>{children}</Layout>
           </NextAuthProvider>
         </NextIntlClientProvider>
       </body>

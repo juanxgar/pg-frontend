@@ -1,3 +1,5 @@
+import { useUser } from "@/hooks/user.queries";
+import { UserItem } from "@/types";
 import { MenuOptions } from "@/types/common.type";
 import {
   Images,
@@ -30,11 +32,12 @@ interface Props {
   open: boolean;
   onClose: () => void;
   locale: string;
-  userName: string;
+  setUserName: (name: string) => void;
 }
 
 export function Navbar(props: Props): ReactElement {
-  const { open, onClose, locale, userName } = props;
+  const { open, onClose, locale, setUserName } = props;
+  const { useLoggedUser } = useUser();
 
   const { data: session, status }: { data: Session | null; status: string } =
     useSession<boolean>();
@@ -43,12 +46,22 @@ export function Navbar(props: Props): ReactElement {
 
   const router: AppRouterInstance = useRouter();
 
+  const [userName, setUserNameLocal] = useState<string>("");
   const [menuOptions, setMenuOptions] = useState<Array<MenuOptions> | null>(
     null
   );
   const [openMenu, setOpenMenu] = useState<Array<boolean>>(
     Array(MenuOptionsAdminEs.length).fill(false)
   );
+
+  const {
+    data,
+    isLoading,
+  }: {
+    data: UserItem | undefined;
+    isLoading: boolean;
+    refetch: () => void;
+  } = useLoggedUser();
 
   useEffect(() => {
     if (locale === "es") {
@@ -67,7 +80,11 @@ export function Navbar(props: Props): ReactElement {
         }
       }
     }
-  }, [status]);
+    if (!isLoading) {
+      setUserName(data ? data.name + " " + data.lastname : "");
+      setUserNameLocal(data ? data.name + " " + data.lastname : "");
+    }
+  }, [status, isLoading]);
 
   const handleMenu = (index: number) => {
     const menu = openMenu.map((e, i) => {

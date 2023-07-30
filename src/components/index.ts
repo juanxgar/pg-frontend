@@ -1,3 +1,4 @@
+"use client";
 export * from "./general/layout/Footer";
 export * from "./general/layout/Header";
 export * from "./general/layout/Navbar";

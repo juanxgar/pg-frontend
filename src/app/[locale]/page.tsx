@@ -29,14 +29,14 @@ import { LoginSchema } from "@/schemas";
 import { useTranslations } from "next-intl";
 import { SignInRequest } from "@/types/request.type";
 import { ReactElement, useEffect, useState } from "react";
+import { Locale } from "@/types";
 
-interface Props {
-  params: { locale: string };
-  csrfToken?: string;
-}
+type Props = {
+  params: Locale;
+};
 
 export default function Page(props: Props): ReactElement {
-  const { params } = props;
+  const { params }: { params: Locale } = props;
   const { status, update }: { status: string; update: () => void } =
     useSession<boolean>();
   const t = useTranslations();

@@ -26,3 +26,7 @@ export type ContentModal = {
   title?: string;
   description: string;
 };
+
+export type Locale = {
+  locale: string;
+};

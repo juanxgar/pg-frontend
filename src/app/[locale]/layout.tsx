@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Layout } from "@/components";
 
 interface Props {
-  children?: ReactNode;
+  children: ReactNode;
   params: { locale: string };
 }
 
@@ -23,11 +23,17 @@ function getMessages(locale: string) {
   }
 }
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<
+  {
+    locale: string;
+  }[]
+> {
   return ["es"].map((locale) => ({ locale }));
 }
 
-export function generateMetadata({ params: { locale } }: Props) {
+export function generateMetadata({ params: { locale } }: Props): {
+  title: string;
+} {
   const messages = getMessages(locale);
 
   const t = createTranslator({ locale, messages });

@@ -10,10 +10,11 @@ import { Footer, Header, Navbar } from "@/components";
 import { useUser } from "@/hooks/user.queries";
 import { UserItem } from "@/types/entities.type";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Locale } from "@/types";
 
 interface Props {
   children?: ReactNode;
-  params: { locale: string };
+  params: Locale;
 }
 
 export function Layout(props: Props): ReactElement {

@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import {
   LinearProgressComponent,
   TabsComponent,
@@ -9,9 +9,14 @@ import { Theme, Typography, useMediaQuery } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { ReactElement, SyntheticEvent, useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import { Locale } from "@/types";
 
 interface Props {
-  params: { locale: string };
+  params: Locale;
+}
+
+export async function generateStaticParams(): Promise<Locale[]> {
+  return ["es"].map((locale) => ({ locale }));
 }
 
 export default function Page(props: Props): ReactElement {

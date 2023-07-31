@@ -4,10 +4,11 @@ import { ReactElement, ReactNode } from "react";
 import { es } from "@/translations";
 import { NextAuthProvider } from "../providers";
 import { Layout } from "@/components";
+import { Locale } from "@/types";
 
 interface Props {
   children: ReactNode;
-  params: { locale: string };
+  params: Locale;
 }
 
 function getMessages(locale: string) {
@@ -20,20 +21,16 @@ function getMessages(locale: string) {
   }
 }
 
-export async function generateStaticParams(): Promise<
-  {
-    locale: string;
-  }[]
-> {
-  return ["es"].map((locale) => ({ locale }));
+export async function generateStaticParams(): Promise<Locale[]> {
+  return ["locale"].map((locale) => ({ locale }));
 }
 
-export function generateMetadata({ params: { locale } }: Props): {
+export function generateMetadata(props: Props): {
   title: string;
 } {
-  const messages = getMessages(locale);
+  const messages = getMessages(props.params.locale);
 
-  const t = createTranslator({ locale, messages });
+  const t = createTranslator({ locale: props.params.locale, messages });
 
   return {
     title: t("title"),

@@ -11,13 +11,4 @@ module.exports = {
         importLoaders: 1,
         localIdentName: "[]",
     },
-    async redirects() {
-        return [
-            {
-                source: '/es',
-                destination: '/',
-                permanent: true,
-            },
-        ]
-    },
 }

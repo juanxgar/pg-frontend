@@ -7,8 +7,6 @@ import { useSession } from "next-auth/react";
 import { redirect, usePathname } from "next/navigation";
 import { lightTheme } from "@/themes";
 import { Footer, Header, Navbar } from "@/components";
-import { useUser } from "@/hooks/user.queries";
-import { UserItem } from "@/types/entities.type";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Locale } from "@/types";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, CssBaseline, Divider, useMediaQuery } from "@mui/material";
+import { Box, CssBaseline, Divider } from "@mui/material";
 import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { useSession } from "next-auth/react";
@@ -24,11 +24,8 @@ export function Layout(props: Props): ReactElement {
   const { status }: { status: string } = useSession<boolean>();
 
   const [open, setOpen] = useState<boolean>(true);
-  const [show, setShow] = useState<boolean>(false);
   const [showLayout, setShowLayout] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
-
-  const xs: boolean = useMediaQuery(lightTheme.breakpoints.up("xs"));
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -45,21 +42,16 @@ export function Layout(props: Props): ReactElement {
     }
     if (status === "authenticated") {
       setShowLayout(true);
-      if (pathname == `/${params.locale}`) {
+
+      if (pathname === `/` || pathname === `/${params.locale}`) {
         redirect(`/${props.params.locale}/home`);
       }
     }
   }, [status]);
 
-  useEffect(() => {
-    if (xs) {
-      setShow(true);
-    }
-  }, [xs]);
-
   return (
     <QueryClientProvider client={queryClient}>
-      {show && showLayout ? (
+      {showLayout ? (
         <ThemeProvider theme={lightTheme}>
           <CssBaseline />
           <Box sx={{ display: "flex", minHeight: "100vh" }}>
@@ -67,7 +59,7 @@ export function Layout(props: Props): ReactElement {
               component="nav"
               sx={{
                 width: {
-                  xs: xs ? "0px" : "256px",
+                  xs: "0px",
                   lg: open ? "256px" : "0px",
                 },
                 transition: "width 300ms ease",
@@ -82,7 +74,10 @@ export function Layout(props: Props): ReactElement {
             </Box>
             <Box
               sx={{
-                width: xs ? "0px" : "256px",
+                width: {
+                  xs: "0px",
+                  lg: "256px",
+                },
                 flex: 1,
                 display: "flex",
                 flexDirection: "column",
@@ -113,7 +108,7 @@ export function Layout(props: Props): ReactElement {
           </Box>
         </ThemeProvider>
       ) : (
-        show && children
+        children
       )}
     </QueryClientProvider>
   );

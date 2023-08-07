@@ -28,3 +28,7 @@ export * from "./users/professors/ProfessorCreation";
 export * from "./users/professors/ProfessorUpdate";
 export * from "./users/professors/ProfessorsTable";
 export * from "./users/professors/ProfessorsView";
+export * from "./users/students/StudentCreation";
+export * from "./users/students/StudentUpdate";
+export * from "./users/students/StudentsTable";
+export * from "./users/students/StudentsView";

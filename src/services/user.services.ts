@@ -22,6 +22,12 @@ class UserServices {
     });
   }
 
+  getAllStudentsWithPagination(params: UserFilterParams) {
+    return this.http.get(`/users/students/pagination`, {
+      params,
+    });
+  }
+
   createUser(
     body: UserCreationBody | unknown
   ): Promise<MessageResult | ErrorResult> {

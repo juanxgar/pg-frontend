@@ -1,11 +1,11 @@
 "use client";
-export const dynamic = "force-dynamic";
 import {
   LinearProgressComponent,
   TabsComponent,
   ProfessorsView,
+  StudentsView,
 } from "@/components";
-import { Theme, Typography, useMediaQuery } from "@mui/material";
+import { Theme, useMediaQuery } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { ReactElement, SyntheticEvent, useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
@@ -42,22 +42,18 @@ export default function Page(props: Props): ReactElement {
 
   return (
     <>
-      {show && (
-        <>
-          {isLoading && <LinearProgressComponent />}
-          <TabsComponent
-            handleChange={handleChange}
-            value={value}
-            tabsTitle={tabsTitle}
-          >
-            {value === 0 ? (
-              <ProfessorsView locale={params.locale} setLoading={setLoading} />
-            ) : (
-              <Typography>hola2</Typography>
-            )}
-          </TabsComponent>
-        </>
-      )}
+      {isLoading && <LinearProgressComponent />}
+      <TabsComponent
+        handleChange={handleChange}
+        value={value}
+        tabsTitle={tabsTitle}
+      >
+        {value === 0 ? (
+          <ProfessorsView locale={params.locale} setLoading={setLoading} />
+        ) : (
+          <StudentsView locale={params.locale} setLoading={setLoading} />
+        )}
+      </TabsComponent>
     </>
   );
 }

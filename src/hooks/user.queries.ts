@@ -1,6 +1,6 @@
 import { UserService } from "@/services/user.services";
 import { ErrorResponse } from "@/types/common.type";
-import { ProfessorItem, UserItem } from "@/types/entities.type";
+import { ProfessorItem, StudentItem, UserItem } from "@/types/entities.type";
 import {
   UpdateUserRequest,
   UserCreationBody,
@@ -44,6 +44,27 @@ export const useUser = () => {
     );
   };
 
+  const useAllStudentsWithPagination = (
+    params: UserFilterParams
+  ): UseQueryResult<PaginatedResult<StudentItem>, unknown> => {
+    return useQuery(
+      ["students-pagination-list", params],
+      () => UserService.getAllStudentsWithPagination(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
   const useLoggedUser = (): UseQueryResult<UserItem, unknown> => {
     return useQuery(["logged-user"], () => UserService.getLoggedUser(), {
       refetchOnWindowFocus: false,
@@ -68,6 +89,14 @@ export const useUser = () => {
       mutationKey: ["add-user"],
       mutationFn: (data: UserCreationBody) => UserService.createUser(data),
       retry: false,
+      onError(err: ErrorResultQuery) {
+        if (err.status === 401) {
+          setErrorStatus(401);
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
+      },
     });
   };
 
@@ -112,6 +141,7 @@ export const useUser = () => {
     errorStatus,
     useLoggedUser,
     useAllProfessorsWithPagination,
+    useAllStudentsWithPagination,
     useCreateUser,
     useUpdateUser,
     useUpdateStateUser,

@@ -58,8 +58,10 @@ export const es = {
     identification: "Núm. identificación",
     fullName: "Nombre Completo",
     code: "Código",
-    professorCreation: "Creación de Profesor",
+    professorCreation: "Creación de profesor",
     professorUpdate: "Actualización de profesor",
+    studentCreation: "Creación de estudiante",
+    studentUpdate: "Actualización de estudiante",
     selectSpeciality: "Seleccione la especialidad",
   },
   specialities: {

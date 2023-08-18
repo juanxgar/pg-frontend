@@ -21,3 +21,16 @@ export type SpecialityItem = {
   description: string;
   state: boolean;
 };
+
+export type GroupItem = {
+  group_id: number;
+  name: string;
+  state: boolean;
+  professor_user: ProfessorItem;
+  group_detail?: Array<GroupDetailItem>;
+};
+
+export type GroupDetailItem = {
+  group_detail_id: number;
+  user: UserItem;
+};

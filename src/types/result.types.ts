@@ -23,3 +23,8 @@ export type ErrorResultQuery = {
   data: ErrorResult;
   status: number;
 };
+
+export type SignInResult = {
+  token: string;
+  role: string;
+};

@@ -27,10 +27,9 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { LoginSchema } from "@/schemas";
 import { useTranslations } from "next-intl";
-import { SignInRequest } from "@/types/request.type";
-import { ReactElement, useEffect, useState } from "react";
+import { SignInRequest } from "@/types";
+import { ReactElement, useState } from "react";
 import { Locale } from "@/types";
-import { redirect } from "next/navigation";
 
 type Props = {
   params: Locale;

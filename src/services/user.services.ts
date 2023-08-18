@@ -3,8 +3,13 @@ import {
   UpdateUserRequest,
   UserCreationBody,
   UserFilterParams,
-} from "@/types/request.type";
-import { ErrorResult, MessageResult } from "@/types/result.types";
+  ErrorResult,
+  MessageResult,
+  PaginatedResult,
+  ProfessorItem,
+  UserItem,
+  StudentItem,
+} from "@/types";
 
 class UserServices {
   private http;
@@ -12,18 +17,38 @@ class UserServices {
     this.http = new Http().getInstance();
   }
 
-  getLoggedUser() {
+  getLoggedUser(): Promise<UserItem | ErrorResult> {
     return this.http.get(`/users/me`);
   }
 
-  getAllProfessorsWithPagination(params: UserFilterParams) {
+  getAllProfessorsWithPagination(
+    params: UserFilterParams
+  ): Promise<PaginatedResult<ProfessorItem> | ErrorResult> {
     return this.http.get(`/users/professors/pagination`, {
       params,
     });
   }
 
-  getAllStudentsWithPagination(params: UserFilterParams) {
+  getAllProfessors(
+    params: UserFilterParams
+  ): Promise<Array<ProfessorItem> | ErrorResult> {
+    return this.http.get(`/users/professors`, {
+      params,
+    });
+  }
+
+  getAllStudentsWithPagination(
+    params: UserFilterParams
+  ): Promise<PaginatedResult<StudentItem> | ErrorResult> {
     return this.http.get(`/users/students/pagination`, {
+      params,
+    });
+  }
+
+  getAllStudents(
+    params: UserFilterParams
+  ): Promise<Array<StudentItem> | ErrorResult> {
+    return this.http.get(`/users/students`, {
       params,
     });
   }

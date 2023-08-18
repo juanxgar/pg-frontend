@@ -15,7 +15,12 @@ import {
   SnackbarComponent,
 } from "@/components";
 import { UserSearchSchema } from "@/schemas";
-import { ContentModal, Navigator } from "@/types";
+import {
+  ContentModal,
+  Navigator,
+  PaginatedResult,
+  ProfessorItem,
+} from "@/types";
 import {
   AlertColor,
   Box,
@@ -35,9 +40,7 @@ import React, {
   useState,
 } from "react";
 import { useTheme } from "@mui/material/styles";
-import { useUser } from "@/hooks/user.queries";
-import { PaginatedResult } from "@/types/result.types";
-import { ProfessorItem } from "@/types/entities.type";
+import { useUser } from "@/hooks";
 
 interface Props {
   locale: string;
@@ -184,6 +187,7 @@ export function ProfessorsView(props: Props): ReactElement {
 
   const onSubmitModalDelete = () => {
     mutateDelete(dataProfessor.user_id as unknown as string);
+    setChecked(Array(data?.data.length).fill(false));
     handleCloseModalDelete();
   };
 
@@ -245,7 +249,7 @@ export function ProfessorsView(props: Props): ReactElement {
   const searchRefState = useRef(
     debounce((value: string) => {
       setPage(0);
-      setStateDebounce(value === "true" ? true : false);
+      setStateDebounce(value === "true");
     }, 2000)
   );
 
@@ -300,6 +304,7 @@ export function ProfessorsView(props: Props): ReactElement {
       setSeveritySnackbar("success");
       setOpenSnackbar(true);
       refetch();
+      setChecked(Array(data?.data.length).fill(false));
     }
     if (isLoadingCreation) {
       setLoading(true);

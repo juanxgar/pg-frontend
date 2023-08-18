@@ -1,5 +1,5 @@
 import { StyledTableCell, TablePagination } from "@/components";
-import { StudentItem, PaginatedResult } from "@/types";
+import { PaginatedResult, GroupItem } from "@/types";
 import { Check, CloseSharp } from "@mui/icons-material";
 import {
   Table,
@@ -16,13 +16,13 @@ interface Props {
   checked: Array<boolean>;
   handleCheck: (index: number) => void;
   handleState: (index: boolean) => void;
-  data: PaginatedResult<StudentItem> | undefined;
+  data: PaginatedResult<GroupItem> | undefined;
   setPage: (page: number) => void;
   limit: number;
   setLimit: (page: number) => void;
-  setDataStudent: (dataStudent: StudentItem) => void;
+  setGroup: (group: GroupItem) => void;
 }
-export function StudentsTable(props: Props): ReactElement {
+export function GroupsTable(props: Props): ReactElement {
   const {
     checked,
     handleCheck,
@@ -31,7 +31,7 @@ export function StudentsTable(props: Props): ReactElement {
     setPage,
     limit,
     setLimit,
-    setDataStudent,
+    setGroup,
   } = props;
   const t = useTranslations();
 
@@ -48,26 +48,25 @@ export function StudentsTable(props: Props): ReactElement {
                 {t("commons.number")}
               </StyledTableCell>
               <StyledTableCell align="center">
-                {t("user.fullName")}
+                {t("groups.professorName")}
               </StyledTableCell>
               <StyledTableCell align="center" sx={{ width: "200px" }}>
-                {t("user.email")}
+                {t("user.name")}
               </StyledTableCell>
-              <StyledTableCell align="center">{t("user.code")}</StyledTableCell>
               <StyledTableCell align="center">
                 {t("commons.active")}
               </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.data.map((student: StudentItem, index: number) => (
+            {data?.data.map((group: GroupItem, index: number) => (
               <TableRow
-                key={student.user_id}
+                key={group.group_id}
                 selected={checked[index]}
                 onClick={() => {
                   handleCheck(index);
-                  setDataStudent(student);
-                  handleState(student.state);
+                  setGroup(group);
+                  handleState(group.state);
                 }}
               >
                 <StyledTableCell
@@ -80,14 +79,11 @@ export function StudentsTable(props: Props): ReactElement {
                   </Typography>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {student.name} {student.lastname}
+                  {group.professor_user.name} {group.professor_user.lastname}
                 </StyledTableCell>
+                <StyledTableCell align="center">{group.name}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {student.email}
-                </StyledTableCell>
-                <StyledTableCell align="center">{student.code}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {student.state ? (
+                  {group.state ? (
                     <Check color="success" />
                   ) : (
                     <CloseSharp color="warning" />

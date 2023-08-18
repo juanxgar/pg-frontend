@@ -1,4 +1,4 @@
-import { SignInRequest } from "@/types/request.type";
+import { SignInRequest } from "@/types";
 import axios from "axios";
 import { environment } from "@/utils";
 

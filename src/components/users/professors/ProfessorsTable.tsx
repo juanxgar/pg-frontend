@@ -1,6 +1,5 @@
 import { StyledTableCell, TablePagination } from "@/components";
-import { ProfessorItem } from "@/types/entities.type";
-import { PaginatedResult } from "@/types/result.types";
+import { ProfessorItem, PaginatedResult } from "@/types";
 import { Check, CloseSharp } from "@mui/icons-material";
 import {
   Table,

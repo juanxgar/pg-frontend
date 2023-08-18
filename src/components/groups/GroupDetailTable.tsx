@@ -1,5 +1,5 @@
 import { StyledTableCell, TablePagination } from "@/components";
-import { StudentItem, PaginatedResult } from "@/types";
+import { GroupDetailItem, GroupItem, PaginatedResult } from "@/types";
 import { Check, CloseSharp } from "@mui/icons-material";
 import {
   Table,
@@ -13,31 +13,18 @@ import { useTranslations } from "next-intl";
 import { ReactElement } from "react";
 
 interface Props {
-  checked: Array<boolean>;
-  handleCheck: (index: number) => void;
-  handleState: (index: boolean) => void;
-  data: PaginatedResult<StudentItem> | undefined;
+  data: PaginatedResult<GroupDetailItem> | undefined;
   setPage: (page: number) => void;
   limit: number;
   setLimit: (page: number) => void;
-  setDataStudent: (dataStudent: StudentItem) => void;
 }
-export function StudentsTable(props: Props): ReactElement {
-  const {
-    checked,
-    handleCheck,
-    handleState,
-    data,
-    setPage,
-    limit,
-    setLimit,
-    setDataStudent,
-  } = props;
+export function GroupDetailTable(props: Props): ReactElement {
+  const { data, setPage, limit, setLimit } = props;
   const t = useTranslations();
 
   return (
     <>
-      <TableContainer sx={{ marginTop: "2px" }}>
+      <TableContainer sx={{ marginTop: "20px" }}>
         <Table sx={{ minWidth: "700px", tableLayout: "fixed" }} stickyHeader>
           <TableHead>
             <TableRow>
@@ -60,34 +47,25 @@ export function StudentsTable(props: Props): ReactElement {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.data.map((student: StudentItem, index: number) => (
-              <TableRow
-                key={student.user_id}
-                selected={checked[index]}
-                onClick={() => {
-                  handleCheck(index);
-                  setDataStudent(student);
-                  handleState(student.state);
-                }}
-              >
+            {data?.data.map((groupDetail: GroupDetailItem, index: number) => (
+              <TableRow key={groupDetail.user.user_id}>
                 <StyledTableCell
                   align="center"
                   sx={{ width: { lg: "100px", xs: "50px" } }}
                 >
-                  <Typography fontWeight="500">
-                    {(data.meta.currentPage - 1) * data.meta.perPage +
-                      (index + 1)}
-                  </Typography>
+                  <Typography fontWeight="500">{index + 1}</Typography>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {student.name} {student.lastname}
+                  {groupDetail.user.name} {groupDetail.user.lastname}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {student.email}
+                  {groupDetail.user.email}
                 </StyledTableCell>
-                <StyledTableCell align="center">{student.code}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {student.state ? (
+                  {groupDetail.user.code}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {groupDetail.user.state ? (
                     <Check color="success" />
                   ) : (
                     <CloseSharp color="warning" />

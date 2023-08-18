@@ -1,5 +1,5 @@
 import { Breadcrumbs, Typography } from "@mui/material";
-import { Navigator } from "@/types/common.type";
+import { Navigator } from "@/types";
 import Link from "next/link";
 import { ReactElement } from "react";
 

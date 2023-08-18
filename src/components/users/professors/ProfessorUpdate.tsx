@@ -1,6 +1,5 @@
 import { CancelButton, EditButton, InputComponent } from "@/components";
-import { useSpeciality } from "@/hooks/speciality.queries";
-import { useUser } from "@/hooks/user.queries";
+import { useUser, useSpeciality } from "@/hooks";
 import { ProfessorCreationSchema } from "@/schemas";
 import { ProfessorItem, UpdateUserRequest } from "@/types";
 import { AlertColor, Box, Grid, MenuItem, Typography } from "@mui/material";

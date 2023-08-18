@@ -1,9 +1,8 @@
 import { CancelButton, EditButton, InputComponent } from "@/components";
-import { useSpeciality } from "@/hooks/speciality.queries";
-import { useUser } from "@/hooks/user.queries";
+import { useUser } from "@/hooks";
 import { StudentCreationSchema } from "@/schemas";
 import { StudentItem, UpdateUserRequest } from "@/types";
-import { AlertColor, Box, Grid, MenuItem, Typography } from "@mui/material";
+import { AlertColor, Box, Grid, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useTranslations } from "next-intl";
 import { ChangeEvent, useEffect } from "react";
@@ -27,9 +26,7 @@ export function StudentUpdate(props: Props) {
     dataStudent,
   } = props;
 
-  const { useUpdateUser } = useUser();
-
-  const { useAllSpecialities, errorStatus } = useSpeciality();
+  const { useUpdateUser, errorStatus } = useUser();
 
   const t = useTranslations();
 

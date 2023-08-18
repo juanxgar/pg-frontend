@@ -1,7 +1,7 @@
 import { CancelButton, CreateButton, InputComponent } from "@/components";
-import { useUser } from "@/hooks/user.queries";
+import { useUser } from "@/hooks";
 import { StudentCreationSchema } from "@/schemas";
-import { UserCreationBody } from "@/types/request.type";
+import { UserCreationBody } from "@/types";
 import { AlertColor, Box, Grid, MenuItem, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useTranslations } from "next-intl";

@@ -10,7 +10,10 @@ export const es = {
     home: "Inicio",
     users: "Usuarios",
     students: "Estudiantes",
+    professor: "Docente",
     professors: "Docentes",
+    groups: "Grupos",
+    detail: "Detalle",
     number: "Núm.",
     active: "Habilitado",
     inactive: "Inhabilitado",
@@ -28,6 +31,7 @@ export const es = {
       "Unidad Central del Valle del Cauca - Facultad de Ciencias de la Salud",
     creationForm: "Formulario de creación",
     updateForm: "Formulario de edición",
+    back: "Regresar",
   },
   modals: {
     deleteRegister: "¿Está seguro de eliminar el registro?",
@@ -66,5 +70,14 @@ export const es = {
   },
   specialities: {
     speciality: "Especialidad",
+  },
+  groups: {
+    group: "grupo",
+    groupsTitle: "Gestión de grupos",
+    professorName: "Nombre Docente",
+    groupName: "Nombre Grupo",
+    groupCreation: "Creación de grupo",
+    groupUpdate: "Actualización de grupo",
+    groupDetail: "Detalle de grupo",
   },
 };

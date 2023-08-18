@@ -30,3 +30,14 @@ export type ContentModal = {
 export type Locale = {
   locale: string;
 };
+
+export type LocaleGroup = {
+  locale: string;
+  group_id: string;
+};
+
+export type StudentGroupItem = {
+  user_id: number;
+  name: string;
+  code: string;
+};

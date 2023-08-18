@@ -74,12 +74,11 @@ export function GroupUpdate(props: Props): ReactElement {
     initialValues: initialValues,
     validationSchema: GroupCreationSchema(t),
     onSubmit: (values) => {
-      createGroup(values);
+      updateGroup(values);
     },
   });
 
-  const createGroup = (values: GroupCreationBody) => {
-    console.log(values);
+  const updateGroup = (values: GroupCreationBody) => {
     const request: UpdateGroupRequest = {
       group_id,
       body: values,
@@ -126,11 +125,17 @@ export function GroupUpdate(props: Props): ReactElement {
       studentsListAux.push({ user_id });
       formik.setFieldValue("group_detail", studentsListAux);
     } else {
-      console.log("el usuario ya está en la lista");
+      setMessageSnackbar(t("groups.studentAddedToList"));
+      setSeveritySnackbar("warning");
+      setOpenSnackbar(true);
     }
   };
 
   const deleteStudentFromList = (user_id: number) => {
+    const studentsListAux = studentsList.filter(
+      (student: StudentGroupItem) => student.user_id != user_id
+    );
+    formik.setFieldValue("group_detail", studentsListAux);
     setStudentsList((old) => old.filter((e) => e.user_id != user_id));
   };
 

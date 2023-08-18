@@ -176,7 +176,7 @@ export function ProfessorUpdate(props: Props) {
                   onInput={(e: ChangeEvent<HTMLInputElement>) => {
                     e.target.value = Math.max(0, parseInt(e.target.value))
                       .toString()
-                      .slice(0, 12);
+                      .slice(0, 10);
                   }}
                 />
               </Grid>

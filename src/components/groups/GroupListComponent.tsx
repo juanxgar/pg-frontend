@@ -20,7 +20,12 @@ export function ListComponent(props: Props): ReactElement {
   useEffect(() => {}, [students]);
 
   return (
-    <List sx={{ marginLeft: "60px", marginRight: "60px" }}>
+    <List
+      sx={{
+        marginLeft: { lg: "60px", xs: "0px" },
+        marginRight: { lg: "60px", xs: "0px" },
+      }}
+    >
       {students.map((student: StudentGroupItem, index: number) => (
         <ListItem
           key={student.user_id}
@@ -29,22 +34,31 @@ export function ListComponent(props: Props): ReactElement {
               edge="end"
               onClick={() => deleteStudentFromList(student.user_id)}
             >
-              <Delete sx={{ color: "#f44336" }} />
+              <Delete
+                sx={{ color: "#f44336" }}
+              />
             </IconButton>
           }
         >
           <ListItemText>
-            <Grid container>
-              <Grid item xs={2}>
-                <Typography fontSize="15px" fontWeight="500">
+            <Grid container textAlign="center">
+              <Grid item lg={2} xs={0.5}>
+                <Typography
+                  fontSize={{ lg: "15px", xs: "13px" }}
+                  fontWeight="500"
+                >
                   {index + 1}
                 </Typography>
               </Grid>
-              <Grid item xs={6}>
-                <Typography fontSize="15px">{student.name}</Typography>
+              <Grid item lg={6} xs={8}>
+                <Typography fontSize={{ lg: "15px", xs: "13px" }}>
+                  {student.name}
+                </Typography>
               </Grid>
-              <Grid item xs={4}>
-                <Typography fontSize="15px">{student.code}</Typography>
+              <Grid item lg={4} xs={3.5}>
+                <Typography fontSize={{ lg: "15px", xs: "13px" }}>
+                  {student.code}
+                </Typography>
               </Grid>
             </Grid>
           </ListItemText>

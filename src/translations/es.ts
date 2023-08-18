@@ -79,5 +79,6 @@ export const es = {
     groupCreation: "Creación de grupo",
     groupUpdate: "Actualización de grupo",
     groupDetail: "Detalle de grupo",
+    studentAddedToList: "El estudiante ya fue agregado a la lista",
   },
 };

@@ -9,14 +9,14 @@ import {
   EditButtonOuted,
   InactivateButton,
   ModalComponent,
-  ProfessorCreation,
-  ProfessorUpdate,
-  ProfessorsTable,
   SnackbarComponent,
+  GroupUpdate,
+  DetailButton,
 } from "@/components";
-import { UserSearchSchema } from "@/schemas";
+import { GroupSearchSchema } from "@/schemas";
 import {
   ContentModal,
+  GroupItem,
   Navigator,
   PaginatedResult,
   ProfessorItem,
@@ -40,30 +40,35 @@ import React, {
   useState,
 } from "react";
 import { useTheme } from "@mui/material/styles";
-import { useUser } from "@/hooks";
+import { useGroup, useUser } from "@/hooks";
+import { GroupsTable } from "./GroupsTable";
+import { GroupCreation } from "./GroupCreation";
+import { useRouter } from "next/navigation";
 
 interface Props {
   locale: string;
   setLoading: (loading: boolean) => void;
 }
 
-export function ProfessorsView(props: Props): ReactElement {
+export function GroupsView(props: Props): ReactElement {
   const { locale, setLoading } = props;
   const t = useTranslations();
+  const { useAllProfessors } = useUser();
   const {
-    useAllProfessorsWithPagination,
-    useUpdateStateUser,
-    useDeleteUser,
+    useAllGroupsWithPagination,
+    useUpdateStateGroup,
+    useDeleteGroup,
     errorStatus,
-  } = useUser();
+  } = useGroup();
+
+  const router = useRouter();
 
   const [state, setState] = useState<boolean>(false);
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
 
   const [nameDebounce, setNameDebounce] = useState<string>("");
-  const [emailDebounce, setEmailDebounce] = useState<string>("");
-  const [codeDebounce, setCodeDebounce] = useState<string>("");
+  const [professorDebounce, setProfessorDebounce] = useState<string>("");
   const [stateDebounce, setStateDebounce] = useState<boolean>(true);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -78,20 +83,33 @@ export function ProfessorsView(props: Props): ReactElement {
 
   const [disabledButtons, setDisabledButtons] = useState<boolean>(true);
 
-  const [dataProfessor, setDataProfessor] = useState<ProfessorItem>({
-    user_id: 0,
+  const [group, setGroup] = useState<GroupItem>({
+    group_id: 0,
     name: "",
-    lastname: "",
-    identification: 0,
-    role: "",
-    code: "",
-    email: "",
+    professor_user: {
+      code: "",
+      email: "",
+      identification: 0,
+      lastname: "",
+      name: "",
+      professor_speciality: [
+        {
+          speciality: {
+            description: "",
+            speciality_id: 0,
+            state: true,
+          },
+        },
+      ],
+      role: "Docente",
+      state: true,
+      user_id: 0,
+    },
     state: true,
-    professor_speciality: [],
   });
 
   const modalContentDelete: ContentModal = {
-    title: t("modals.deleteTitle") + t("user.user"),
+    title: t("modals.deleteTitle") + t("groups.group"),
     description: t("modals.deleteRegister"),
   };
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
@@ -100,7 +118,7 @@ export function ProfessorsView(props: Props): ReactElement {
 
   const navigator: Array<Navigator> = [
     { ref: `/${locale}/home`, name: t("commons.home") },
-    { ref: `/${locale}/admin/users`, name: t("commons.users") },
+    { ref: `/${locale}/admin/users`, name: t("commons.groups") },
   ];
 
   const theme: Theme = useTheme();
@@ -111,11 +129,10 @@ export function ProfessorsView(props: Props): ReactElement {
     validateOnChange: true,
     initialValues: {
       nameSearch: "",
-      emailSearch: "",
-      codeSearch: "",
+      professorSearch: "",
       stateSearch: "true",
     },
-    validationSchema: UserSearchSchema(t),
+    validationSchema: GroupSearchSchema(t),
     onSubmit: (values) => {},
   });
 
@@ -124,16 +141,26 @@ export function ProfessorsView(props: Props): ReactElement {
     isLoading,
     refetch,
   }: {
-    data: PaginatedResult<ProfessorItem> | undefined;
+    data: PaginatedResult<GroupItem> | undefined;
     isLoading: boolean;
     refetch: () => void;
-  } = useAllProfessorsWithPagination({
+  } = useAllGroupsWithPagination({
     name: nameDebounce,
-    email: emailDebounce,
-    code: codeDebounce,
+    professor_user_id: professorDebounce,
     state: stateDebounce,
     page,
     limit,
+  });
+
+  const {
+    data: dataProfessors,
+    isLoading: isLoadingProfessors,
+  }: {
+    data: Array<ProfessorItem> | undefined;
+    isLoading: boolean;
+    refetch: () => void;
+  } = useAllProfessors({
+    state: true,
   });
 
   const {
@@ -143,7 +170,7 @@ export function ProfessorsView(props: Props): ReactElement {
     isLoading: isLoadingState,
     isError,
     error,
-  } = useUpdateStateUser();
+  } = useUpdateStateGroup();
 
   const {
     mutate: mutateDelete,
@@ -152,10 +179,10 @@ export function ProfessorsView(props: Props): ReactElement {
     isLoading: isLoadingDelete,
     isError: isErrorDelete,
     error: errorDelete,
-  } = useDeleteUser();
+  } = useDeleteGroup();
 
-  const updateStateUser = (user_id: number) => {
-    mutate(user_id as unknown as string);
+  const updateStateGroup = (group_id: number) => {
+    mutate(group_id as unknown as string);
   };
 
   const handleChecked = (index: number) => {
@@ -178,6 +205,9 @@ export function ProfessorsView(props: Props): ReactElement {
   };
 
   const toggleDrawer = () => {
+    if (!openDrawer) {
+      setLoadingCreation(true);
+    }
     setOpenDrawer(!openDrawer);
   };
 
@@ -186,7 +216,7 @@ export function ProfessorsView(props: Props): ReactElement {
   };
 
   const onSubmitModalDelete = () => {
-    mutateDelete(dataProfessor.user_id as unknown as string);
+    mutateDelete(group.group_id as unknown as string);
     setChecked(Array(data?.data.length).fill(false));
     handleCloseModalDelete();
   };
@@ -214,33 +244,17 @@ export function ProfessorsView(props: Props): ReactElement {
     }
   };
 
-  const searchRefEmail = useRef(
+  const searchRefProfessor = useRef(
     debounce((value: string) => {
       setPage(0);
-      setEmailDebounce(value);
+      setProfessorDebounce(value);
     }, 2000)
   );
 
-  const handleSearchEmail = (
+  const handleSearchProfessor = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    searchRefEmail.current(event.target.value);
-    if (page) {
-      return null;
-    }
-  };
-
-  const searchRefCode = useRef(
-    debounce((value: string) => {
-      setPage(0);
-      setCodeDebounce(value);
-    }, 2000)
-  );
-
-  const handleSearchCode = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    searchRefCode.current(event.target.value);
+    searchRefProfessor.current(event.target.value);
     if (page) {
       return null;
     }
@@ -266,14 +280,13 @@ export function ProfessorsView(props: Props): ReactElement {
     debounce(() => {
       setPage(0);
       setNameDebounce("");
-      setCodeDebounce("");
-      setEmailDebounce("");
+      setProfessorDebounce("");
       setStateDebounce(true);
     }, 2000)
   );
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || isLoadingProfessors) {
       setLoading(true);
     } else {
       setChecked(Array(data?.data.length).fill(false));
@@ -284,7 +297,7 @@ export function ProfessorsView(props: Props): ReactElement {
       setSeveritySnackbar("warning");
       setOpenSnackbar(true);
     }
-  }, [isLoading, errorStatus]);
+  }, [isLoading, isLoadingProfessors, errorStatus]);
 
   useEffect(() => {
     setChecked(Array(data?.data.length).fill(false));
@@ -306,11 +319,7 @@ export function ProfessorsView(props: Props): ReactElement {
       refetch();
       setChecked(Array(data?.data.length).fill(false));
     }
-    if (isLoadingCreation) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
+
     if (isSuccessDelete) {
       setMessageSnackbar(dataDelete.message);
       setSeveritySnackbar("success");
@@ -346,13 +355,11 @@ export function ProfessorsView(props: Props): ReactElement {
       <DrawerComponent
         open={openDrawer}
         toggleDrawer={toggleDrawer}
-        title={
-          isCreation ? t("user.professorCreation") : t("user.professorUpdate")
-        }
+        title={isCreation ? t("groups.groupCreation") : t("groups.groupUpdate")}
         isLoading={isLoadingCreation}
       >
         {isCreation ? (
-          <ProfessorCreation
+          <GroupCreation
             toggleDrawer={toggleDrawer}
             setLoading={setLoadingCreation}
             setMessageSnackbar={setMessageSnackbar}
@@ -361,17 +368,21 @@ export function ProfessorsView(props: Props): ReactElement {
             refetch={refetch}
             checked={checked}
             setChecked={setChecked}
+            dataProfessors={dataProfessors}
           />
         ) : (
-          <ProfessorUpdate
-            toggleDrawer={toggleDrawer}
-            setLoading={setLoadingCreation}
-            setMessageSnackbar={setMessageSnackbar}
-            setOpenSnackbar={setOpenSnackbar}
-            setSeveritySnackbar={setSeveritySnackbar}
-            refetch={refetch}
-            dataProfessor={dataProfessor}
-          />
+          <>
+            <GroupUpdate
+              toggleDrawer={toggleDrawer}
+              setLoading={setLoadingCreation}
+              setMessageSnackbar={setMessageSnackbar}
+              setOpenSnackbar={setOpenSnackbar}
+              setSeveritySnackbar={setSeveritySnackbar}
+              refetch={refetch}
+              dataProfessors={dataProfessors}
+              group_id={group.group_id}
+            />
+          </>
         )}
       </DrawerComponent>
       <ModalComponent
@@ -397,7 +408,7 @@ export function ProfessorsView(props: Props): ReactElement {
               marginTop: { lg: "0px", xs: "10px" },
             }}
           >
-            <PageTitle>{t("user.professorsTitle")}</PageTitle>
+            <PageTitle>{t("groups.groupsTitle")}</PageTitle>
           </Box>
         </Grid>
       </Grid>
@@ -420,7 +431,7 @@ export function ProfessorsView(props: Props): ReactElement {
               id="nameSearch"
               name="nameSearch"
               label={t("user.name")}
-              value={formik.values.nameSearch || ""}
+              value={formik.values.nameSearch}
               onChange={(e) => {
                 formik.handleChange(e);
                 handleSearchName(e);
@@ -434,38 +445,33 @@ export function ProfessorsView(props: Props): ReactElement {
           <Grid item lg={2} xs={6}>
             <InputComponent
               type="search"
-              id="emailSearch"
-              name="emailSearch"
-              label={t("user.email")}
-              value={formik.values.emailSearch}
+              id="professorSearch"
+              name="professorSearch"
+              select
+              label={t("commons.professor")}
+              value={formik.values.professorSearch}
               onChange={(e) => {
                 formik.handleChange(e);
-                handleSearchEmail(e);
+                handleSearchProfessor(e);
               }}
               error={
-                formik.touched.emailSearch && Boolean(formik.errors.emailSearch)
+                formik.touched.professorSearch &&
+                Boolean(formik.errors.professorSearch)
               }
               helperText={
-                formik.touched.emailSearch && formik.errors.emailSearch
+                formik.touched.professorSearch && formik.errors.professorSearch
               }
-            />
-          </Grid>
-          <Grid item lg={2} xs={6}>
-            <InputComponent
-              type="search"
-              id="codeSearch"
-              name="codeSearch"
-              label={t("user.code")}
-              value={formik.values.codeSearch}
-              onChange={(e) => {
-                formik.handleChange(e);
-                handleSearchCode(e);
-              }}
-              error={
-                formik.touched.codeSearch && Boolean(formik.errors.codeSearch)
-              }
-              helperText={formik.touched.codeSearch && formik.errors.codeSearch}
-            />
+            >
+              {dataProfessors ? (
+                dataProfessors?.map((professor: ProfessorItem) => (
+                  <MenuItem key={professor.user_id} value={professor.user_id}>
+                    {professor.name} {professor.lastname}
+                  </MenuItem>
+                ))
+              ) : (
+                <div></div>
+              )}
+            </InputComponent>
           </Grid>
           <Grid item lg={2} xs={6}>
             <InputComponent
@@ -491,7 +497,7 @@ export function ProfessorsView(props: Props): ReactElement {
             </InputComponent>
           </Grid>
           {lg && (
-            <Grid item lg={4} xs={12}>
+            <Grid item lg={6} xs={12}>
               <CreateButton
                 onClick={() => {
                   toggleDrawer();
@@ -501,7 +507,11 @@ export function ProfessorsView(props: Props): ReactElement {
             </Grid>
           )}
 
-          <Grid item lg={12} xs={8} marginTop="20px" marginBottom="10px">
+          <Grid item lg={12} xs={9} marginTop="20px" marginBottom="10px">
+            <DetailButton
+              disabled={disabledButtons}
+              onClick={() => router.push(`/${locale}/admin/groups/${group.group_id}`)}
+            />
             <EditButtonOuted
               disabled={disabledButtons}
               onClick={() => {
@@ -513,7 +523,7 @@ export function ProfessorsView(props: Props): ReactElement {
               state={state}
               buttonProps={{
                 disabled: disabledButtons,
-                onClick: () => updateStateUser(dataProfessor.user_id),
+                onClick: () => updateStateGroup(group.group_id),
               }}
             />
             <DeleteButton
@@ -522,7 +532,7 @@ export function ProfessorsView(props: Props): ReactElement {
             />
           </Grid>
           {!lg && (
-            <Grid item lg={12} xs={4} marginTop="20px" marginBottom="10px">
+            <Grid item lg={12} xs={3} marginTop="20px" marginBottom="10px">
               <CreateButton
                 onClick={() => {
                   toggleDrawer();
@@ -535,7 +545,7 @@ export function ProfessorsView(props: Props): ReactElement {
       </form>
 
       {!isLoading && (
-        <ProfessorsTable
+        <GroupsTable
           checked={checked}
           handleCheck={handleChecked}
           handleState={handleState}
@@ -543,7 +553,7 @@ export function ProfessorsView(props: Props): ReactElement {
           setPage={setPage}
           limit={limit}
           setLimit={setLimit}
-          setDataProfessor={setDataProfessor}
+          setGroup={setGroup}
         />
       )}
     </>

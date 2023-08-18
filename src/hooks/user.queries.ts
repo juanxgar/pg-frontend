@@ -1,16 +1,16 @@
-import { UserService } from "@/services/user.services";
-import { ErrorResponse } from "@/types/common.type";
-import { ProfessorItem, UserItem } from "@/types/entities.type";
+import { UserService } from "@/services";
 import {
-  UpdateUserRequest,
-  UserCreationBody,
-  UserFilterParams,
-} from "@/types/request.type";
-import {
+  ProfessorItem,
+  StudentItem,
+  UserItem,
+  ErrorResponse,
   ErrorResultQuery,
   MessageResult,
   PaginatedResult,
-} from "@/types/result.types";
+  UpdateUserRequest,
+  UserCreationBody,
+  UserFilterParams,
+} from "@/types";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import {
@@ -29,6 +29,69 @@ export const useUser = () => {
     return useQuery(
       ["professors-pagination-list", params],
       () => UserService.getAllProfessorsWithPagination(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
+  const useAllProfessors = (
+    params: UserFilterParams
+  ): UseQueryResult<Array<ProfessorItem>, unknown> => {
+    return useQuery(
+      ["professors-list", params],
+      () => UserService.getAllProfessors(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
+  const useAllStudentsWithPagination = (
+    params: UserFilterParams
+  ): UseQueryResult<PaginatedResult<StudentItem>, unknown> => {
+    return useQuery(
+      ["students-pagination-list", params],
+      () => UserService.getAllStudentsWithPagination(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
+  const useAllStudents = (
+    params: UserFilterParams
+  ): UseQueryResult<Array<StudentItem>> => {
+    return useQuery(
+      ["students-list", params],
+      () => UserService.getAllStudents(params),
       {
         refetchOnWindowFocus: false,
         retry: false,
@@ -68,6 +131,14 @@ export const useUser = () => {
       mutationKey: ["add-user"],
       mutationFn: (data: UserCreationBody) => UserService.createUser(data),
       retry: false,
+      onError(err: ErrorResultQuery) {
+        if (err.status === 401) {
+          setErrorStatus(401);
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
+      },
     });
   };
 
@@ -112,9 +183,12 @@ export const useUser = () => {
     errorStatus,
     useLoggedUser,
     useAllProfessorsWithPagination,
+    useAllStudentsWithPagination,
     useCreateUser,
     useUpdateUser,
     useUpdateStateUser,
     useDeleteUser,
+    useAllProfessors,
+    useAllStudents,
   };
 };

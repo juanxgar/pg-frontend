@@ -1,7 +1,5 @@
-import { SpecialityService } from "@/services/speciality.services";
-import { ErrorResponse } from "@/types/common.type";
-import { SpecialityItem } from "@/types/entities.type";
-import { SpecialityFilterParams } from "@/types/request.type";
+import { SpecialityService } from "@/services";
+import { ErrorResponse, SpecialityItem, SpecialityFilterParams } from "@/types";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";

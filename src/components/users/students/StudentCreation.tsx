@@ -1,6 +1,6 @@
 import { CancelButton, CreateButton, InputComponent } from "@/components";
-import { useSpeciality, useUser } from "@/hooks";
-import { ProfessorCreationSchema } from "@/schemas";
+import { useUser } from "@/hooks";
+import { StudentCreationSchema } from "@/schemas";
 import { UserCreationBody } from "@/types";
 import { AlertColor, Box, Grid, MenuItem, Typography } from "@mui/material";
 import { useFormik } from "formik";
@@ -9,7 +9,6 @@ import { ChangeEvent, ReactElement, useEffect } from "react";
 
 interface Props {
   toggleDrawer: () => void;
-  setLoading: (loading: boolean) => void;
   setMessageSnackbar: (message: string) => void;
   setSeveritySnackbar: (severity: AlertColor) => void;
   setOpenSnackbar: (openSnackbar: boolean) => void;
@@ -18,11 +17,10 @@ interface Props {
   setChecked: (cheked: Array<boolean>) => void;
 }
 
-export function ProfessorCreation(props: Props): ReactElement {
+export function StudentCreation(props: Props): ReactElement {
   const {
     toggleDrawer,
     refetch,
-    setLoading,
     setMessageSnackbar,
     setSeveritySnackbar,
     setOpenSnackbar,
@@ -30,9 +28,7 @@ export function ProfessorCreation(props: Props): ReactElement {
     setChecked,
   } = props;
 
-  const { useCreateUser } = useUser();
-
-  const { useAllSpecialities, errorStatus } = useSpeciality();
+  const { errorStatus, useCreateUser } = useUser();
 
   const t = useTranslations();
 
@@ -43,13 +39,12 @@ export function ProfessorCreation(props: Props): ReactElement {
       name: "",
       lastname: "",
       identification: 0,
-      role: "Profesor",
+      role: "Estudiante",
       code: "",
       email: "",
       password: "",
-      speciality_id: undefined,
     },
-    validationSchema: ProfessorCreationSchema(t),
+    validationSchema: StudentCreationSchema(t),
     onSubmit: (values) => {
       createUser(values);
     },
@@ -59,10 +54,6 @@ export function ProfessorCreation(props: Props): ReactElement {
     mutate(values);
   };
 
-  const { data, isLoading } = useAllSpecialities({
-    state: true,
-  });
-
   const {
     mutate,
     isSuccess,
@@ -71,12 +62,6 @@ export function ProfessorCreation(props: Props): ReactElement {
     isError,
     error,
   } = useCreateUser();
-
-  useEffect(() => {
-    if (!isLoading) {
-      setLoading(false);
-    }
-  }, [isLoading]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -209,37 +194,6 @@ export function ProfessorCreation(props: Props): ReactElement {
               helperText={formik.touched.password && formik.errors.password}
               inputProps={{ maxLength: 20 }}
             />
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <InputComponent
-              type="number"
-              select
-              id="speciality_id"
-              name="speciality_id"
-              label={t("specialities.speciality")}
-              value={formik.values.speciality_id ?? ""}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.speciality_id &&
-                Boolean(formik.errors.speciality_id)
-              }
-              helperText={
-                formik.touched.speciality_id && formik.errors.speciality_id
-              }
-            >
-              {data ? (
-                data?.map((speciality) => (
-                  <MenuItem
-                    key={speciality.speciality_id}
-                    value={speciality.speciality_id}
-                  >
-                    {speciality.description}
-                  </MenuItem>
-                ))
-              ) : (
-                <div></div>
-              )}
-            </InputComponent>
           </Grid>
           <Grid
             item

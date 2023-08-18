@@ -9,7 +9,7 @@ interface Props {
   toggleDrawer: () => void;
   children: ReactElement;
   title: string;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const styleCloseButton = {

@@ -9,18 +9,13 @@ import {
   EditButtonOuted,
   InactivateButton,
   ModalComponent,
-  ProfessorCreation,
-  ProfessorUpdate,
-  ProfessorsTable,
   SnackbarComponent,
+  StudentsTable,
+  StudentUpdate,
+  StudentCreation,
 } from "@/components";
 import { UserSearchSchema } from "@/schemas";
-import {
-  ContentModal,
-  Navigator,
-  PaginatedResult,
-  ProfessorItem,
-} from "@/types";
+import { ContentModal, Navigator } from "@/types";
 import {
   AlertColor,
   Box,
@@ -41,17 +36,18 @@ import React, {
 } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useUser } from "@/hooks";
+import { StudentItem, PaginatedResult } from "@/types";
 
 interface Props {
   locale: string;
   setLoading: (loading: boolean) => void;
 }
 
-export function ProfessorsView(props: Props): ReactElement {
+export function StudentsView(props: Props): ReactElement {
   const { locale, setLoading } = props;
   const t = useTranslations();
   const {
-    useAllProfessorsWithPagination,
+    useAllStudentsWithPagination,
     useUpdateStateUser,
     useDeleteUser,
     errorStatus,
@@ -73,12 +69,11 @@ export function ProfessorsView(props: Props): ReactElement {
   const [severitySnackbar, setSeveritySnackbar] =
     useState<AlertColor>("success");
 
-  const [isLoadingCreation, setLoadingCreation] = useState<boolean>(true);
   const [isCreation, setCreation] = useState<boolean>(false);
 
   const [disabledButtons, setDisabledButtons] = useState<boolean>(true);
 
-  const [dataProfessor, setDataProfessor] = useState<ProfessorItem>({
+  const [dataStudent, setDataStudent] = useState<StudentItem>({
     user_id: 0,
     name: "",
     lastname: "",
@@ -87,7 +82,6 @@ export function ProfessorsView(props: Props): ReactElement {
     code: "",
     email: "",
     state: true,
-    professor_speciality: [],
   });
 
   const modalContentDelete: ContentModal = {
@@ -124,10 +118,10 @@ export function ProfessorsView(props: Props): ReactElement {
     isLoading,
     refetch,
   }: {
-    data: PaginatedResult<ProfessorItem> | undefined;
+    data: PaginatedResult<StudentItem> | undefined;
     isLoading: boolean;
     refetch: () => void;
-  } = useAllProfessorsWithPagination({
+  } = useAllStudentsWithPagination({
     name: nameDebounce,
     email: emailDebounce,
     code: codeDebounce,
@@ -186,8 +180,7 @@ export function ProfessorsView(props: Props): ReactElement {
   };
 
   const onSubmitModalDelete = () => {
-    mutateDelete(dataProfessor.user_id as unknown as string);
-    setChecked(Array(data?.data.length).fill(false));
+    mutateDelete(dataStudent.user_id as unknown as string);
     handleCloseModalDelete();
   };
 
@@ -249,7 +242,7 @@ export function ProfessorsView(props: Props): ReactElement {
   const searchRefState = useRef(
     debounce((value: string) => {
       setPage(0);
-      setStateDebounce(value === "true");
+      setStateDebounce(value === "true" ? true : false);
     }, 2000)
   );
 
@@ -304,12 +297,6 @@ export function ProfessorsView(props: Props): ReactElement {
       setSeveritySnackbar("success");
       setOpenSnackbar(true);
       refetch();
-      setChecked(Array(data?.data.length).fill(false));
-    }
-    if (isLoadingCreation) {
-      setLoading(true);
-    } else {
-      setLoading(false);
     }
     if (isSuccessDelete) {
       setMessageSnackbar(dataDelete.message);
@@ -346,15 +333,11 @@ export function ProfessorsView(props: Props): ReactElement {
       <DrawerComponent
         open={openDrawer}
         toggleDrawer={toggleDrawer}
-        title={
-          isCreation ? t("user.professorCreation") : t("user.professorUpdate")
-        }
-        isLoading={isLoadingCreation}
+        title={isCreation ? t("user.studentCreation") : t("user.studentUpdate")}
       >
         {isCreation ? (
-          <ProfessorCreation
+          <StudentCreation
             toggleDrawer={toggleDrawer}
-            setLoading={setLoadingCreation}
             setMessageSnackbar={setMessageSnackbar}
             setOpenSnackbar={setOpenSnackbar}
             setSeveritySnackbar={setSeveritySnackbar}
@@ -363,14 +346,13 @@ export function ProfessorsView(props: Props): ReactElement {
             setChecked={setChecked}
           />
         ) : (
-          <ProfessorUpdate
+          <StudentUpdate
             toggleDrawer={toggleDrawer}
-            setLoading={setLoadingCreation}
             setMessageSnackbar={setMessageSnackbar}
             setOpenSnackbar={setOpenSnackbar}
             setSeveritySnackbar={setSeveritySnackbar}
             refetch={refetch}
-            dataProfessor={dataProfessor}
+            dataStudent={dataStudent}
           />
         )}
       </DrawerComponent>
@@ -397,7 +379,7 @@ export function ProfessorsView(props: Props): ReactElement {
               marginTop: { lg: "0px", xs: "10px" },
             }}
           >
-            <PageTitle>{t("user.professorsTitle")}</PageTitle>
+            <PageTitle>{t("user.studentsTitle")}</PageTitle>
           </Box>
         </Grid>
       </Grid>
@@ -513,7 +495,7 @@ export function ProfessorsView(props: Props): ReactElement {
               state={state}
               buttonProps={{
                 disabled: disabledButtons,
-                onClick: () => updateStateUser(dataProfessor.user_id),
+                onClick: () => updateStateUser(dataStudent.user_id),
               }}
             />
             <DeleteButton
@@ -535,7 +517,7 @@ export function ProfessorsView(props: Props): ReactElement {
       </form>
 
       {!isLoading && (
-        <ProfessorsTable
+        <StudentsTable
           checked={checked}
           handleCheck={handleChecked}
           handleState={handleState}
@@ -543,7 +525,7 @@ export function ProfessorsView(props: Props): ReactElement {
           setPage={setPage}
           limit={limit}
           setLimit={setLimit}
-          setDataProfessor={setDataProfessor}
+          setDataStudent={setDataStudent}
         />
       )}
     </>

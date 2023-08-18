@@ -1,6 +1,5 @@
-import { useUser } from "@/hooks/user.queries";
-import { UserItem } from "@/types";
-import { MenuOptions } from "@/types/common.type";
+import { useUser } from "@/hooks";
+import { UserItem, MenuOptions } from "@/types";
 import {
   Images,
   MenuOptionsAdminEs,

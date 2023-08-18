@@ -2,7 +2,7 @@
 
 import { ReactElement } from "react";
 import { Home, MedicalInformation, People, Person } from "@mui/icons-material";
-import { MenuOptions } from "@/types/common.type";
+import { MenuOptions } from "@/types";
 
 export const MenuOptionsAdminEs: Array<MenuOptions> = [
   

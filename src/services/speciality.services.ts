@@ -1,5 +1,5 @@
 import { Http } from "@/libs";
-import { SpecialityFilterParams } from "@/types/request.type";
+import { ErrorResult, SpecialityFilterParams, SpecialityItem } from "@/types";
 
 class SpecialityServices {
   private http;
@@ -7,7 +7,9 @@ class SpecialityServices {
     this.http = new Http().getInstance();
   }
 
-  getAllSpecialities(params: SpecialityFilterParams) {
+  getAllSpecialities(
+    params: SpecialityFilterParams
+  ): Promise<Array<SpecialityItem> | ErrorResult> {
     return this.http.get(`/specialities`, {
       params,
     });

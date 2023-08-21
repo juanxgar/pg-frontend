@@ -15,6 +15,7 @@ interface Props {
   setOpenSnackbar: (open: boolean) => void;
   refetch: () => void;
   dataProfessor: ProfessorItem;
+  updateChecked: () => void;
 }
 
 export function ProfessorUpdate(props: Props) {
@@ -26,6 +27,7 @@ export function ProfessorUpdate(props: Props) {
     setSeveritySnackbar,
     setOpenSnackbar,
     dataProfessor,
+    updateChecked,
   } = props;
 
   const { useUpdateUser } = useUser();
@@ -52,15 +54,15 @@ export function ProfessorUpdate(props: Props) {
     validationSchema: ProfessorCreationSchema(t),
     onSubmit: (values) => {
       const { user_id, ...body } = values;
-      const updateUser: UpdateUserRequest = {
+      const updateUserRequest: UpdateUserRequest = {
         user_id,
         body,
       };
-      createUser(updateUser);
+      updateUser(updateUserRequest);
     },
   });
 
-  const createUser = (values: UpdateUserRequest) => {
+  const updateUser = (values: UpdateUserRequest) => {
     mutate(values);
     refetch();
   };
@@ -91,6 +93,7 @@ export function ProfessorUpdate(props: Props) {
       setSeveritySnackbar("success");
       setOpenSnackbar(true);
       refetch();
+      updateChecked();
     }
   }, [isLoadingUpdate]);
 

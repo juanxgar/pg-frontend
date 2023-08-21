@@ -380,7 +380,7 @@ export function GroupsView(props: Props): ReactElement {
               setSeveritySnackbar={setSeveritySnackbar}
               refetch={refetch}
               dataProfessors={dataProfessors}
-              group_id={group.group_id}
+              group_id={`${group.group_id}`}
             />
           </>
         )}
@@ -510,7 +510,9 @@ export function GroupsView(props: Props): ReactElement {
           <Grid item lg={12} xs={9} marginTop="20px" marginBottom="10px">
             <DetailButton
               disabled={disabledButtons}
-              onClick={() => router.push(`/${locale}/admin/groups/${group.group_id}`)}
+              onClick={() =>
+                router.push(`/${locale}/admin/groups/${group.group_id}`)
+              }
             />
             <EditButtonOuted
               disabled={disabledButtons}

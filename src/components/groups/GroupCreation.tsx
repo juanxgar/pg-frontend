@@ -66,6 +66,7 @@ export function GroupCreation(props: Props): ReactElement {
 
   const createGroup = (values: GroupCreationBody) => {
     mutate(values);
+    refetch();
   };
 
   const {

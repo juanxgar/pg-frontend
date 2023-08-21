@@ -3,6 +3,7 @@ import {
   BackButton,
   Breadcrumb,
   CleanSearchButton,
+  GroupDetailTable,
   InputComponent,
   PageTitle,
   SnackbarComponent,
@@ -17,7 +18,6 @@ import {
 } from "@/types";
 import { UserSearchSchema } from "@/schemas";
 import { useFormik } from "formik";
-import { GroupDetailTable } from "./GroupDetailTable";
 import { useGroup } from "@/hooks";
 import { useRouter } from "next/navigation";
 

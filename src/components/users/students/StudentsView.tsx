@@ -15,7 +15,7 @@ import {
   StudentCreation,
 } from "@/components";
 import { UserSearchSchema } from "@/schemas";
-import { ContentModal, Navigator } from "@/types";
+import { ContentModal, Navigator, StudentItem, PaginatedResult } from "@/types";
 import {
   AlertColor,
   Box,
@@ -36,7 +36,6 @@ import React, {
 } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useUser } from "@/hooks";
-import { StudentItem, PaginatedResult } from "@/types";
 
 interface Props {
   locale: string;
@@ -163,6 +162,10 @@ export function StudentsView(props: Props): ReactElement {
     setChecked(isChecked);
   };
 
+  const updateCheked = () => {
+    setChecked(Array(data?.data.length).fill(false));
+  };
+
   const handleState = (state: boolean) => {
     setState(state);
   };
@@ -242,7 +245,7 @@ export function StudentsView(props: Props): ReactElement {
   const searchRefState = useRef(
     debounce((value: string) => {
       setPage(0);
-      setStateDebounce(value === "true" ? true : false);
+      setStateDebounce(value === "true");
     }, 2000)
   );
 
@@ -344,6 +347,7 @@ export function StudentsView(props: Props): ReactElement {
             refetch={refetch}
             checked={checked}
             setChecked={setChecked}
+            updateChecked={updateCheked}
           />
         ) : (
           <StudentUpdate
@@ -353,6 +357,7 @@ export function StudentsView(props: Props): ReactElement {
             setSeveritySnackbar={setSeveritySnackbar}
             refetch={refetch}
             dataStudent={dataStudent}
+            updateChecked={updateCheked}
           />
         )}
       </DrawerComponent>

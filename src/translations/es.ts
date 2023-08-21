@@ -13,6 +13,7 @@ export const es = {
     professor: "Docente",
     professors: "Docentes",
     groups: "Grupos",
+    specialities: "Especialidades",
     detail: "Detalle",
     number: "Núm.",
     active: "Habilitado",
@@ -70,6 +71,10 @@ export const es = {
   },
   specialities: {
     speciality: "Especialidad",
+    specialitiesTitle: "Gestión de especialidades",
+    description: "Descripción",
+    specialityCreation: "Creación de especialidad",
+    specialityUpdate: "Actualización de especialidad",
   },
   groups: {
     group: "grupo",

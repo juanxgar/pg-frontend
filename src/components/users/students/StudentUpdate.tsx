@@ -14,6 +14,7 @@ interface Props {
   setOpenSnackbar: (open: boolean) => void;
   refetch: () => void;
   dataStudent: StudentItem;
+  updateChecked: () => void;
 }
 
 export function StudentUpdate(props: Props) {
@@ -24,6 +25,7 @@ export function StudentUpdate(props: Props) {
     setSeveritySnackbar,
     setOpenSnackbar,
     dataStudent,
+    updateChecked,
   } = props;
 
   const { useUpdateUser, errorStatus } = useUser();
@@ -46,15 +48,15 @@ export function StudentUpdate(props: Props) {
     validationSchema: StudentCreationSchema(t),
     onSubmit: (values) => {
       const { user_id, ...body } = values;
-      const updateUser: UpdateUserRequest = {
+      const updateUserRequest: UpdateUserRequest = {
         user_id,
         body,
       };
-      createUser(updateUser);
+      updateUser(updateUserRequest);
     },
   });
 
-  const createUser = (values: UpdateUserRequest) => {
+  const updateUser = (values: UpdateUserRequest) => {
     mutate(values);
     refetch();
   };
@@ -75,6 +77,7 @@ export function StudentUpdate(props: Props) {
       setSeveritySnackbar("success");
       setOpenSnackbar(true);
       refetch();
+      updateChecked();
     }
   }, [isLoadingUpdate]);
 

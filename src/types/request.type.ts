@@ -54,7 +54,7 @@ export type GroupDetailBody = {
 };
 
 export type UpdateGroupRequest = {
-  group_id: number;
+  group_id: string;
   body: GroupCreationBody;
 };
 
@@ -67,4 +67,13 @@ export type GroupDetailParams = {
   name?: string;
   page?: number;
   limit?: number;
+};
+
+export type SpecialityCreationBody = {
+  description: string;
+};
+
+export type UpdateSpecialityRequest = {
+  speciality_id: string;
+  body: SpecialityCreationBody;
 };

@@ -1,11 +1,16 @@
 "use client";
 
 import { ReactElement } from "react";
-import { Home, MedicalInformation, People, Person } from "@mui/icons-material";
+import {
+  Home,
+  LocalHospital,
+  MedicalInformation,
+  People,
+  Person,
+} from "@mui/icons-material";
 import { MenuOptions } from "@/types";
 
 export const MenuOptionsAdminEs: Array<MenuOptions> = [
-  
   {
     name: "Inicio",
     pathname: "/home",
@@ -33,6 +38,12 @@ export const MenuOptionsAdminEs: Array<MenuOptions> = [
     name: "Especialidades",
     pathname: "/admin/specialities",
     icon: (): ReactElement => <MedicalInformation />,
+    items: [],
+  },
+  {
+    name: "Centros Médicos",
+    pathname: "/admin/locatinons",
+    icon: (): ReactElement => <LocalHospital />,
     items: [],
   },
 ];

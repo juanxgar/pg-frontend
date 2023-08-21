@@ -2,7 +2,7 @@ import { CancelButton, CreateButton, InputComponent } from "@/components";
 import { useUser } from "@/hooks";
 import { StudentCreationSchema } from "@/schemas";
 import { UserCreationBody } from "@/types";
-import { AlertColor, Box, Grid, MenuItem, Typography } from "@mui/material";
+import { AlertColor, Box, Grid, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useTranslations } from "next-intl";
 import { ChangeEvent, ReactElement, useEffect } from "react";
@@ -15,6 +15,7 @@ interface Props {
   refetch: () => void;
   checked: Array<boolean>;
   setChecked: (cheked: Array<boolean>) => void;
+  updateChecked: () => void;
 }
 
 export function StudentCreation(props: Props): ReactElement {
@@ -26,6 +27,7 @@ export function StudentCreation(props: Props): ReactElement {
     setOpenSnackbar,
     checked,
     setChecked,
+    updateChecked,
   } = props;
 
   const { errorStatus, useCreateUser } = useUser();
@@ -52,6 +54,7 @@ export function StudentCreation(props: Props): ReactElement {
 
   const createUser = (values: UserCreationBody) => {
     mutate(values);
+    refetch();
   };
 
   const {
@@ -72,6 +75,7 @@ export function StudentCreation(props: Props): ReactElement {
       refetch();
       checked.push(false);
       setChecked(checked);
+      updateChecked();
     }
   }, [isLoadingCreation]);
 

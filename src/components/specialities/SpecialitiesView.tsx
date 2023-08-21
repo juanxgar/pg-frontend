@@ -1,69 +1,60 @@
+import { ChangeEvent, ReactElement, useEffect, useRef, useState } from "react";
 import {
   Breadcrumb,
-  CreateButton,
-  PageTitle,
-  InputComponent,
   CleanSearchButton,
+  CreateButton,
   DeleteButton,
   DrawerComponent,
   EditButtonOuted,
   InactivateButton,
+  InputComponent,
   ModalComponent,
-  ProfessorCreation,
-  ProfessorUpdate,
-  ProfessorsTable,
+  PageTitle,
   SnackbarComponent,
+  SpecialitiesTable,
+  SpecialityCreation,
+  SpecialityUpdate,
 } from "@/components";
-import { UserSearchSchema } from "@/schemas";
-import {
-  ContentModal,
-  Navigator,
-  PaginatedResult,
-  ProfessorItem,
-} from "@/types";
 import {
   AlertColor,
   Box,
   Grid,
   MenuItem,
-  Theme,
   debounce,
   useMediaQuery,
 } from "@mui/material";
-import { useFormik } from "formik";
+import { Theme, useTheme } from "@mui/material/styles";
 import { useTranslations } from "next-intl";
-import React, {
-  ChangeEvent,
-  ReactElement,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { useTheme } from "@mui/material/styles";
-import { useUser } from "@/hooks";
+import {
+  ContentModal,
+  Navigator,
+  PaginatedResult,
+  SpecialityItem,
+} from "@/types";
+import { SpecialitySearchSchema } from "@/schemas";
+import { useFormik } from "formik";
+import { useSpeciality } from "@/hooks";
 
 interface Props {
   locale: string;
   setLoading: (loading: boolean) => void;
 }
 
-export function ProfessorsView(props: Props): ReactElement {
+export function SpecialititiesView(props: Props): ReactElement {
   const { locale, setLoading } = props;
   const t = useTranslations();
   const {
-    useAllProfessorsWithPagination,
-    useUpdateStateUser,
-    useDeleteUser,
+    useAllSpecialitiesWithPagination,
+    useUpdateStateSpeciality,
+    useDeleteSpeciality,
     errorStatus,
-  } = useUser();
+  } = useSpeciality();
 
   const [state, setState] = useState<boolean>(false);
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
 
-  const [nameDebounce, setNameDebounce] = useState<string>("");
-  const [emailDebounce, setEmailDebounce] = useState<string>("");
-  const [codeDebounce, setCodeDebounce] = useState<string>("");
+  const [descriptionDebounce, setDescriptionDebounce] = useState<string>("");
   const [stateDebounce, setStateDebounce] = useState<boolean>(true);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -73,35 +64,29 @@ export function ProfessorsView(props: Props): ReactElement {
   const [severitySnackbar, setSeveritySnackbar] =
     useState<AlertColor>("success");
 
-  const [isLoadingCreation, setLoadingCreation] = useState<boolean>(true);
   const [isCreation, setCreation] = useState<boolean>(false);
 
   const [disabledButtons, setDisabledButtons] = useState<boolean>(true);
 
-  const [dataProfessor, setDataProfessor] = useState<ProfessorItem>({
-    user_id: 0,
-    name: "",
-    lastname: "",
-    identification: 0,
-    role: "",
-    code: "",
-    email: "",
-    state: true,
-    professor_speciality: [],
-  });
-
-  const modalContentDelete: ContentModal = {
-    title: t("modals.deleteTitle") + t("user.user"),
-    description: t("modals.deleteRegister"),
-  };
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
 
   const [checked, setChecked] = useState<Array<boolean>>([]);
 
+  const [speciality, setSpeciality] = useState<SpecialityItem>({
+    description: "",
+    speciality_id: 0,
+    state: false,
+  });
+
   const navigator: Array<Navigator> = [
     { ref: `/${locale}/home`, name: t("commons.home") },
-    { ref: `/${locale}/admin/users`, name: t("commons.users") },
+    { ref: `/${locale}/admin/specialities`, name: t("commons.specialities") },
   ];
+
+  const modalContentDelete: ContentModal = {
+    title: t("modals.deleteTitle") + t("groups.group"),
+    description: t("modals.deleteRegister"),
+  };
 
   const theme: Theme = useTheme();
   const lg: boolean = useMediaQuery(theme.breakpoints.up("lg"));
@@ -110,12 +95,10 @@ export function ProfessorsView(props: Props): ReactElement {
     enableReinitialize: true,
     validateOnChange: true,
     initialValues: {
-      nameSearch: "",
-      emailSearch: "",
-      codeSearch: "",
+      descriptionSearch: "",
       stateSearch: "true",
     },
-    validationSchema: UserSearchSchema(t),
+    validationSchema: SpecialitySearchSchema(t),
     onSubmit: (values) => {},
   });
 
@@ -124,16 +107,14 @@ export function ProfessorsView(props: Props): ReactElement {
     isLoading,
     refetch,
   }: {
-    data: PaginatedResult<ProfessorItem> | undefined;
+    data: PaginatedResult<SpecialityItem> | undefined;
     isLoading: boolean;
     refetch: () => void;
-  } = useAllProfessorsWithPagination({
-    name: nameDebounce,
-    email: emailDebounce,
-    code: codeDebounce,
+  } = useAllSpecialitiesWithPagination({
+    description: descriptionDebounce,
     state: stateDebounce,
-    page,
     limit,
+    page,
   });
 
   const {
@@ -143,7 +124,7 @@ export function ProfessorsView(props: Props): ReactElement {
     isLoading: isLoadingState,
     isError,
     error,
-  } = useUpdateStateUser();
+  } = useUpdateStateSpeciality();
 
   const {
     mutate: mutateDelete,
@@ -152,10 +133,10 @@ export function ProfessorsView(props: Props): ReactElement {
     isLoading: isLoadingDelete,
     isError: isErrorDelete,
     error: errorDelete,
-  } = useDeleteUser();
+  } = useDeleteSpeciality();
 
-  const updateStateUser = (user_id: number) => {
-    mutate(user_id as unknown as string);
+  const updateStateSpeciality = (speciality_id: number) => {
+    mutate(speciality_id as unknown as string);
   };
 
   const handleChecked = (index: number) => {
@@ -190,7 +171,7 @@ export function ProfessorsView(props: Props): ReactElement {
   };
 
   const onSubmitModalDelete = () => {
-    mutateDelete(dataProfessor.user_id as unknown as string);
+    mutateDelete(speciality.speciality_id as unknown as string);
     setChecked(Array(data?.data.length).fill(false));
     handleCloseModalDelete();
   };
@@ -200,51 +181,19 @@ export function ProfessorsView(props: Props): ReactElement {
     searchRefClear.current();
   };
 
-  const searchRefName = useRef(
+  const searchRefDescription = useRef(
     debounce((value: string) => {
       setPage(0);
-      setNameDebounce(value);
+      setDescriptionDebounce(value);
     }, 2000)
   );
 
-  const handleSearchName = (
+  const handleSearchDescription = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setLoading(true);
-    searchRefName.current(event.target.value);
+    searchRefDescription.current(event.target.value);
     setLoading(false);
-    if (page) {
-      return null;
-    }
-  };
-
-  const searchRefEmail = useRef(
-    debounce((value: string) => {
-      setPage(0);
-      setEmailDebounce(value);
-    }, 2000)
-  );
-
-  const handleSearchEmail = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    searchRefEmail.current(event.target.value);
-    if (page) {
-      return null;
-    }
-  };
-
-  const searchRefCode = useRef(
-    debounce((value: string) => {
-      setPage(0);
-      setCodeDebounce(value);
-    }, 2000)
-  );
-
-  const handleSearchCode = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    searchRefCode.current(event.target.value);
     if (page) {
       return null;
     }
@@ -269,9 +218,7 @@ export function ProfessorsView(props: Props): ReactElement {
   const searchRefClear = useRef(
     debounce(() => {
       setPage(0);
-      setNameDebounce("");
-      setCodeDebounce("");
-      setEmailDebounce("");
+      setDescriptionDebounce("");
       setStateDebounce(true);
     }, 2000)
   );
@@ -310,11 +257,7 @@ export function ProfessorsView(props: Props): ReactElement {
       refetch();
       setChecked(Array(data?.data.length).fill(false));
     }
-    if (isLoadingCreation) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
+
     if (isSuccessDelete) {
       setMessageSnackbar(dataDelete.message);
       setSeveritySnackbar("success");
@@ -347,51 +290,50 @@ export function ProfessorsView(props: Props): ReactElement {
 
   return (
     <>
-      <DrawerComponent
-        open={openDrawer}
-        toggleDrawer={toggleDrawer}
-        title={
-          isCreation ? t("user.professorCreation") : t("user.professorUpdate")
-        }
-        isLoading={isLoadingCreation}
-      >
-        {isCreation ? (
-          <ProfessorCreation
-            toggleDrawer={toggleDrawer}
-            setLoading={setLoadingCreation}
-            setMessageSnackbar={setMessageSnackbar}
-            setOpenSnackbar={setOpenSnackbar}
-            setSeveritySnackbar={setSeveritySnackbar}
-            refetch={refetch}
-            checked={checked}
-            setChecked={setChecked}
-            updateChecked={updateCheked}
-          />
-        ) : (
-          <ProfessorUpdate
-            toggleDrawer={toggleDrawer}
-            setLoading={setLoadingCreation}
-            setMessageSnackbar={setMessageSnackbar}
-            setOpenSnackbar={setOpenSnackbar}
-            setSeveritySnackbar={setSeveritySnackbar}
-            refetch={refetch}
-            dataProfessor={dataProfessor}
-            updateChecked={updateCheked}
-          />
-        )}
-      </DrawerComponent>
-      <ModalComponent
-        open={openModalDelete}
-        onClose={handleCloseModalDelete}
-        content={modalContentDelete}
-        onSubmit={onSubmitModalDelete}
-      />
       <SnackbarComponent
         open={openSnackbar}
         handleClose={handleCloseSnackbar}
         severity={severitySnackbar}
         message={messageSnackbar}
       />
+      <ModalComponent
+        open={openModalDelete}
+        onClose={handleCloseModalDelete}
+        content={modalContentDelete}
+        onSubmit={onSubmitModalDelete}
+      />
+      <DrawerComponent
+        open={openDrawer}
+        toggleDrawer={toggleDrawer}
+        title={
+          isCreation
+            ? t("specialities.specialityCreation")
+            : t("specialities.specialityUpdate")
+        }
+      >
+        {isCreation ? (
+          <SpecialityCreation
+            checked={checked}
+            refetch={refetch}
+            setChecked={setChecked}
+            setMessageSnackbar={setMessageSnackbar}
+            setOpenSnackbar={setOpenSnackbar}
+            setSeveritySnackbar={setSeveritySnackbar}
+            toggleDrawer={toggleDrawer}
+            updateChecked={updateCheked}
+          />
+        ) : (
+          <SpecialityUpdate
+            refetch={refetch}
+            setMessageSnackbar={setMessageSnackbar}
+            setOpenSnackbar={setOpenSnackbar}
+            setSeveritySnackbar={setSeveritySnackbar}
+            toggleDrawer={toggleDrawer}
+            dataSpeciality={speciality}
+            updateChecked={updateCheked}
+          />
+        )}
+      </DrawerComponent>
       <Grid container>
         <Grid item lg={6} xs={12}>
           <Breadcrumb navigator={navigator} />
@@ -403,10 +345,11 @@ export function ProfessorsView(props: Props): ReactElement {
               marginTop: { lg: "0px", xs: "10px" },
             }}
           >
-            <PageTitle>{t("user.professorsTitle")}</PageTitle>
+            <PageTitle>{t("specialities.specialitiesTitle")}</PageTitle>
           </Box>
         </Grid>
       </Grid>
+
       <form onSubmit={formik.handleSubmit}>
         <Box
           sx={{
@@ -423,54 +366,22 @@ export function ProfessorsView(props: Props): ReactElement {
           <Grid item lg={2} xs={6}>
             <InputComponent
               type="search"
-              id="nameSearch"
-              name="nameSearch"
+              id="descriptionSearch"
+              name="descriptionSearch"
               label={t("user.name")}
-              value={formik.values.nameSearch || ""}
+              value={formik.values.descriptionSearch || ""}
               onChange={(e) => {
                 formik.handleChange(e);
-                handleSearchName(e);
+                handleSearchDescription(e);
               }}
               error={
-                formik.touched.nameSearch && Boolean(formik.errors.nameSearch)
-              }
-              helperText={formik.touched.nameSearch && formik.errors.nameSearch}
-            />
-          </Grid>
-          <Grid item lg={2} xs={6}>
-            <InputComponent
-              type="search"
-              id="emailSearch"
-              name="emailSearch"
-              label={t("user.email")}
-              value={formik.values.emailSearch}
-              onChange={(e) => {
-                formik.handleChange(e);
-                handleSearchEmail(e);
-              }}
-              error={
-                formik.touched.emailSearch && Boolean(formik.errors.emailSearch)
+                formik.touched.descriptionSearch &&
+                Boolean(formik.errors.descriptionSearch)
               }
               helperText={
-                formik.touched.emailSearch && formik.errors.emailSearch
+                formik.touched.descriptionSearch &&
+                formik.errors.descriptionSearch
               }
-            />
-          </Grid>
-          <Grid item lg={2} xs={6}>
-            <InputComponent
-              type="search"
-              id="codeSearch"
-              name="codeSearch"
-              label={t("user.code")}
-              value={formik.values.codeSearch}
-              onChange={(e) => {
-                formik.handleChange(e);
-                handleSearchCode(e);
-              }}
-              error={
-                formik.touched.codeSearch && Boolean(formik.errors.codeSearch)
-              }
-              helperText={formik.touched.codeSearch && formik.errors.codeSearch}
             />
           </Grid>
           <Grid item lg={2} xs={6}>
@@ -497,7 +408,7 @@ export function ProfessorsView(props: Props): ReactElement {
             </InputComponent>
           </Grid>
           {lg && (
-            <Grid item lg={4} xs={12}>
+            <Grid item lg={8} xs={12}>
               <CreateButton
                 onClick={() => {
                   toggleDrawer();
@@ -506,20 +417,19 @@ export function ProfessorsView(props: Props): ReactElement {
               />
             </Grid>
           )}
-
-          <Grid item lg={12} xs={8} marginTop="20px" marginBottom="10px">
+          <Grid item lg={12} xs={9} marginTop="20px" marginBottom="10px">
             <EditButtonOuted
               disabled={disabledButtons}
               onClick={() => {
-                toggleDrawer();
                 setCreation(false);
+                toggleDrawer();
               }}
             />
             <InactivateButton
               state={state}
               buttonProps={{
                 disabled: disabledButtons,
-                onClick: () => updateStateUser(dataProfessor.user_id),
+                onClick: () => updateStateSpeciality(speciality.speciality_id),
               }}
             />
             <DeleteButton
@@ -528,7 +438,7 @@ export function ProfessorsView(props: Props): ReactElement {
             />
           </Grid>
           {!lg && (
-            <Grid item lg={12} xs={4} marginTop="20px" marginBottom="10px">
+            <Grid item lg={12} xs={3} marginTop="20px" marginBottom="10px">
               <CreateButton
                 onClick={() => {
                   toggleDrawer();
@@ -539,9 +449,8 @@ export function ProfessorsView(props: Props): ReactElement {
           )}
         </Grid>
       </form>
-
       {!isLoading && (
-        <ProfessorsTable
+        <SpecialitiesTable
           checked={checked}
           handleCheck={handleChecked}
           handleState={handleState}
@@ -549,7 +458,7 @@ export function ProfessorsView(props: Props): ReactElement {
           setPage={setPage}
           limit={limit}
           setLimit={setLimit}
-          setDataProfessor={setDataProfessor}
+          setSpeciality={setSpeciality}
         />
       )}
     </>

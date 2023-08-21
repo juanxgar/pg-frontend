@@ -16,6 +16,7 @@ interface Props {
   refetch: () => void;
   checked: Array<boolean>;
   setChecked: (cheked: Array<boolean>) => void;
+  updateChecked: () => void;
 }
 
 export function ProfessorCreation(props: Props): ReactElement {
@@ -28,6 +29,7 @@ export function ProfessorCreation(props: Props): ReactElement {
     setOpenSnackbar,
     checked,
     setChecked,
+    updateChecked
   } = props;
 
   const { useCreateUser } = useUser();
@@ -57,6 +59,7 @@ export function ProfessorCreation(props: Props): ReactElement {
 
   const createUser = (values: UserCreationBody) => {
     mutate(values);
+    refetch();
   };
 
   const { data, isLoading } = useAllSpecialities({
@@ -87,6 +90,7 @@ export function ProfessorCreation(props: Props): ReactElement {
       refetch();
       checked.push(false);
       setChecked(checked);
+      updateChecked();
     }
   }, [isLoadingCreation]);
 

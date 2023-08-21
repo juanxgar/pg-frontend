@@ -29,7 +29,7 @@ interface Props {
   setOpenSnackbar: (openSnackbar: boolean) => void;
   refetch: () => void;
   dataProfessors?: Array<ProfessorItem>;
-  group_id: number;
+  group_id: string;
 }
 
 export function GroupUpdate(props: Props): ReactElement {

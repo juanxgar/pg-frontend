@@ -34,3 +34,21 @@ export type GroupDetailItem = {
   group_detail_id: number;
   user: UserItem;
 };
+
+export type LocationItem = {
+  location_id: number;
+  adress: string;
+  city: string;
+  complexity: string;
+  name: string;
+  state: boolean;
+  total_capacity: number;
+  location_speciality?: Array<LocationSpecialityItem>;
+};
+
+export type LocationSpecialityItem = {
+  location_speciality_id: number;
+  limit_capacity: number;
+  state: boolean;
+  speciality: SpecialityItem;
+};

@@ -8,14 +8,15 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
+import { SpecialityLocationItem } from "../../types/common.type";
 
 type Props = {
-  students: Array<StudentGroupItem>;
-  deleteStudentFromList: (user_id: number) => void;
+  specialities: Array<SpecialityLocationItem>;
+  deleteSpecialityFromList: (speciality_id: number) => void;
 };
-export function GroupListComponent(props: Props): ReactElement {
-  const { students, deleteStudentFromList } = props;
+export function LocationListComponent(props: Props): ReactElement {
+  const { specialities, deleteSpecialityFromList } = props;
 
   return (
     <List
@@ -24,17 +25,15 @@ export function GroupListComponent(props: Props): ReactElement {
         marginRight: { lg: "60px", xs: "0px" },
       }}
     >
-      {students.map((student: StudentGroupItem, index: number) => (
+      {specialities.map((speciality: SpecialityLocationItem, index: number) => (
         <ListItem
-          key={student.user_id}
+          key={speciality.speciality_id}
           secondaryAction={
             <IconButton
               edge="end"
-              onClick={() => deleteStudentFromList(student.user_id)}
+              onClick={() => deleteSpecialityFromList(speciality.speciality_id)}
             >
-              <Delete
-                sx={{ color: "#f44336" }}
-              />
+              <Delete sx={{ color: "#f44336" }} />
             </IconButton>
           }
         >
@@ -50,12 +49,12 @@ export function GroupListComponent(props: Props): ReactElement {
               </Grid>
               <Grid item lg={6} xs={8}>
                 <Typography fontSize={{ lg: "15px", xs: "13px" }}>
-                  {student.name}
+                  {speciality.speciality_description}
                 </Typography>
               </Grid>
               <Grid item lg={4} xs={3.5}>
                 <Typography fontSize={{ lg: "15px", xs: "13px" }}>
-                  {student.code}
+                  {speciality.limit_capacity}
                 </Typography>
               </Grid>
             </Grid>

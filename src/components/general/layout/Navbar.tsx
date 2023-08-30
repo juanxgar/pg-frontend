@@ -124,6 +124,7 @@ export function Navbar(props: Props): ReactElement {
             }}
             src={Images.logo}
             alt="Logo UCEVA"
+            priority={true}
           />
         </Box>
         {!lg && (

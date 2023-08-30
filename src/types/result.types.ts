@@ -1,3 +1,5 @@
+import { SpecialityItem } from "./entities.type";
+
 export type PaginatedResult<T> = {
   data: T[];
   meta: {
@@ -27,4 +29,10 @@ export type ErrorResultQuery = {
 export type SignInResult = {
   token: string;
   role: string;
+};
+
+export type LocationDetailItem = {
+  location_speciality_id: number;
+  speciality: SpecialityItem;
+  limit_capacity: number;
 };

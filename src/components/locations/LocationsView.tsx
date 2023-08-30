@@ -10,18 +10,17 @@ import {
   InactivateButton,
   ModalComponent,
   SnackbarComponent,
-  GroupUpdate,
   DetailButton,
-  GroupCreation,
-  GroupsTable,
+  LocationCreation,
+  LocationUpdate,
+  LocationsTable,
 } from "@/components";
-import { GroupSearchSchema } from "@/schemas";
+import { LocationSearchSchema } from "@/schemas";
 import {
   ContentModal,
-  GroupItem,
+  LocationItem,
   Navigator,
   PaginatedResult,
-  ProfessorItem,
 } from "@/types";
 import {
   AlertColor,
@@ -42,7 +41,7 @@ import React, {
   useState,
 } from "react";
 import { useTheme } from "@mui/material/styles";
-import { useGroup, useUser } from "@/hooks";
+import { useLocation } from "@/hooks";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -50,16 +49,15 @@ interface Props {
   setLoading: (loading: boolean) => void;
 }
 
-export function GroupsView(props: Props): ReactElement {
+export function LocationsView(props: Props): ReactElement {
   const { locale, setLoading } = props;
   const t = useTranslations();
-  const { useAllProfessors } = useUser();
   const {
-    useAllGroupsWithPagination,
-    useUpdateStateGroup,
-    useDeleteGroup,
+    useAllLocationsWithPagination,
+    useUpdateStateLocation,
+    useDeleteLocation,
     errorStatus,
-  } = useGroup();
+  } = useLocation();
 
   const router = useRouter();
 
@@ -68,7 +66,9 @@ export function GroupsView(props: Props): ReactElement {
   const [page, setPage] = useState<number>(1);
 
   const [nameDebounce, setNameDebounce] = useState<string>("");
-  const [professorDebounce, setProfessorDebounce] = useState<string>("");
+  const [adressDebounce, setAdressDebounce] = useState<string>("");
+  const [cityDebounce, setCityDebounce] = useState<string>("");
+  const [complexityDebounce, setComplexityDebounce] = useState<string>("");
   const [stateDebounce, setStateDebounce] = useState<boolean>(true);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -83,33 +83,18 @@ export function GroupsView(props: Props): ReactElement {
 
   const [disabledButtons, setDisabledButtons] = useState<boolean>(true);
 
-  const [group, setGroup] = useState<GroupItem>({
-    group_id: 0,
+  const [location, setLocation] = useState<LocationItem>({
+    location_id: 0,
+    adress: "",
+    city: "",
+    complexity: "",
     name: "",
-    professor_user: {
-      code: "",
-      email: "",
-      identification: 0,
-      lastname: "",
-      name: "",
-      professor_speciality: [
-        {
-          speciality: {
-            description: "",
-            speciality_id: 0,
-            state: true,
-          },
-        },
-      ],
-      role: "Docente",
-      state: true,
-      user_id: 0,
-    },
+    total_capacity: 0,
     state: true,
   });
 
   const modalContentDelete: ContentModal = {
-    title: t("modals.deleteTitle") + t("groups.group"),
+    title: t("modals.deleteTitle") + t("locations.location"),
     description: t("modals.deleteRegister"),
   };
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
@@ -118,7 +103,7 @@ export function GroupsView(props: Props): ReactElement {
 
   const navigator: Array<Navigator> = [
     { ref: `/${locale}/home`, name: t("commons.home") },
-    { ref: `/${locale}/admin/users`, name: t("commons.groups") },
+    { ref: `/${locale}/admin/locations`, name: t("commons.locations") },
   ];
 
   const theme: Theme = useTheme();
@@ -129,10 +114,12 @@ export function GroupsView(props: Props): ReactElement {
     validateOnChange: true,
     initialValues: {
       nameSearch: "",
-      professorSearch: "",
+      adressSearch: "",
+      citySearch: "",
+      complexitySearch: "",
       stateSearch: "true",
     },
-    validationSchema: GroupSearchSchema(t),
+    validationSchema: LocationSearchSchema(t),
     onSubmit: (values) => {},
   });
 
@@ -141,26 +128,17 @@ export function GroupsView(props: Props): ReactElement {
     isLoading,
     refetch,
   }: {
-    data: PaginatedResult<GroupItem> | undefined;
+    data: PaginatedResult<LocationItem> | undefined;
     isLoading: boolean;
     refetch: () => void;
-  } = useAllGroupsWithPagination({
+  } = useAllLocationsWithPagination({
     name: nameDebounce,
-    professor_user_id: professorDebounce,
+    adress: adressDebounce,
+    city: cityDebounce,
+    complexity: complexityDebounce,
     state: stateDebounce,
     page,
     limit,
-  });
-
-  const {
-    data: dataProfessors,
-    isLoading: isLoadingProfessors,
-  }: {
-    data: Array<ProfessorItem> | undefined;
-    isLoading: boolean;
-    refetch: () => void;
-  } = useAllProfessors({
-    state: true,
   });
 
   const {
@@ -170,7 +148,7 @@ export function GroupsView(props: Props): ReactElement {
     isLoading: isLoadingState,
     isError,
     error,
-  } = useUpdateStateGroup();
+  } = useUpdateStateLocation();
 
   const {
     mutate: mutateDelete,
@@ -179,10 +157,10 @@ export function GroupsView(props: Props): ReactElement {
     isLoading: isLoadingDelete,
     isError: isErrorDelete,
     error: errorDelete,
-  } = useDeleteGroup();
+  } = useDeleteLocation();
 
-  const updateStateGroup = (group_id: number) => {
-    mutate(group_id as unknown as string);
+  const updateStateLocation = (location_id: number) => {
+    mutate(location_id as unknown as string);
   };
 
   const handleChecked = (index: number) => {
@@ -216,7 +194,7 @@ export function GroupsView(props: Props): ReactElement {
   };
 
   const onSubmitModalDelete = () => {
-    mutateDelete(group.group_id as unknown as string);
+    mutateDelete(location.location_id as unknown as string);
     setChecked(Array(data?.data.length).fill(false));
     handleCloseModalDelete();
   };
@@ -244,17 +222,49 @@ export function GroupsView(props: Props): ReactElement {
     }
   };
 
-  const searchRefProfessor = useRef(
+  const searchRefAdress = useRef(
     debounce((value: string) => {
       setPage(0);
-      setProfessorDebounce(value);
+      setAdressDebounce(value);
     }, 2000)
   );
 
-  const handleSearchProfessor = (
+  const handleSearchAdress = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    searchRefProfessor.current(event.target.value);
+    searchRefAdress.current(event.target.value);
+    if (page) {
+      return null;
+    }
+  };
+
+  const searchRefCity = useRef(
+    debounce((value: string) => {
+      setPage(0);
+      setCityDebounce(value);
+    }, 2000)
+  );
+
+  const handleSearchCity = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    searchRefCity.current(event.target.value);
+    if (page) {
+      return null;
+    }
+  };
+
+  const searchRefComplexity = useRef(
+    debounce((value: string) => {
+      setPage(0);
+      setComplexityDebounce(value);
+    }, 2000)
+  );
+
+  const handleSearchComplexity = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    searchRefComplexity.current(event.target.value);
     if (page) {
       return null;
     }
@@ -280,13 +290,15 @@ export function GroupsView(props: Props): ReactElement {
     debounce(() => {
       setPage(0);
       setNameDebounce("");
-      setProfessorDebounce("");
+      setAdressDebounce("");
+      setCityDebounce("");
+      setComplexityDebounce("");
       setStateDebounce(true);
     }, 2000)
   );
 
   useEffect(() => {
-    if (isLoading || isLoadingProfessors) {
+    if (isLoading) {
       setLoading(true);
     } else {
       setChecked(Array(data?.data.length).fill(false));
@@ -297,7 +309,7 @@ export function GroupsView(props: Props): ReactElement {
       setSeveritySnackbar("warning");
       setOpenSnackbar(true);
     }
-  }, [isLoading, isLoadingProfessors, errorStatus]);
+  }, [isLoading, errorStatus]);
 
   useEffect(() => {
     setChecked(Array(data?.data.length).fill(false));
@@ -355,11 +367,15 @@ export function GroupsView(props: Props): ReactElement {
       <DrawerComponent
         open={openDrawer}
         toggleDrawer={toggleDrawer}
-        title={isCreation ? t("groups.groupCreation") : t("groups.groupUpdate")}
+        title={
+          isCreation
+            ? t("locations.locationCreation")
+            : t("locations.locationUpdate")
+        }
         isLoading={isLoadingCreation}
       >
         {isCreation ? (
-          <GroupCreation
+          <LocationCreation
             toggleDrawer={toggleDrawer}
             setLoading={setLoadingCreation}
             setMessageSnackbar={setMessageSnackbar}
@@ -368,21 +384,19 @@ export function GroupsView(props: Props): ReactElement {
             refetch={refetch}
             checked={checked}
             setChecked={setChecked}
-            dataProfessors={dataProfessors}
           />
         ) : (
-          <>
-            <GroupUpdate
-              toggleDrawer={toggleDrawer}
-              setLoading={setLoadingCreation}
-              setMessageSnackbar={setMessageSnackbar}
-              setOpenSnackbar={setOpenSnackbar}
-              setSeveritySnackbar={setSeveritySnackbar}
-              refetch={refetch}
-              dataProfessors={dataProfessors}
-              group_id={`${group.group_id}`}
-            />
-          </>
+          <LocationUpdate
+            toggleDrawer={toggleDrawer}
+            setLoading={setLoadingCreation}
+            setMessageSnackbar={setMessageSnackbar}
+            setOpenSnackbar={setOpenSnackbar}
+            setSeveritySnackbar={setSeveritySnackbar}
+            refetch={refetch}
+            checked={checked}
+            setChecked={setChecked}
+            location_id={location.location_id as unknown as string}
+          />
         )}
       </DrawerComponent>
       <ModalComponent
@@ -408,7 +422,7 @@ export function GroupsView(props: Props): ReactElement {
               marginTop: { lg: "0px", xs: "10px" },
             }}
           >
-            <PageTitle>{t("groups.groupsTitle")}</PageTitle>
+            <PageTitle>{t("locations.locationsTitle")}</PageTitle>
           </Box>
         </Grid>
       </Grid>
@@ -445,33 +459,56 @@ export function GroupsView(props: Props): ReactElement {
           <Grid item lg={2} xs={6}>
             <InputComponent
               type="search"
-              id="professorSearch"
-              name="professorSearch"
-              select
-              label={t("commons.professor")}
-              value={formik.values.professorSearch}
+              id="adressSearch"
+              name="adressSearch"
+              label={t("locations.adress")}
+              value={formik.values.adressSearch}
               onChange={(e) => {
                 formik.handleChange(e);
-                handleSearchProfessor(e);
+                handleSearchAdress(e);
               }}
               error={
-                formik.touched.professorSearch &&
-                Boolean(formik.errors.professorSearch)
+                formik.touched.adressSearch &&
+                Boolean(formik.errors.adressSearch)
               }
               helperText={
-                formik.touched.professorSearch && formik.errors.professorSearch
+                formik.touched.adressSearch && formik.errors.adressSearch
               }
-            >
-              {dataProfessors ? (
-                dataProfessors?.map((professor: ProfessorItem) => (
-                  <MenuItem key={professor.user_id} value={professor.user_id}>
-                    {professor.name} {professor.lastname}
-                  </MenuItem>
-                ))
-              ) : (
-                <div></div>
-              )}
-            </InputComponent>
+            />
+          </Grid>
+          <Grid item lg={2} xs={6}>
+            <InputComponent
+              type="search"
+              id="citySearch"
+              name="citySearch"
+              label={t("locations.city")}
+              value={formik.values.citySearch}
+              onChange={(e) => {
+                formik.handleChange(e);
+                handleSearchCity(e);
+              }}
+              error={
+                formik.touched.citySearch && Boolean(formik.errors.citySearch)
+              }
+              helperText={formik.touched.citySearch && formik.errors.citySearch}
+            />
+          </Grid>
+          <Grid item lg={2} xs={6}>
+            <InputComponent
+              type="search"
+              id="complexitySearch"
+              name="complexitySearch"
+              label={t("locations.complexity")}
+              value={formik.values.citySearch}
+              onChange={(e) => {
+                formik.handleChange(e);
+                handleSearchComplexity(e);
+              }}
+              error={
+                formik.touched.citySearch && Boolean(formik.errors.citySearch)
+              }
+              helperText={formik.touched.citySearch && formik.errors.citySearch}
+            />
           </Grid>
           <Grid item lg={2} xs={6}>
             <InputComponent
@@ -497,7 +534,7 @@ export function GroupsView(props: Props): ReactElement {
             </InputComponent>
           </Grid>
           {lg && (
-            <Grid item lg={6} xs={12}>
+            <Grid item lg={2} xs={12}>
               <CreateButton
                 onClick={() => {
                   toggleDrawer();
@@ -511,7 +548,9 @@ export function GroupsView(props: Props): ReactElement {
             <DetailButton
               disabled={disabledButtons}
               onClick={() =>
-                router.push(`/${locale}/admin/groups/${group.group_id}`)
+                router.push(
+                  `/${locale}/admin/locations/${location.location_id}`
+                )
               }
             />
             <EditButtonOuted
@@ -525,7 +564,7 @@ export function GroupsView(props: Props): ReactElement {
               state={state}
               buttonProps={{
                 disabled: disabledButtons,
-                onClick: () => updateStateGroup(group.group_id),
+                onClick: () => updateStateLocation(location.location_id),
               }}
             />
             <DeleteButton
@@ -545,9 +584,8 @@ export function GroupsView(props: Props): ReactElement {
           )}
         </Grid>
       </form>
-
       {!isLoading && (
-        <GroupsTable
+        <LocationsTable
           checked={checked}
           handleCheck={handleChecked}
           handleState={handleState}
@@ -555,7 +593,7 @@ export function GroupsView(props: Props): ReactElement {
           setPage={setPage}
           limit={limit}
           setLimit={setLimit}
-          setGroup={setGroup}
+          setLocation={setLocation}
         />
       )}
     </>

@@ -2,10 +2,10 @@ import * as yup from "yup";
 
 export const UserSearchSchema = (t: any) => {
   return yup.object().shape({
-    name: yup.string().max(50, t("user.validations.maxSize") + 50),
-    email: yup.string().max(50, t("user.validations.maxSize") + 50),
-    code: yup.string().max(50, t("user.validations.maxSize") + 50),
-    state: yup.boolean(),
+    nameSearch: yup.string().max(50, t("user.validations.maxSize") + 50),
+    emailSearch: yup.string().max(50, t("user.validations.maxSize") + 50),
+    codeSearch: yup.string().max(50, t("user.validations.maxSize") + 50),
+    stateSearch: yup.boolean(),
   });
 };
 

@@ -122,6 +122,7 @@ export default function Page(props: Props): ReactElement {
                 }}
                 src={Images.logo}
                 alt="Logo UCEVA"
+                priority={true}
               />
             )}
           </Box>

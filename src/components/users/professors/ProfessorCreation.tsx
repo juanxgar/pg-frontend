@@ -1,7 +1,7 @@
 import { CancelButton, CreateButton, InputComponent } from "@/components";
 import { useSpeciality, useUser } from "@/hooks";
 import { ProfessorCreationSchema } from "@/schemas";
-import { UserCreationBody } from "@/types";
+import { SpecialityItem, UserCreationBody } from "@/types";
 import { AlertColor, Box, Grid, MenuItem, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useTranslations } from "next-intl";
@@ -29,7 +29,7 @@ export function ProfessorCreation(props: Props): ReactElement {
     setOpenSnackbar,
     checked,
     setChecked,
-    updateChecked
+    updateChecked,
   } = props;
 
   const { useCreateUser } = useUser();
@@ -62,7 +62,13 @@ export function ProfessorCreation(props: Props): ReactElement {
     refetch();
   };
 
-  const { data, isLoading } = useAllSpecialities({
+  const {
+    data,
+    isLoading,
+  }: {
+    data: Array<SpecialityItem> | undefined;
+    isLoading: boolean;
+  } = useAllSpecialities({
     state: true,
   });
 
@@ -232,7 +238,7 @@ export function ProfessorCreation(props: Props): ReactElement {
               }
             >
               {data ? (
-                data?.map((speciality) => (
+                data?.map((speciality: SpecialityItem) => (
                   <MenuItem
                     key={speciality.speciality_id}
                     value={speciality.speciality_id}

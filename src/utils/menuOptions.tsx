@@ -42,7 +42,7 @@ export const MenuOptionsAdminEs: Array<MenuOptions> = [
   },
   {
     name: "Centros Médicos",
-    pathname: "/admin/locatinons",
+    pathname: "/admin/locations",
     icon: (): ReactElement => <LocalHospital />,
     items: [],
   },

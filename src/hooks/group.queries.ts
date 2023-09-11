@@ -71,7 +71,7 @@ export const useGroup = () => {
     GroupCreationBody
   > => {
     return useMutation({
-      mutationKey: ["add-user"],
+      mutationKey: ["add-group"],
       mutationFn: (data: GroupCreationBody) => GroupService.createGroup(data),
       retry: false,
       onError(err: ErrorResultQuery) {
@@ -117,7 +117,7 @@ export const useGroup = () => {
     string
   > => {
     return useMutation({
-      mutationKey: ["update-state-user"],
+      mutationKey: ["update-state-group"],
       mutationFn: (group_id: string) => GroupService.updateStateGroup(group_id),
       retry: false,
     });

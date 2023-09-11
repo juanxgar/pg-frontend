@@ -1,8 +1,8 @@
 import {
   CancelButton,
   CreateButton,
+  GroupListComponent,
   InputComponent,
-  ListComponent,
 } from "@/components";
 import { useGroup, useUser } from "@/hooks";
 import { GroupCreationSchema } from "@/schemas";
@@ -66,6 +66,7 @@ export function GroupCreation(props: Props): ReactElement {
 
   const createGroup = (values: GroupCreationBody) => {
     mutate(values);
+    refetch();
   };
 
   const {
@@ -247,7 +248,7 @@ export function GroupCreation(props: Props): ReactElement {
           </Grid>
           <Grid item lg={12} xs={12}>
             {studentsList.length > 0 && (
-              <ListComponent
+              <GroupListComponent
                 students={studentsList}
                 deleteStudentFromList={deleteStudentFromList}
               />

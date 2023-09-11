@@ -54,7 +54,7 @@ export type GroupDetailBody = {
 };
 
 export type UpdateGroupRequest = {
-  group_id: number;
+  group_id: string;
   body: GroupCreationBody;
 };
 
@@ -65,6 +65,66 @@ export type GroupDetailRequest = {
 
 export type GroupDetailParams = {
   name?: string;
+  page?: number;
+  limit?: number;
+};
+
+export type SpecialityCreationBody = {
+  description: string;
+};
+
+export type UpdateSpecialityRequest = {
+  speciality_id: string;
+  body: SpecialityCreationBody;
+};
+
+export type LocationFilterParams = {
+  name?: string;
+  adress?: string;
+  city?: string;
+  complexity?: string;
+  state?: boolean;
+  page?: number;
+  limit?: number;
+};
+
+export type LocationBody = {
+  name: string;
+  adress: string;
+  city: string;
+  total_capacity: number;
+  complexity: string;
+};
+
+export type LocationCreationBody = LocationBody & {
+  specialities: Array<LocationDetailBody>;
+};
+
+export type LocationUpdateBody = LocationBody & {
+  specialities: Array<LocationDetailUpdateBody>;
+};
+
+export type LocationDetailBody = {
+  speciality_id: number;
+  limit_capacity: number;
+};
+
+export type LocationDetailUpdateBody = LocationDetailBody & {
+  location_speciality_id: number;
+};
+
+export type UpdateLocationRequest = {
+  location_id: string;
+  body: LocationUpdateBody;
+};
+
+export type LocationDetailRequest = {
+  location_id: number;
+  params?: LocationDetailParams;
+};
+
+export type LocationDetailParams = {
+  description?: string;
   page?: number;
   limit?: number;
 };

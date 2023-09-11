@@ -1,7 +1,7 @@
 import { CancelButton, CreateButton, InputComponent } from "@/components";
 import { useSpeciality, useUser } from "@/hooks";
 import { ProfessorCreationSchema } from "@/schemas";
-import { UserCreationBody } from "@/types";
+import { SpecialityItem, UserCreationBody } from "@/types";
 import { AlertColor, Box, Grid, MenuItem, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useTranslations } from "next-intl";
@@ -16,6 +16,7 @@ interface Props {
   refetch: () => void;
   checked: Array<boolean>;
   setChecked: (cheked: Array<boolean>) => void;
+  updateChecked: () => void;
 }
 
 export function ProfessorCreation(props: Props): ReactElement {
@@ -28,6 +29,7 @@ export function ProfessorCreation(props: Props): ReactElement {
     setOpenSnackbar,
     checked,
     setChecked,
+    updateChecked,
   } = props;
 
   const { useCreateUser } = useUser();
@@ -57,9 +59,16 @@ export function ProfessorCreation(props: Props): ReactElement {
 
   const createUser = (values: UserCreationBody) => {
     mutate(values);
+    refetch();
   };
 
-  const { data, isLoading } = useAllSpecialities({
+  const {
+    data,
+    isLoading,
+  }: {
+    data: Array<SpecialityItem> | undefined;
+    isLoading: boolean;
+  } = useAllSpecialities({
     state: true,
   });
 
@@ -87,6 +96,7 @@ export function ProfessorCreation(props: Props): ReactElement {
       refetch();
       checked.push(false);
       setChecked(checked);
+      updateChecked();
     }
   }, [isLoadingCreation]);
 
@@ -228,7 +238,7 @@ export function ProfessorCreation(props: Props): ReactElement {
               }
             >
               {data ? (
-                data?.map((speciality) => (
+                data?.map((speciality: SpecialityItem) => (
                   <MenuItem
                     key={speciality.speciality_id}
                     value={speciality.speciality_id}

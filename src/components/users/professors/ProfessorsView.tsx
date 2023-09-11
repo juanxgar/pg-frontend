@@ -169,6 +169,10 @@ export function ProfessorsView(props: Props): ReactElement {
     setChecked(isChecked);
   };
 
+  const updateCheked = () => {
+    setChecked(Array(data?.data.length).fill(false));
+  };
+
   const handleState = (state: boolean) => {
     setState(state);
   };
@@ -361,6 +365,7 @@ export function ProfessorsView(props: Props): ReactElement {
             refetch={refetch}
             checked={checked}
             setChecked={setChecked}
+            updateChecked={updateCheked}
           />
         ) : (
           <ProfessorUpdate
@@ -371,6 +376,7 @@ export function ProfessorsView(props: Props): ReactElement {
             setSeveritySnackbar={setSeveritySnackbar}
             refetch={refetch}
             dataProfessor={dataProfessor}
+            updateChecked={updateCheked}
           />
         )}
       </DrawerComponent>

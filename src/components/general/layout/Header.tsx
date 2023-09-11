@@ -130,6 +130,7 @@ export function Header(props: Props): ReactElement {
                       }}
                       src={Images.logo}
                       alt="Logo UCEVA"
+                      priority={true}
                     />
                   </Box>
                 </Grid>

@@ -2,7 +2,7 @@ import {
   CancelButton,
   EditButton,
   InputComponent,
-  ListComponent,
+  GroupListComponent,
 } from "@/components";
 import { useGroup, useUser } from "@/hooks";
 import { GroupCreationSchema } from "@/schemas";
@@ -29,7 +29,7 @@ interface Props {
   setOpenSnackbar: (openSnackbar: boolean) => void;
   refetch: () => void;
   dataProfessors?: Array<ProfessorItem>;
-  group_id: number;
+  group_id: string;
 }
 
 export function GroupUpdate(props: Props): ReactElement {
@@ -60,7 +60,7 @@ export function GroupUpdate(props: Props): ReactElement {
     data?: GroupItem;
     isLoading: boolean;
     isSuccess: boolean;
-  } = useSpecificGroup(group_id.toString());
+  } = useSpecificGroup(group_id);
 
   const [initialValues, setInitialValues] = useState<GroupCreationBody>({
     name: "",
@@ -290,7 +290,7 @@ export function GroupUpdate(props: Props): ReactElement {
           </Grid>
           <Grid item lg={12} xs={12}>
             {studentsList.length > 0 && (
-              <ListComponent
+              <GroupListComponent
                 students={studentsList}
                 deleteStudentFromList={deleteStudentFromList}
               />

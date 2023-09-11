@@ -3,39 +3,39 @@ import {
   BackButton,
   Breadcrumb,
   CleanSearchButton,
-  GroupDetailTable,
   InputComponent,
+  LocationDetailTable,
   PageTitle,
   SnackbarComponent,
 } from "@/components";
 import { AlertColor, Box, Grid, Typography, debounce } from "@mui/material";
 import { useTranslations } from "next-intl";
 import {
-  GroupDetailItem,
-  GroupItem,
+  LocationDetailItem,
+  LocationItem,
   Navigator,
   PaginatedResult,
 } from "@/types";
-import { UserSearchSchema } from "@/schemas";
+import { SpecialitySearchSchema } from "@/schemas";
 import { useFormik } from "formik";
-import { useGroup } from "@/hooks";
+import { useLocation } from "@/hooks";
 import { useRouter } from "next/navigation";
 
 interface Props {
   locale: string;
-  group_id: string;
+  location_id: string;
   setLoading: (loading: boolean) => void;
 }
 
-export function GroupDetail(props: Props): ReactElement {
-  const { locale, setLoading, group_id } = props;
+export function LocationDetail(props: Props): ReactElement {
+  const { locale, setLoading, location_id } = props;
   const t = useTranslations();
-  const { useGroupDetailWithPagination, useSpecificGroup, errorStatus } =
-    useGroup();
+  const { useLocationDetailWithPagination, useSpecificLocation, errorStatus } =
+    useLocation();
 
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
-  const [nameDebounce, setNameDebounce] = useState<string>("");
+  const [descriptionDebounce, setDescriptionDebounce] = useState<string>("");
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [messageSnackbar, setMessageSnackbar] = useState<string>("");
@@ -46,17 +46,17 @@ export function GroupDetail(props: Props): ReactElement {
 
   const navigator: Array<Navigator> = [
     { ref: `/${locale}/home`, name: t("commons.home") },
-    { ref: `/${locale}/admin/groups`, name: t("commons.groups") },
-    { ref: `/${locale}/admin/groups/detail`, name: t("commons.detail") },
+    { ref: `/${locale}/admin/location`, name: t("commons.locations") },
+    { ref: `/${locale}/admin/locations/detail`, name: t("commons.detail") },
   ];
 
   const formik = useFormik({
     enableReinitialize: true,
     validateOnChange: true,
     initialValues: {
-      nameSearch: "",
+      descriptionSearch: "",
     },
-    validationSchema: UserSearchSchema(t),
+    validationSchema: SpecialitySearchSchema(t),
     onSubmit: (values) => {},
   });
 
@@ -64,24 +64,24 @@ export function GroupDetail(props: Props): ReactElement {
     data,
     isLoading,
   }: {
-    data: PaginatedResult<GroupDetailItem> | undefined;
+    data: PaginatedResult<LocationDetailItem> | undefined;
     isLoading: boolean;
-  } = useGroupDetailWithPagination({
-    group_id: +group_id,
+  } = useLocationDetailWithPagination({
+    location_id: +location_id,
     params: {
-      name: nameDebounce,
+      description: descriptionDebounce,
       page,
       limit,
     },
   });
 
   const {
-    data: dataGroup,
-    isLoading: isLoadingGroup,
+    data: dataLocation,
+    isLoading: isLoadingLocation,
   }: {
-    data: GroupItem | undefined;
+    data: LocationItem | undefined;
     isLoading: boolean;
-  } = useSpecificGroup(group_id);
+  } = useSpecificLocation(location_id);
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -92,18 +92,18 @@ export function GroupDetail(props: Props): ReactElement {
     searchRefClear.current();
   };
 
-  const searchRefName = useRef(
+  const searchRefDescription = useRef(
     debounce((value: string) => {
       setPage(0);
-      setNameDebounce(value);
+      setDescriptionDebounce(value);
     }, 2000)
   );
 
-  const handleSearchName = (
+  const handleSearchDescription = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setLoading(true);
-    searchRefName.current(event.target.value);
+    searchRefDescription.current(event.target.value);
     setLoading(false);
     if (page) {
       return null;
@@ -113,12 +113,12 @@ export function GroupDetail(props: Props): ReactElement {
   const searchRefClear = useRef(
     debounce(() => {
       setPage(0);
-      setNameDebounce("");
+      setDescriptionDebounce("");
     }, 2000)
   );
 
   useEffect(() => {
-    if (isLoading || isLoadingGroup) {
+    if (isLoading || isLoadingLocation) {
       setLoading(true);
     } else {
       setLoading(false);
@@ -128,7 +128,7 @@ export function GroupDetail(props: Props): ReactElement {
       setSeveritySnackbar("warning");
       setOpenSnackbar(true);
     }
-  }, [isLoading, isLoadingGroup, errorStatus]);
+  }, [isLoading, isLoadingLocation, errorStatus]);
   return (
     <>
       <SnackbarComponent
@@ -148,7 +148,7 @@ export function GroupDetail(props: Props): ReactElement {
               marginTop: { lg: "0px", xs: "10px" },
             }}
           >
-            <PageTitle>{t("groups.groupDetail")}</PageTitle>
+            <PageTitle>{t("locations.locationDetail")}</PageTitle>
           </Box>
         </Grid>
         <Grid item lg={6} xs={12}>
@@ -163,7 +163,7 @@ export function GroupDetail(props: Props): ReactElement {
               }}
             >
               <BackButton
-                onClick={() => router.push(`/${locale}/admin/groups`)}
+                onClick={() => router.push(`/${locale}/admin/locations`)}
               />
               <CleanSearchButton clearFunction={cleanForm} />
             </Box>
@@ -171,27 +171,28 @@ export function GroupDetail(props: Props): ReactElement {
               <Grid item lg={6} xs={12}>
                 <InputComponent
                   type="search"
-                  id="nameSearch"
-                  name="nameSearch"
-                  label={t("user.name")}
-                  value={formik.values.nameSearch || ""}
+                  id="descriptionSearch"
+                  name="descriptionSearch"
+                  label={t("specialities.description")}
+                  value={formik.values.descriptionSearch || ""}
                   onChange={(e) => {
                     formik.handleChange(e);
-                    handleSearchName(e);
+                    handleSearchDescription(e);
                   }}
                   error={
-                    formik.touched.nameSearch &&
-                    Boolean(formik.errors.nameSearch)
+                    formik.touched.descriptionSearch &&
+                    Boolean(formik.errors.descriptionSearch)
                   }
                   helperText={
-                    formik.touched.nameSearch && formik.errors.nameSearch
+                    formik.touched.descriptionSearch &&
+                    formik.errors.descriptionSearch
                   }
                 />
               </Grid>
             </Grid>
           </form>
         </Grid>
-        {!isLoadingGroup && (
+        {!isLoadingLocation && (
           <Grid item lg={6} xs={12}>
             <Grid container>
               <Grid item lg={12} xs={12}>
@@ -202,8 +203,8 @@ export function GroupDetail(props: Props): ReactElement {
                   }}
                 >
                   <Typography fontSize={{ lg: 20, xs: 16 }}>
-                    <strong>{t("groups.groupName")}: </strong>
-                    {dataGroup?.name}
+                    <strong>{t("user.name")}: </strong>
+                    {dataLocation?.name}
                   </Typography>
                 </Box>
               </Grid>
@@ -215,9 +216,8 @@ export function GroupDetail(props: Props): ReactElement {
                   }}
                 >
                   <Typography fontSize={{ lg: 20, xs: 16 }} marginTop="10px">
-                    <strong>{t("groups.professorName")}: </strong>
-                    {dataGroup?.professor_user.name}{" "}
-                    {dataGroup?.professor_user.lastname}
+                    <strong>{t("locations.complexity")}: </strong>
+                    {dataLocation?.complexity}
                   </Typography>
                 </Box>
               </Grid>
@@ -226,7 +226,7 @@ export function GroupDetail(props: Props): ReactElement {
         )}
       </Grid>
 
-      <GroupDetailTable
+      <LocationDetailTable
         data={data}
         setPage={setPage}
         limit={limit}

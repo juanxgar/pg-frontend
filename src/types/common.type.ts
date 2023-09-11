@@ -36,8 +36,20 @@ export type LocaleGroup = {
   group_id: string;
 };
 
+export type LocaleLocation = {
+  locale: string;
+  location_id: string;
+};
+
 export type StudentGroupItem = {
   user_id: number;
   name: string;
   code: string;
+};
+
+export type SpecialityLocationItem = {
+  speciality_id: number;
+  speciality_description: string;
+  limit_capacity: number;
+  location_speciality_id?: number;
 };

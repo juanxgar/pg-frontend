@@ -25,6 +25,10 @@ export function InputComponent(props: TextFieldProps): ReactElement {
               borderColor: "#048014",
             },
           },
+          "& .MuiInputBase-input.Mui-disabled": {
+            WebkitTextFillColor: "#000000",
+            color: "black"
+          },
         }}
       />
     </FormControl>

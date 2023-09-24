@@ -53,3 +53,11 @@ export type SpecialityLocationItem = {
   limit_capacity: number;
   location_speciality_id?: number;
 };
+
+export type SpecialityRotationItem = {
+  speciality_id: number;
+  speciality_description: string;
+  professor_user_id: number;
+  professor_name: string;
+  number_weeks: number;
+};

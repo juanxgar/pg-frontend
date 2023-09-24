@@ -44,6 +44,48 @@ export const useLocation = () => {
     );
   };
 
+  const useAllLocations = (
+    params: LocationFilterParams
+  ): UseQueryResult<Array<LocationItem>, unknown> => {
+    return useQuery(
+      ["locations-list", params],
+      () => LocationService.getAllLocations(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
+  const useLocationDetail = (
+    request: LocationDetailRequest
+  ): UseQueryResult<Array<LocationDetailItem>, unknown> => {
+    return useQuery(
+      ["location-detail-list", request],
+      () => LocationService.getLocationDetail(request),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
   const useLocationDetailWithPagination = (
     request: LocationDetailRequest
   ): UseQueryResult<PaginatedResult<LocationDetailItem>, unknown> => {
@@ -146,6 +188,8 @@ export const useLocation = () => {
     useUpdateLocation,
     useUpdateStateLocation,
     useDeleteLocation,
+    useLocationDetail,
     useLocationDetailWithPagination,
+    useAllLocations,
   };
 };

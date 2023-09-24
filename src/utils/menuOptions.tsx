@@ -4,6 +4,7 @@ import { ReactElement } from "react";
 import {
   Home,
   LocalHospital,
+  Loop,
   MedicalInformation,
   People,
   Person,
@@ -44,6 +45,12 @@ export const MenuOptionsAdminEs: Array<MenuOptions> = [
     name: "Centros Médicos",
     pathname: "/admin/locations",
     icon: (): ReactElement => <LocalHospital />,
+    items: [],
+  },
+  {
+    name: "Rotaciones",
+    pathname: "/admin/rotations",
+    icon: (): ReactElement => <Loop />,
     items: [],
   },
 ];

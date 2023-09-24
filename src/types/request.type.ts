@@ -10,6 +10,7 @@ export type UserFilterParams = {
   state?: boolean;
   page?: number;
   limit?: number;
+  speciality_id?: number;
 };
 
 export type UserCreationBody = {
@@ -127,4 +128,46 @@ export type LocationDetailParams = {
   description?: string;
   page?: number;
   limit?: number;
+};
+
+export type RotationBody = {
+  group_id: number;
+  location_id: number;
+  start_date: string;
+  finish_date: string;
+  semester: number;
+};
+
+export type RotationCreationBody = RotationBody & {
+  specialities: Array<RotationSpecialityCreationBody>;
+};
+
+export type RotationUpdateBody = RotationBody & {
+  specialities: Array<RotationSpecialityUpdateBody>;
+};
+
+export type RotationSpecialityCreationBody = {
+  speciality_id: number;
+  professor_user_id: number;
+  number_weeks: number;
+};
+
+export type RotationSpecialityUpdateBody = RotationSpecialityCreationBody & {
+  rotation_speciality_id?: number;
+};
+
+export type RotationFilterParams = {
+  group_id?: number;
+  location_id?: number;
+  start_date?: string;
+  finish_date?: string;
+  semester?: number;
+  state?: boolean;
+  page?: number;
+  limit?: number;
+};
+
+export type UpdateRotationRequest = {
+  rotation_id: string;
+  body: RotationUpdateBody;
 };

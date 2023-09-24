@@ -24,6 +24,12 @@ class GroupsServices {
     });
   }
 
+  getAllGroups(
+    params: GroupFilterParams
+  ): Promise<Array<GroupItem> | ErrorResult> {
+    return this.http.get(`/groups`, { params });
+  }
+
   getSpecificGroup(group_id: string): Promise<GroupItem | ErrorResult> {
     return this.http.get(`/groups/unique/${group_id}`);
   }

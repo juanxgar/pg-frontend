@@ -44,6 +44,27 @@ export const useGroup = () => {
     );
   };
 
+  const useAllGroups = (
+    params: GroupFilterParams
+  ): UseQueryResult<Array<GroupItem>, unknown> => {
+    return useQuery(
+      ["groups-list", params],
+      () => GroupService.getAllGroups(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
   const useGroupDetailWithPagination = (
     request: GroupDetailRequest
   ): UseQueryResult<PaginatedResult<GroupDetailItem>, unknown> => {
@@ -144,5 +165,6 @@ export const useGroup = () => {
     useUpdateStateGroup,
     useDeleteGroup,
     useGroupDetailWithPagination,
+    useAllGroups,
   };
 };

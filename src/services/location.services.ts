@@ -25,10 +25,24 @@ class LocationsServices {
     });
   }
 
+  getAllLocations(
+    params: LocationFilterParams
+  ): Promise<Array<LocationItem> | ErrorResult> {
+    return this.http.get(`/locations`, { params });
+  }
+
   getSpecificLocation(
     location_id: string
   ): Promise<LocationItem | ErrorResult> {
     return this.http.get(`/locations/${location_id}`);
+  }
+
+  getLocationDetail(
+    request: LocationDetailRequest
+  ): Promise<Array<LocationDetailItem> | ErrorResult> {
+    return this.http.get(`/locations/detail/${request.location_id}`, {
+      params: request.params,
+    });
   }
 
   getLocationDetailWithPagination(

@@ -1,4 +1,4 @@
-import { SpecialityLocationItem } from "@/types";
+import { SpecialityRotationItem } from "@/types";
 import { Delete } from "@mui/icons-material";
 import {
   Grid,
@@ -11,10 +11,10 @@ import {
 import { ReactElement } from "react";
 
 type Props = {
-  specialities: Array<SpecialityLocationItem>;
+  specialities: Array<SpecialityRotationItem>;
   deleteSpecialityFromList: (speciality_id: number) => void;
 };
-export function LocationListComponent(props: Props): ReactElement {
+export function RotationListComponent(props: Props): ReactElement {
   const { specialities, deleteSpecialityFromList } = props;
 
   return (
@@ -24,7 +24,7 @@ export function LocationListComponent(props: Props): ReactElement {
         marginRight: { lg: "60px", xs: "0px" },
       }}
     >
-      {specialities.map((speciality: SpecialityLocationItem, index: number) => (
+      {specialities.map((speciality: SpecialityRotationItem, index: number) => (
         <ListItem
           key={speciality.speciality_id}
           secondaryAction={
@@ -38,7 +38,7 @@ export function LocationListComponent(props: Props): ReactElement {
         >
           <ListItemText>
             <Grid container textAlign="center">
-              <Grid item lg={2} xs={0.5}>
+              <Grid item lg={1} xs={0.5}>
                 <Typography
                   fontSize={{ lg: "15px", xs: "13px" }}
                   fontWeight="500"
@@ -46,14 +46,19 @@ export function LocationListComponent(props: Props): ReactElement {
                   {index + 1}
                 </Typography>
               </Grid>
-              <Grid item lg={6} xs={8}>
+              <Grid item lg={4} xs={4}>
                 <Typography fontSize={{ lg: "15px", xs: "13px" }}>
                   {speciality.speciality_description}
                 </Typography>
               </Grid>
-              <Grid item lg={4} xs={3.5}>
+              <Grid item lg={4} xs={5}>
                 <Typography fontSize={{ lg: "15px", xs: "13px" }}>
-                  {speciality.limit_capacity}
+                  {speciality.professor_name}
+                </Typography>
+              </Grid>
+              <Grid item lg={3} xs={2.5}>
+                <Typography fontSize={{ lg: "15px", xs: "13px" }}>
+                  {speciality.number_weeks} sem
                 </Typography>
               </Grid>
             </Grid>

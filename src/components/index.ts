@@ -53,3 +53,8 @@ export * from "./locations/LocationUpdate";
 export * from "./locations/LocationsTable";
 export * from "./locations/LocationDetail";
 export * from "./locations/LocationDetailTable";
+export * from "./rotations/RotationsView";
+export * from "./rotations/RotationsTable";
+export * from "./rotations/RotationCreation";
+export * from "./rotations/RotationListComponent";
+export * from "./rotations/RotationUpdate";

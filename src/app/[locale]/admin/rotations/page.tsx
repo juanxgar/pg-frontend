@@ -1,7 +1,7 @@
 "use client";
 import {
   LinearProgressComponent,
-  LocationsView,
+  RotationsView,
 } from "@/components";
 import { ReactElement, useState } from "react";
 import { Locale } from "@/types";
@@ -20,7 +20,7 @@ export default function Page(props: Props): ReactElement {
     <>
       {isLoading && <LinearProgressComponent />}
       <Box sx={{ width: "100%", padding: "20px" }}>
-        <LocationsView locale={params.locale} setLoading={setLoading} />
+        <RotationsView locale={params.locale} setLoading={setLoading} />
       </Box>
     </>
   );

@@ -15,6 +15,7 @@ export const es = {
     groups: "Grupos",
     locations: "Centros médicos",
     specialities: "Especialidades",
+    rotations: "Rotaciones",
     detail: "Detalle",
     number: "Núm.",
     active: "Habilitado",
@@ -80,6 +81,7 @@ export const es = {
   },
   groups: {
     group: "grupo",
+    groupCapitalLetter: "Grupo",
     groupsTitle: "Gestión de grupos",
     professorName: "Nombre Docente",
     groupName: "Nombre Grupo",
@@ -90,6 +92,7 @@ export const es = {
   },
   locations: {
     location: "centro médico",
+    locationCapitalLetter: "Centro médico",
     locationsTitle: "Gestión de centros médicos",
     adress: "Dirección",
     city: "Ciudad",
@@ -107,5 +110,16 @@ export const es = {
     addSpecialities: "Adicionar especialidades",
     limitCapacity: "Capacidad límite",
     locationDetail: "Detalle de Centro Médico",
+  },
+  rotations: {
+    rotation: "rotación",
+    rotationsTitle: "Gestión de rotaciones",
+    startDate: "Fecha inicio",
+    finishDate: "Fecha fin",
+    semester: "Semestre",
+    professorInCharge: "Docente a cargo",
+    numberOfWeeks: "Número de semanas",
+    rotationCreation: "Creación de rotación",
+    rotationUpdate: "Actualización de rotación",
   },
 };

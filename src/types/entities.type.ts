@@ -52,3 +52,29 @@ export type LocationSpecialityItem = {
   state: boolean;
   speciality: SpecialityItem;
 };
+
+export type RotationItem = {
+  rotation_id: number;
+  semester: number;
+  start_date: Date;
+  finish_date: Date;
+  state: boolean;
+  group: GroupItem;
+  location: LocationItem;
+  rotation_speciality?: Array<RotationSpecialityItem>;
+};
+
+export type RotationSpecialityItem = {
+  rotation_speciality_id: number;
+  speciality_id: number;
+  professor: UserItem;
+  speciality: SpecialityItem;
+  number_weeks: number;
+  available_capacity: number;
+};
+
+export type RotationDateItem = {
+  rotation_date_id: number;
+  student: UserItem;
+  rotation_speciality: RotationSpecialityItem;
+};

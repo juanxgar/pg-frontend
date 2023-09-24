@@ -3,3 +3,4 @@ export * from "./user.services";
 export * from "./speciality.services";
 export * from "./group.services";
 export * from "./location.services";
+export * from "./rotation.services";

@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 export type SignInRequest = {
   email?: string;
   password?: string;
@@ -128,6 +130,15 @@ export type LocationDetailParams = {
   description?: string;
   page?: number;
   limit?: number;
+};
+
+export type FormikRotationCreation = {
+  group_id: number;
+  location_id: number;
+  start_date: Moment | null;
+  finish_date: Moment | null;
+  semester: number;
+  specialities: Array<RotationSpecialityCreationBody>;
 };
 
 export type RotationBody = {

@@ -58,3 +58,5 @@ export * from "./rotations/RotationsTable";
 export * from "./rotations/RotationCreation";
 export * from "./rotations/RotationListComponent";
 export * from "./rotations/RotationUpdate";
+export * from "./rotations/RotationDateCreation";
+export * from "./general/InputDateComponent";

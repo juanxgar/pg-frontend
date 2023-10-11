@@ -1,5 +1,6 @@
 import { Http } from "@/libs";
 import {
+  DatesRotationDatesResult,
   ErrorResult,
   MessageResult,
   PaginatedResult,
@@ -49,6 +50,12 @@ class RotationServices {
 
   deleteRotation(rotation_id: string): Promise<MessageResult | ErrorResult> {
     return this.http.delete(`/rotations/${rotation_id}`);
+  }
+
+  getUsedDatesRotations(
+    location_id: string
+  ): Promise<Array<DatesRotationDatesResult>> {
+    return this.http.get(`/rotations/used-dates-rotation/${location_id}`);
   }
 }
 

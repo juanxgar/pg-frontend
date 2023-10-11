@@ -42,7 +42,6 @@ import React, {
 } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useGroup, useLocation, useRotation } from "@/hooks";
-import { useRouter } from "next/navigation";
 
 interface Props {
   locale: string;
@@ -56,8 +55,6 @@ export function RotationsView(props: Props): ReactElement {
   const { useAllLocations } = useLocation();
   const { useAllRotationsWithPagination, useDeleteRotation, errorStatus } =
     useRotation();
-
-  const router = useRouter();
 
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);

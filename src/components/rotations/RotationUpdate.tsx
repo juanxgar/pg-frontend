@@ -3,11 +3,14 @@ import {
   CancelButton,
   EditButton,
   InputComponent,
+  InputDateComponent,
   RotationListComponent,
 } from "@/components";
 import { useGroup, useLocation, useRotation, useUser } from "@/hooks";
 import { RotationCreationSchema } from "@/schemas";
 import {
+  DatesRotationDatesResult,
+  FormikRotationCreation,
   GroupItem,
   LocationDetailItem,
   LocationItem,
@@ -30,7 +33,7 @@ import {
 import { useFormik } from "formik";
 import { useTranslations } from "next-intl";
 import { ChangeEvent, ReactElement, useEffect, useState } from "react";
-import moment from "moment";
+import moment, { Moment } from "moment";
 
 interface Props {
   toggleDrawer: () => void;
@@ -57,7 +60,8 @@ export function RotationUpdate(props: Props): ReactElement {
     rotation_id,
   } = props;
 
-  const { useUpdateRotation, useSpecificRotation } = useRotation();
+  const { useUpdateRotation, useSpecificRotation, useUsedDatesRotations } =
+    useRotation();
   const { useAllGroups } = useGroup();
   const { useLocationDetail, useAllLocations } = useLocation();
   const { useAllProfessors, errorStatus } = useUser();
@@ -76,17 +80,18 @@ export function RotationUpdate(props: Props): ReactElement {
   const [groupProfessorName, setGroupProfessorName] = useState<string>("");
   const [numberWeeks, setNumberWeeks] = useState<number>(0);
   const [touchedNumberWeeks, setTouchedNumberWeeks] = useState<boolean>(false);
+  const [datesDisabled, setDatesDisabled] = useState<boolean>(false);
 
   const [rotationsSpecialitiesList, setRotationsSpecialitiesList] = useState<
     Array<SpecialityRotationItem>
   >([]);
-  const [initialValues, setInitialValues] = useState<RotationUpdateBody>({
-    finish_date: "",
+  const [initialValues, setInitialValues] = useState<FormikRotationCreation>({
+    finish_date: null,
     group_id: 0,
     location_id: 0,
     semester: 0,
     specialities: [],
-    start_date: "",
+    start_date: null,
   });
 
   const formik = useFormik({
@@ -99,10 +104,16 @@ export function RotationUpdate(props: Props): ReactElement {
     },
   });
 
-  const updateRotation = (values: RotationUpdateBody) => {
+  const updateRotation = (values: FormikRotationCreation) => {
+    const { start_date, finish_date, ...rest } = values;
+    const body: RotationUpdateBody = {
+      start_date: start_date ? start_date.format("YYYY-MM-DD") : "",
+      finish_date: finish_date ? finish_date.format("YYYY-MM-DD") : "",
+      ...rest,
+    };
     const request: UpdateRotationRequest = {
       rotation_id,
-      body: values,
+      body,
     };
     mutate(request);
     refetch();
@@ -167,6 +178,12 @@ export function RotationUpdate(props: Props): ReactElement {
     isError,
     error,
   } = useUpdateRotation();
+
+  const {
+    data: dataDates,
+  }: {
+    data: Array<DatesRotationDatesResult> | undefined;
+  } = useUsedDatesRotations(locationId as unknown as string);
 
   const addRotationsSpecialitiesToList = () => {
     const rotationSpeciality: SpecialityRotationItem = {
@@ -257,12 +274,43 @@ export function RotationUpdate(props: Props): ReactElement {
     }
   };
 
+  const isDatesDisabled = (location_id: number) => {
+    if (location_id != 0) {
+      setDatesDisabled(false);
+    } else {
+      setDatesDisabled(true);
+    }
+  };
+
+  const disableUsedDates = (date: Moment): boolean => {
+    const disableDates: Array<Moment> = [];
+    if (dataDates && dataRotation) {
+      dataDates.forEach((d: DatesRotationDatesResult) => {
+        if (
+          moment(dataRotation.start_date, "YYYY-MM-DD").format("DD-MM-YYYY") !==
+            moment(d.start_date, "DD-MM-YYYY").format("DD-MM-YYYY") &&
+          moment(dataRotation.finish_date, "YYYY-MM-DD").format(
+            "DD-MM-YYYY"
+          ) !== moment(d.finish_date, "DD-MM-YYYY").format("DD-MM-YYYY") &&
+          date.isBetween(
+            moment(d.start_date, "DD-MM-YYYY").subtract(1, "d"),
+            moment(d.finish_date, "DD-MM-YYYY").add(1, "d")
+          )
+        ) {
+          disableDates.push(date);
+        }
+      });
+    }
+    return disableDates.includes(date);
+  };
+
   useEffect(() => {
     if (
       !isLoadingProfessors &&
       !isLoadingSpecialities &&
       !isLoadingGroups &&
-      !isLoadingLocations
+      !isLoadingLocations &&
+      !isLoadingRotation
     ) {
       setLoading(false);
     }
@@ -271,6 +319,7 @@ export function RotationUpdate(props: Props): ReactElement {
     isLoadingSpecialities,
     isLoadingGroups,
     isLoadingLocations,
+    isLoadingRotation,
   ]);
 
   useEffect(() => {
@@ -328,15 +377,15 @@ export function RotationUpdate(props: Props): ReactElement {
           };
         }
       );
-      const locationUpdate: RotationUpdateBody = {
-        finish_date: moment(dataRotation.finish_date).format("YYYY-MM-DD"),
+      const rotationUpdate: FormikRotationCreation = {
+        finish_date: moment(dataRotation.finish_date, "YYYY-MM-DD"),
         group_id: dataRotation.group.group_id,
         location_id: dataRotation.location.location_id,
         semester: dataRotation.semester,
         specialities,
-        start_date: moment(dataRotation.start_date).format("YYYY-MM-DD"),
+        start_date: moment(dataRotation.start_date, "YYYY-MM-DD"),
       };
-      setInitialValues(locationUpdate);
+      setInitialValues(rotationUpdate);
       setRotationsSpecialitiesList(data);
       setGroupProfessorName(
         dataRotation.group.professor_user.name +
@@ -387,7 +436,10 @@ export function RotationUpdate(props: Props): ReactElement {
               select
               label={t("locations.locationCapitalLetter")}
               value={formik.values.location_id || ""}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                isDatesDisabled(+e.target.value);
+              }}
               error={
                 formik.touched.location_id && Boolean(formik.errors.location_id)
               }
@@ -454,37 +506,51 @@ export function RotationUpdate(props: Props): ReactElement {
             />
           </Grid>
           <Grid item lg={6} xs={12}>
-            <InputComponent
-              type="date"
-              id="start_date"
-              name="start_date"
-              label={t("rotations.startDate")}
-              value={formik.values.start_date || ""}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.start_date && Boolean(formik.errors.start_date)
+            <InputDateComponent
+              value={formik.values.start_date}
+              onChange={(value) =>
+                formik.setFieldValue("start_date", value, true)
               }
-              helperText={formik.touched.start_date && formik.errors.start_date}
-              InputLabelProps={{ shrink: true }}
-              inputProps={{ min: moment(new Date()).format("YYYY-MM-DD") }}
+              disabled={datesDisabled}
+              shouldDisableDate={(date: Moment) => disableUsedDates(date)}
+              minDate={moment(
+                moment(new Date()).format("DD-MM-YYYY"),
+                "DD-MM-YYYY"
+              )}
+              label={t("rotations.startDate")}
+              slotProps={{
+                textField: {
+                  size: "small",
+                  id: "start_date",
+                  name: "start_date",
+                },
+              }}
             />
           </Grid>
           <Grid item lg={6} xs={12}>
-            <InputComponent
-              type="date"
-              id="finish_date"
-              name="finish_date"
+            <InputDateComponent
+              value={formik.values.finish_date}
+              onChange={(value) =>
+                formik.setFieldValue("finish_date", value, true)
+              }
+              disabled={datesDisabled}
+              shouldDisableDate={(date: Moment) => disableUsedDates(date)}
+              minDate={
+                formik.values.start_date
+                  ? formik.values.start_date
+                  : moment(
+                      moment(new Date()).format("DD-MM-YYYY"),
+                      "DD-MM-YYYY"
+                    )
+              }
               label={t("rotations.finishDate")}
-              value={formik.values.finish_date || ""}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.finish_date && Boolean(formik.errors.finish_date)
-              }
-              helperText={
-                formik.touched.finish_date && formik.errors.finish_date
-              }
-              InputLabelProps={{ shrink: true }}
-              inputProps={{ min: moment(new Date()).format("YYYY-MM-DD") }}
+              slotProps={{
+                textField: {
+                  size: "small",
+                  id: "finish_date",
+                  name: "finish_date",
+                },
+              }}
             />
           </Grid>
           <Grid item lg={12} xs={12}>

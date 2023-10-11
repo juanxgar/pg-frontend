@@ -36,3 +36,8 @@ export type LocationDetailItem = {
   speciality: SpecialityItem;
   limit_capacity: number;
 };
+
+export type DatesRotationDatesResult = {
+  start_date: string;
+  finish_date: string;
+};

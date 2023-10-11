@@ -8,6 +8,7 @@ import {
   ErrorResultQuery,
   RotationCreationBody,
   UpdateRotationRequest,
+  DatesRotationDatesResult,
 } from "@/types";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -102,6 +103,19 @@ export const useRotation = () => {
     });
   };
 
+  const useUsedDatesRotations = (
+    location_id: string
+  ): UseQueryResult<Array<DatesRotationDatesResult>, unknown> => {
+    return useQuery(
+      ["dates_rotation", location_id],
+      () => RotationService.getUsedDatesRotations(location_id),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+      }
+    );
+  };
+
   return {
     errorStatus,
     useAllRotationsWithPagination,
@@ -109,5 +123,6 @@ export const useRotation = () => {
     useCreateRotation,
     useUpdateRotation,
     useDeleteRotation,
+    useUsedDatesRotations,
   };
 };

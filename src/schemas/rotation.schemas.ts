@@ -38,3 +38,23 @@ export const RotationCreationSchema = (t: any) => {
     start_date: yup.string().required(t("commons.validations.requiredField")),
   });
 };
+
+export const RotationDateCreationSchema = (t: any) => {
+  return yup.object().shape({
+    rotation_id: yup.number(),
+    student_user_id: yup.number(),
+    rotation_dates: yup.array().of(
+      yup.object().shape({
+        rotation_speciality_id: yup
+          .number()
+          .required(t("commons.validations.requiredField")),
+        start_date: yup
+          .string()
+          .required(t("commons.validations.requiredField")),
+        finish_date: yup
+          .string()
+          .required(t("commons.validations.requiredField")),
+      })
+    ),
+  });
+};

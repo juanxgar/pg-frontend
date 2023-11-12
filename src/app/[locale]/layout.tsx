@@ -5,6 +5,7 @@ import { es } from "@/translations";
 import { NextAuthProvider } from "../providers";
 import { Layout } from "@/components";
 import { Locale } from "@/types";
+import { DatePickerProvider } from "../dateProvider";
 
 interface Props {
   children: ReactNode;
@@ -51,7 +52,9 @@ export default function LocaleLayout(props: Props): ReactElement {
       >
         <NextIntlClientProvider locale={params.locale} messages={messages}>
           <NextAuthProvider>
-            <Layout params={{ locale: params.locale }}>{children}</Layout>
+            <DatePickerProvider params={{ locale: params.locale }}>
+              <Layout params={{ locale: params.locale }}>{children}</Layout>
+            </DatePickerProvider>
           </NextAuthProvider>
         </NextIntlClientProvider>
       </body>

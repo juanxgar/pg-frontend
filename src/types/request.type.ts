@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 export type SignInRequest = {
   email?: string;
   password?: string;
@@ -130,6 +132,15 @@ export type LocationDetailParams = {
   limit?: number;
 };
 
+export type FormikRotationCreation = {
+  group_id: number;
+  location_id: number;
+  start_date: Moment | null;
+  finish_date: Moment | null;
+  semester: number;
+  specialities: Array<RotationSpecialityCreationBody>;
+};
+
 export type RotationBody = {
   group_id: number;
   location_id: number;
@@ -170,4 +181,38 @@ export type RotationFilterParams = {
 export type UpdateRotationRequest = {
   rotation_id: string;
   body: RotationUpdateBody;
+};
+
+export type RotationDateCreationBody = {
+  rotation_id: number;
+  student_user_id: number;
+  rotation_dates: Array<RotationDateCreationDatesBody>;
+};
+
+export type RotationDateCreationDatesBody = {
+  rotation_speciality_id: number;
+  start_date: string;
+  finish_date: string;
+};
+
+export type StudentRotationDatesParams = {
+  rotationId: string;
+  studentId: string;
+};
+
+export type FormikRotationDateCreation = {
+  rotation_id: number;
+  student_user_id: number;
+  rotation_dates: Array<FormikRotationDateCreationDates>;
+};
+
+export type FormikRotationDateCreationDates = {
+  rotation_speciality_id: number;
+  start_date: Moment | null;
+  finish_date: Moment | null;
+};
+
+export type FormikRotationDates = {
+  start_date: Moment | null;
+  finish_date: Moment | null;
 };

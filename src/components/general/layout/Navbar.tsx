@@ -158,7 +158,7 @@ export function Navbar(props: Props): ReactElement {
                     : () => router.push(`/${locale}/${pathname}`)
                 }
                 selected={
-                  actualPathname === `/${locale}${pathname}` ? true : false
+                  actualPathname === `/${locale}${pathname}`
                 }
               >
                 <ListItemIcon sx={{ color: "#048014" }}>{icon()}</ListItemIcon>
@@ -188,8 +188,6 @@ export function Navbar(props: Props): ReactElement {
                         <ListItemButton
                           selected={
                             actualPathname === `/${locale}${pathname}`
-                              ? true
-                              : false
                           }
                           onClick={() => router.push(`/${locale}/${pathname}`)}
                         >

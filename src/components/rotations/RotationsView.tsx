@@ -12,6 +12,7 @@ import {
   RotationsTable,
   RotationCreation,
   RotationUpdate,
+  CreateButtonOuted,
 } from "@/components";
 import { RotationSearchSchema } from "@/schemas";
 import {
@@ -605,6 +606,14 @@ export function RotationsView(props: Props): ReactElement {
           )}
 
           <Grid item lg={12} xs={9} marginTop="20px" marginBottom="10px">
+            <CreateButtonOuted
+              disabled={disabledButtons}
+              onClick={() => {
+                router.push(
+                  `/${locale}/admin/rotations/${rotation.rotation_id}`
+                );
+              }}
+            />
             <EditButtonOuted
               disabled={disabledButtons}
               onClick={() => {

@@ -5,6 +5,21 @@ export type SignInRequest = {
   password?: string;
 };
 
+export type RecoverPasswordRequest = {
+  email: string;
+};
+
+export type NewPasswordRequest = {
+  resetPasswordToken: string;
+  password: string;
+};
+
+export type FormikNewPasswordRequest = {
+  resetPasswordToken: string;
+  password: string;
+  password2: string;
+};
+
 export type UserFilterParams = {
   name?: string;
   code?: string;

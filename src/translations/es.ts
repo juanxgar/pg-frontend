@@ -56,6 +56,8 @@ export const es = {
     studentsTitle: "Gestión de estudiantes",
     email: "Correo electrónico",
     password: "Contraseña",
+    password2: "Repita la contraseña",
+    samePasswords: "Las contraseñas no coinciden",
     validations: {
       validEmail: "Debes ingresar un email válido",
       maxSize: "Tamaño máximo para digitar: ",
@@ -126,5 +128,13 @@ export const es = {
     dates: "Fechas",
     updateDates: "Actualización fechas",
     studentName: "Nombre estudiante",
+  },
+  recoverPassword: {
+    recoverPassword: "Recuperación de contraseña",
+    send: "Enviar",
+    sendEmail: "Recibirás un correo de restablecimiento si estás registrado",
+    newPasswordMessage:
+      "Digite el código de restablecimiento y su nueva contraseña",
+    recoverToken: "Código restablecimiento",
   },
 };

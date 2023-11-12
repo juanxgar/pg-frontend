@@ -65,3 +65,13 @@ export type RotationDatesStudents = {
   start_date: string;
   finish_date: string;
 };
+
+export type AuthResponse = {
+  data: MessageResult;
+};
+
+export type AuthErrorResponse = {
+  response: {
+    data: ErrorResult;
+  };
+};

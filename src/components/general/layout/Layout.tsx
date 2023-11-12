@@ -33,7 +33,11 @@ export function Layout(props: Props): ReactElement {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      if (pathname != `/${params.locale}`) {
+      if (
+        pathname != `/${params.locale}` &&
+        pathname != `/${params.locale}/auth/recover-password` &&
+        pathname != `/${params.locale}/auth/new-password`
+      ) {
         setShowLayout(false);
         redirect(`/${props.params.locale}`);
       } else {

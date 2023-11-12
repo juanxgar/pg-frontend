@@ -49,6 +49,9 @@ export class Http {
         return Promise.resolve(response.data);
       },
       function (error) {
+        if (error.response.status === 400) {
+          return Promise.reject(error.response.data);
+        }
         return Promise.reject(error.response);
       }
     );

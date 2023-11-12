@@ -1,4 +1,4 @@
-import { SpecialityItem } from "./entities.type";
+import { RotationSpecialityItem, SpecialityItem } from "./entities.type";
 
 export type PaginatedResult<T> = {
   data: T[];
@@ -38,6 +38,30 @@ export type LocationDetailItem = {
 };
 
 export type DatesRotationDatesResult = {
+  start_date: string;
+  finish_date: string;
+};
+
+export type UsedRotationDatesBySpeciality = {
+  rotation_speciality_id: number;
+  used_dates: Array<DatesRotationDatesResult>;
+};
+
+export type StudentRotationDatesResult = DatesRotationDatesResult & {
+  rotation_id: number;
+  rotation_speciality: RotationSpecialityItem;
+};
+
+export type StudentRotation = {
+  student_user_id: number;
+  name: string;
+  lastname: string;
+  rotation_dates?: Array<RotationDatesStudents>;
+};
+
+export type RotationDatesStudents = {
+  rotation_date_id: number;
+  speciality?: SpecialityItem;
   start_date: string;
   finish_date: string;
 };

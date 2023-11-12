@@ -12,6 +12,7 @@ import {
   RotationsTable,
   RotationCreation,
   RotationUpdate,
+  CreateButtonOuted,
 } from "@/components";
 import { RotationSearchSchema } from "@/schemas";
 import {
@@ -42,6 +43,7 @@ import React, {
 } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useGroup, useLocation, useRotation } from "@/hooks";
+import { useRouter } from "next/navigation";
 
 interface Props {
   locale: string;
@@ -55,6 +57,8 @@ export function RotationsView(props: Props): ReactElement {
   const { useAllLocations } = useLocation();
   const { useAllRotationsWithPagination, useDeleteRotation, errorStatus } =
     useRotation();
+
+  const router = useRouter();
 
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
@@ -602,6 +606,14 @@ export function RotationsView(props: Props): ReactElement {
           )}
 
           <Grid item lg={12} xs={9} marginTop="20px" marginBottom="10px">
+            <CreateButtonOuted
+              disabled={disabledButtons}
+              onClick={() => {
+                router.push(
+                  `/${locale}/admin/rotations/${rotation.rotation_id}`
+                );
+              }}
+            />
             <EditButtonOuted
               disabled={disabledButtons}
               onClick={() => {

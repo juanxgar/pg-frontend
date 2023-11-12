@@ -121,5 +121,10 @@ export const es = {
     numberOfWeeks: "Número de semanas",
     rotationCreation: "Creación de rotación",
     rotationUpdate: "Actualización de rotación",
+    rotationDateCreation: "Creación fechas rotación",
+    rotationDate: "Fechas rotación",
+    dates: "Fechas",
+    updateDates: "Actualización fechas",
+    studentName: "Nombre estudiante",
   },
 };

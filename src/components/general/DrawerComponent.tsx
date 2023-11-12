@@ -10,6 +10,7 @@ interface Props {
   children: ReactElement;
   title: string;
   isLoading?: boolean;
+  isCreationDate?: boolean;
 }
 
 const styleCloseButton = {
@@ -27,14 +28,16 @@ const styleCloseButton = {
 };
 
 export function DrawerComponent(props: Props): ReactElement {
-  const { toggleDrawer, open, children, title, isLoading } = props;
+  const { toggleDrawer, open, children, title, isLoading, isCreationDate } =
+    props;
 
   return (
     <DrawerStyled
       anchor="right"
       open={open}
       onClose={toggleDrawer}
-      sx={{ backdropFilter: "blur(12.5px)" }}
+      variant={!isCreationDate ? "temporary" : "persistent"}
+      sx={{ backdropFilter: !isCreationDate ? "blur(12.5px)" : "" }}
     >
       <Box sx={styleCloseButton}>
         <IconButton

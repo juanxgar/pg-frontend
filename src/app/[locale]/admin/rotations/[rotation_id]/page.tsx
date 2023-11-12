@@ -1,12 +1,11 @@
 "use client";
-import { LinearProgressComponent, RotationDateCreation } from "@/components";
+import { LinearProgressComponent, RotationDateView } from "@/components";
 import { ReactElement, useState } from "react";
-import { Locale } from "@/types";
+import { LocaleRotation } from "@/types";
 import { Box } from "@mui/material";
 
 interface Props {
-  params: Locale;
-  rotation_id: string;
+  params: LocaleRotation;
 }
 
 export default function Page(props: Props): ReactElement {
@@ -18,7 +17,11 @@ export default function Page(props: Props): ReactElement {
     <>
       {isLoading && <LinearProgressComponent />}
       <Box sx={{ width: "100%", padding: "20px" }}>
-        <RotationDateCreation locale={params.locale} setLoading={setLoading} />
+        <RotationDateView
+          locale={params.locale}
+          setLoading={setLoading}
+          rotation_id={params.rotation_id}
+        />
       </Box>
     </>
   );

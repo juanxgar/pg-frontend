@@ -107,7 +107,8 @@ export const useGroup = () => {
   };
 
   const useSpecificGroup = (
-    group_id: string
+    group_id: string,
+    enabled?: boolean
   ): UseQueryResult<GroupItem, unknown> => {
     return useQuery(
       ["specific_group", group_id],
@@ -115,6 +116,7 @@ export const useGroup = () => {
       {
         refetchOnWindowFocus: false,
         retry: false,
+        enabled: enabled ? true : false,
       }
     );
   };

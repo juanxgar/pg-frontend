@@ -259,8 +259,8 @@ export function RotationCreation(props: Props): ReactElement {
       dataDates.forEach((d: DatesRotationDatesResult) => {
         if (
           date.isBetween(
-            moment(d.start_date, "DD-MM-YYYY").subtract(1, "d"),
-            moment(d.finish_date, "DD-MM-YYYY").add(1, "d")
+            moment(d.start_date, "DD-MM-YYYY"),
+            moment(d.finish_date, "DD-MM-YYYY")
           )
         ) {
           disableDates.push(date);
@@ -557,7 +557,7 @@ export function RotationCreation(props: Props): ReactElement {
                 touchedNumberWeeks && t("commons.validations.requiredField")
               }
               onInput={(e: ChangeEvent<HTMLInputElement>) => {
-                e.target.value = Math.max(0, parseInt(e.target.value))
+                e.target.value = Math.max(2, parseInt(e.target.value))
                   .toString()
                   .slice(0, 2);
               }}

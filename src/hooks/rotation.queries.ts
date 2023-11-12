@@ -9,6 +9,11 @@ import {
   RotationCreationBody,
   UpdateRotationRequest,
   DatesRotationDatesResult,
+  StudentRotationDatesParams,
+  StudentRotationDatesResult,
+  UsedRotationDatesBySpeciality,
+  RotationDateCreationBody,
+  StudentRotation,
 } from "@/types";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -52,6 +57,27 @@ export const useRotation = () => {
       mutationKey: ["add-rotation"],
       mutationFn: (data: RotationCreationBody) =>
         RotationService.createRotation(data),
+      retry: false,
+      onError(err: ErrorResultQuery) {
+        if (err.status === 401) {
+          setErrorStatus(401);
+          setTimeout(() => {
+            signOut();
+          }, 3000);
+        }
+      },
+    });
+  };
+
+  const useCreateDateRotation = (): UseMutationResult<
+    MessageResult,
+    ErrorResultQuery,
+    RotationDateCreationBody
+  > => {
+    return useMutation({
+      mutationKey: ["add-date-rotation"],
+      mutationFn: (data: RotationDateCreationBody) =>
+        RotationService.createDateRotation(data),
       retry: false,
       onError(err: ErrorResultQuery) {
         if (err.status === 401) {
@@ -116,13 +142,72 @@ export const useRotation = () => {
     );
   };
 
+  const useDatesRotations = (
+    rotation_id: string
+  ): UseQueryResult<Array<DatesRotationDatesResult>, unknown> => {
+    return useQuery(
+      ["dates_rotation", rotation_id],
+      () => RotationService.getDatesRotations(rotation_id),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+      }
+    );
+  };
+
+  const useUsedDatesFromSpecialities = (
+    rotation_id: string
+  ): UseQueryResult<Array<UsedRotationDatesBySpeciality>, unknown> => {
+    return useQuery(
+      ["used_dates_specialities", rotation_id],
+      () => RotationService.getUsedDatesFromSpecialities(rotation_id),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        enabled: false,
+      }
+    );
+  };
+
+  const useStudentRotationDates = (
+    params: StudentRotationDatesParams
+  ): UseQueryResult<Array<StudentRotationDatesResult>, unknown> => {
+    return useQuery(
+      ["used_dates_student", params],
+      () => RotationService.getDatesFromStudent(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        enabled: false,
+      }
+    );
+  };
+
+  const useStudentsRotationDates = (
+    rotation_id: string
+  ): UseQueryResult<Array<StudentRotation>, unknown> => {
+    return useQuery(
+      ["used_dates_students", rotation_id],
+      () => RotationService.getDatesFromStudents(rotation_id),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+      }
+    );
+  };
+
   return {
     errorStatus,
     useAllRotationsWithPagination,
     useSpecificRotation,
     useCreateRotation,
+    useCreateDateRotation,
     useUpdateRotation,
     useDeleteRotation,
     useUsedDatesRotations,
+    useDatesRotations,
+    useUsedDatesFromSpecialities,
+    useStudentRotationDates,
+    useStudentsRotationDates,
   };
 };

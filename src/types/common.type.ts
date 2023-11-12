@@ -41,6 +41,11 @@ export type LocaleLocation = {
   location_id: string;
 };
 
+export type LocaleRotation = {
+  locale: string;
+  rotation_id: string;
+};
+
 export type StudentGroupItem = {
   user_id: number;
   name: string;

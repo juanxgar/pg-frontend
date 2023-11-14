@@ -118,7 +118,6 @@ export function EvaluationsView(props: Props): ReactElement {
 
   useEffect(() => {
     if (!isLoadingUser && dataUser) {
-      console.log(dataUser);
       if (dataUser.role === "Estudiante") {
         setStudent_user_id(dataUser.user_id as unknown as string);
         setInitialValues({

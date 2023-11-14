@@ -14,7 +14,6 @@ export function CleanSearchButton(props: Props): ReactElement {
   return (
     <Button
       variant="contained"
-      type="submit"
       color="inherit"
       startIcon={<ClearAll />}
       sx={{

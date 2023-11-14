@@ -60,7 +60,7 @@ export function GroupUpdate(props: Props): ReactElement {
     data?: GroupItem;
     isLoading: boolean;
     isSuccess: boolean;
-  } = useSpecificGroup(group_id);
+  } = useSpecificGroup(group_id, true);
 
   const [initialValues, setInitialValues] = useState<GroupCreationBody>({
     name: "",

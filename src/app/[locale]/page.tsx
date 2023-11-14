@@ -231,7 +231,7 @@ export default function Page(props: Props): ReactElement {
                           <LinkMaterial
                             style={{ cursor: "pointer" }}
                             variant="body2"
-                            href="/auth/recover"
+                            href={`${params.locale}/auth/recover-password`}
                           >
                             {t("login.forgotPassword")}
                           </LinkMaterial>

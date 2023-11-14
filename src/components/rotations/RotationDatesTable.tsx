@@ -22,9 +22,17 @@ interface Props {
   dataDates?: Array<DatesRotationDatesResult>;
   dataStudents?: Array<StudentRotation>;
   setStudent: (student: StudentRotation) => void;
+  student_user_id?: string;
 }
 export function RotationDatesTable(props: Props): ReactElement {
-  const { dataDates, dataStudents, checked, handleCheck, setStudent } = props;
+  const {
+    dataDates,
+    dataStudents,
+    checked,
+    handleCheck,
+    setStudent,
+    student_user_id,
+  } = props;
 
   return (
     <>
@@ -50,34 +58,70 @@ export function RotationDatesTable(props: Props): ReactElement {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataStudents?.map((student: StudentRotation, index: number) => (
-              <TableRow
-                key={student.student_user_id}
-                selected={checked[index]}
-                onClick={() => {
-                  handleCheck(index);
-                  setStudent({
-                    student_user_id: student.student_user_id,
-                    name: student.name,
-                    lastname: student.lastname,
-                  });
-                }}
-              >
-                <StyledTableCell align="center">
-                  {student.name} {student.lastname}
-                </StyledTableCell>
-                {student.rotation_dates?.map(
-                  (date: RotationDatesStudents, i: number) => (
-                    <StyledTableCell
-                      key={`${date.rotation_date_id}_${i}`}
-                      align="center"
-                    >
-                      {date.speciality?.description}
+            {dataStudents?.map((student: StudentRotation, index: number) => {
+              if (
+                student_user_id &&
+                student.student_user_id === +student_user_id
+              ) {
+                return (
+                  <TableRow
+                    key={student.student_user_id}
+                    selected={checked[index]}
+                    onClick={() => {
+                      handleCheck(index);
+                      setStudent({
+                        student_user_id: student.student_user_id,
+                        name: student.name,
+                        lastname: student.lastname,
+                      });
+                    }}
+                  >
+                    <StyledTableCell align="center">
+                      {student.name} {student.lastname}
                     </StyledTableCell>
-                  )
-                )}
-              </TableRow>
-            ))}
+                    {student.rotation_dates?.map(
+                      (date: RotationDatesStudents, i: number) => (
+                        <StyledTableCell
+                          key={`${date.rotation_date_id}_${i}`}
+                          align="center"
+                        >
+                          {date.speciality?.description}
+                        </StyledTableCell>
+                      )
+                    )}
+                  </TableRow>
+                );
+              } else if (!student_user_id) {
+                return (
+                  <TableRow
+                    key={student.student_user_id}
+                    selected={checked[index]}
+                    onClick={() => {
+                      handleCheck(index);
+                      setStudent({
+                        student_user_id: student.student_user_id,
+                        name: student.name,
+                        lastname: student.lastname,
+                      });
+                    }}
+                  >
+                    <StyledTableCell align="center">
+                      {student.name} {student.lastname}
+                    </StyledTableCell>
+                    {student.rotation_dates?.map(
+                      (date: RotationDatesStudents, i: number) => (
+                        <StyledTableCell
+                          key={`${date.rotation_date_id}_${i}`}
+                          align="center"
+                        >
+                          {date.speciality?.description}
+                        </StyledTableCell>
+                      )
+                    )}
+                  </TableRow>
+                );
+              }
+            })}
           </TableBody>
         </Table>
       </TableContainer>

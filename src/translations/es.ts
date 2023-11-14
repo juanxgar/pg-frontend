@@ -9,6 +9,7 @@ export const es = {
     },
     home: "Inicio",
     users: "Usuarios",
+    student: "Estudiante",
     students: "Estudiantes",
     professor: "Docente",
     professors: "Docentes",
@@ -36,6 +37,13 @@ export const es = {
     updateForm: "Formulario de edición",
     back: "Regresar",
     select: "Seleccione",
+    evaluations: "Evaluaciones",
+    excellent: "Excelente",
+    veryGood: "Muy bueno",
+    good: "Bueno",
+    regular: "Regular",
+    deficient: "Deficiente",
+    save: "Guardar",
   },
   modals: {
     deleteRegister: "¿Está seguro de eliminar el registro?",
@@ -56,6 +64,8 @@ export const es = {
     studentsTitle: "Gestión de estudiantes",
     email: "Correo electrónico",
     password: "Contraseña",
+    password2: "Repita la contraseña",
+    samePasswords: "Las contraseñas no coinciden",
     validations: {
       validEmail: "Debes ingresar un email válido",
       maxSize: "Tamaño máximo para digitar: ",
@@ -126,5 +136,18 @@ export const es = {
     dates: "Fechas",
     updateDates: "Actualización fechas",
     studentName: "Nombre estudiante",
+  },
+  recoverPassword: {
+    recoverPassword: "Recuperación de contraseña",
+    send: "Enviar",
+    sendEmail: "Recibirás un correo de restablecimiento si estás registrado",
+    newPasswordMessage:
+      "Digite el código de restablecimiento y su nueva contraseña",
+    recoverToken: "Código restablecimiento",
+  },
+  evaluations: {
+    currentRotations: "¿Rotaciones actuales?",
+    commentsProfessor: "Comentarios docente",
+    commentsStudent: "Comentarios estudiante",
   },
 };

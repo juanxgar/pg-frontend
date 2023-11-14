@@ -4,7 +4,9 @@ import {
   GroupCreationBody,
   GroupDetailRequest,
   GroupFilterParams,
+  GroupInRotation,
   GroupItem,
+  GroupsInRotationParams,
   MessageResult,
   PaginatedResult,
   UpdateGroupRequest,
@@ -28,6 +30,12 @@ class GroupsServices {
     params: GroupFilterParams
   ): Promise<Array<GroupItem> | ErrorResult> {
     return this.http.get(`/groups`, { params });
+  }
+
+  getGroupsInRotation(
+    params: GroupsInRotationParams
+  ): Promise<Array<GroupInRotation> | ErrorResult> {
+    return this.http.get(`/groups/in-rotation`, { params });
   }
 
   getSpecificGroup(group_id: string): Promise<GroupItem | ErrorResult> {

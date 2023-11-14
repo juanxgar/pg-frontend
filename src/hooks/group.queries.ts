@@ -10,6 +10,8 @@ import {
   UpdateGroupRequest,
   GroupDetailItem,
   GroupDetailRequest,
+  GroupsInRotationParams,
+  GroupInRotation,
 } from "@/types";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -50,6 +52,27 @@ export const useGroup = () => {
     return useQuery(
       ["groups-list", params],
       () => GroupService.getAllGroups(params),
+      {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError(err: ErrorResponse) {
+          if (err.status === 401) {
+            setErrorStatus(401);
+            setTimeout(() => {
+              signOut();
+            }, 3000);
+          }
+        },
+      }
+    );
+  };
+
+  const useGroupsInRotation = (
+    params: GroupsInRotationParams
+  ): UseQueryResult<Array<GroupInRotation>, unknown> => {
+    return useQuery(
+      ["groups-list", params],
+      () => GroupService.getGroupsInRotation(params),
       {
         refetchOnWindowFocus: false,
         retry: false,
@@ -168,5 +191,6 @@ export const useGroup = () => {
     useDeleteGroup,
     useGroupDetailWithPagination,
     useAllGroups,
+    useGroupsInRotation,
   };
 };

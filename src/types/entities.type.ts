@@ -78,3 +78,14 @@ export type RotationDateItem = {
   student: UserItem;
   rotation_speciality: RotationSpecialityItem;
 };
+
+export type DescriptionExamItem = {
+  description_exam_id: number;
+  description: string;
+  subdescription_exam: Array<SubdescriptionExamItem>;
+};
+
+export type SubdescriptionExamItem = {
+  subdescription_exam_id: number;
+  subdescription: string;
+};

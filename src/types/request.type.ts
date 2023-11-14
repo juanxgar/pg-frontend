@@ -5,6 +5,21 @@ export type SignInRequest = {
   password?: string;
 };
 
+export type RecoverPasswordRequest = {
+  email: string;
+};
+
+export type NewPasswordRequest = {
+  resetPasswordToken: string;
+  password: string;
+};
+
+export type FormikNewPasswordRequest = {
+  resetPasswordToken: string;
+  password: string;
+  password2: string;
+};
+
 export type UserFilterParams = {
   name?: string;
   code?: string;
@@ -44,6 +59,12 @@ export type GroupFilterParams = {
   state?: boolean;
   page?: number;
   limit?: number;
+  user_id?: string;
+};
+
+export type GroupsInRotationParams = {
+  isCurrently?: boolean;
+  student_user_id?: string;
 };
 
 export type GroupCreationBody = {
@@ -176,6 +197,7 @@ export type RotationFilterParams = {
   state?: boolean;
   page?: number;
   limit?: number;
+  user_id?: number;
 };
 
 export type UpdateRotationRequest = {
@@ -215,4 +237,60 @@ export type FormikRotationDateCreationDates = {
 export type FormikRotationDates = {
   start_date: Moment | null;
   finish_date: Moment | null;
+};
+
+export type EvaluationParams = {
+  rotation_speciality_id: string;
+  student_user_id: string;
+};
+
+export type FormikEvaluationSearch = {
+  group_id: string;
+  student_user_id: string;
+  date: string;
+  rotation_speciality_id: string;
+};
+
+export type FormikEvaluationCreation = {
+  professor_comments?: string;
+  student_comments?: string;
+  student_grades?: Array<FormikStudentGrades>;
+};
+
+export type FormikStudentGrades = {
+  subdescription_exam_id?: number;
+  student_grade_id?: number;
+  grade_value: number;
+};
+
+export type EvaluationBody = {
+  professor_comments: string;
+};
+
+export type EvaluationCreationBody = EvaluationBody & {
+  rotation_speciality_id: number;
+  student_user_id: number;
+  student_grades: Array<StudentGradeCreationBody>;
+};
+
+export type EvaluationUpdateBody = EvaluationBody & {
+  student_comments: string;
+  student_grades: Array<StudentGradeUpdateBody>;
+};
+
+export type StudentGradeBody = {
+  grade_value: number;
+};
+
+export type StudentGradeCreationBody = StudentGradeBody & {
+  subdescription_exam_id: number;
+};
+
+export type StudentGradeUpdateBody = StudentGradeBody & {
+  student_grade_id: number;
+};
+
+export type UpdateEvaluationRequest = {
+  evaluation_id: string;
+  body: EvaluationUpdateBody;
 };

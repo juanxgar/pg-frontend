@@ -66,3 +66,9 @@ export type SpecialityRotationItem = {
   professor_name: string;
   number_weeks: number;
 };
+
+export type GradesColumn = {
+  id: number;
+  description: string;
+  value: string;
+};

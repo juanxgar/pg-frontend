@@ -75,3 +75,60 @@ export type AuthErrorResponse = {
     data: ErrorResult;
   };
 };
+
+export type GroupInRotation = {
+  group_id: number;
+  name: string;
+  professor_user: UserInRotation;
+  group_detail: Array<GroupDetailInRotation>;
+  rotation: Array<RotationInRotation>;
+};
+
+export type UserInRotation = {
+  user_id: number;
+  name: string;
+  lastname: string;
+};
+
+export type GroupDetailInRotation = {
+  user: UserInRotation;
+};
+
+export type RotationInRotation = {
+  rotation_id: number;
+  start_date: Date;
+  finish_date: Date;
+  location: LocationInRotation;
+  rotation_speciality: Array<RotationSpecialityInRotation>;
+};
+
+export type RotationSpecialityInRotation = {
+  rotation_speciality_id: number;
+  speciality: SpecialityInRotation;
+};
+
+export type SpecialityInRotation = {
+  description: string;
+};
+
+export type LocationInRotation = {
+  location_id: number;
+  name: string;
+};
+
+export type EvaluationCreatedResult = {
+  evaluation_id: number;
+  rotation_speciality_id: number;
+  rotation_date_id: number;
+  grade_value?: number;
+  professor_comments?: string;
+  student_comments?: string;
+  student_grade: Array<StudentGrade>;
+};
+
+export type StudentGrade = {
+  student_grade_id: number;
+  evaluation_id: number;
+  subdescription_exam_id: number;
+  grade_value: number;
+};

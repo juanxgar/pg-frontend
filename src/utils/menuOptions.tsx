@@ -2,6 +2,7 @@
 
 import { ReactElement } from "react";
 import {
+  Description,
   Home,
   LocalHospital,
   Loop,
@@ -53,8 +54,59 @@ export const MenuOptionsAdminEs: Array<MenuOptions> = [
     icon: (): ReactElement => <Loop />,
     items: [],
   },
+  {
+    name: "Evaluaciones",
+    pathname: "/admin/evaluations",
+    icon: (): ReactElement => <Description />,
+    items: [],
+  },
 ];
 
-export const MenuOptionsStudentEs: Array<MenuOptions> = [];
+export const MenuOptionsStudentEs: Array<MenuOptions> = [
+  {
+    name: "Inicio",
+    pathname: "/home",
+    icon: (): ReactElement => <Home />,
+    items: [],
+  },
 
-export const MenuOptionsProfessorEs: Array<MenuOptions> = [];
+  {
+    name: "Rotaciones",
+    pathname: "/student/rotations",
+    icon: (): ReactElement => <Loop />,
+    items: [],
+  },
+  {
+    name: "Evaluaciones",
+    pathname: "/student/evaluations",
+    icon: (): ReactElement => <Description />,
+    items: [],
+  },
+];
+
+export const MenuOptionsProfessorEs: Array<MenuOptions> = [
+  {
+    name: "Inicio",
+    pathname: "/home",
+    icon: (): ReactElement => <Home />,
+    items: [],
+  },
+  {
+    name: "Grupos",
+    pathname: "/professor/groups",
+    icon: (): ReactElement => <People />,
+    items: [],
+  },
+  {
+    name: "Rotaciones",
+    pathname: "/professor/rotations",
+    icon: (): ReactElement => <Loop />,
+    items: [],
+  },
+  {
+    name: "Evaluaciones",
+    pathname: "/professor/evaluations",
+    icon: (): ReactElement => <Description />,
+    items: [],
+  },
+];

@@ -9,6 +9,7 @@ export const es = {
     },
     home: "Inicio",
     users: "Usuarios",
+    student: "Estudiante",
     students: "Estudiantes",
     professor: "Docente",
     professors: "Docentes",
@@ -36,6 +37,13 @@ export const es = {
     updateForm: "Formulario de edición",
     back: "Regresar",
     select: "Seleccione",
+    evaluations: "Evaluaciones",
+    excellent: "Excelente",
+    veryGood: "Muy bueno",
+    good: "Bueno",
+    regular: "Regular",
+    deficient: "Deficiente",
+    save: "Guardar",
   },
   modals: {
     deleteRegister: "¿Está seguro de eliminar el registro?",
@@ -136,5 +144,10 @@ export const es = {
     newPasswordMessage:
       "Digite el código de restablecimiento y su nueva contraseña",
     recoverToken: "Código restablecimiento",
+  },
+  evaluations: {
+    currentRotations: "¿Rotaciones actuales?",
+    commentsProfessor: "Comentarios docente",
+    commentsStudent: "Comentarios estudiante",
   },
 };

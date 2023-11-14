@@ -31,17 +31,19 @@ import {
   UserItem,
 } from "@/types";
 import { useTranslations } from "next-intl";
-import { useGroup, useRotation } from "@/hooks";
+import { useGroup, useRotation, useUser } from "@/hooks";
 import moment from "moment";
 import { Theme, useTheme } from "@mui/material/styles";
 interface Props {
   locale: string;
   setLoading: (loading: boolean) => void;
   rotation_id: string;
+  isStudent?: boolean;
+  isProfessor?: boolean;
 }
 
 export function RotationDateView(props: Props): ReactElement {
-  const { locale, setLoading, rotation_id } = props;
+  const { locale, setLoading, rotation_id, isStudent, isProfessor } = props;
 
   const {
     useSpecificRotation,
@@ -51,6 +53,7 @@ export function RotationDateView(props: Props): ReactElement {
     useStudentsRotationDates,
   } = useRotation();
   const { useSpecificGroup } = useGroup();
+  const { useLoggedUser } = useUser();
 
   const t = useTranslations();
 
@@ -78,6 +81,24 @@ export function RotationDateView(props: Props): ReactElement {
   const [rotationDates, setRotationDates] = useState<
     Array<FormikRotationDateCreationDates>
   >([]);
+  const [student_user_id, setStudent_user_id] = useState<string>("");
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+  }: {
+    data: UserItem | undefined;
+    isLoading: boolean;
+    refetch: () => void;
+  } = useLoggedUser();
+
+  useEffect(() => {
+    if (!isLoadingUser && dataUser) {
+      if (dataUser.role === "Estudiante") {
+        setStudent_user_id(dataUser.user_id as unknown as string);
+      }
+    }
+  }, [isLoadingUser]);
 
   const {
     data: dataRotation,
@@ -304,7 +325,11 @@ export function RotationDateView(props: Props): ReactElement {
                     marginTop: { lg: "0px", xs: "10px" },
                   }}
                 >
-                  <PageTitle>{t("rotations.rotationDateCreation")}</PageTitle>
+                  <PageTitle>
+                    {isStudent || isProfessor
+                      ? "Rotaciones"
+                      : t("rotations.rotationDateCreation")}
+                  </PageTitle>
                 </Box>
               </Grid>
               <Grid container>
@@ -363,10 +388,12 @@ export function RotationDateView(props: Props): ReactElement {
                 </Grid>
               </Grid>
               <Grid item lg={12} xs={12}>
-                <EditButtonOuted
-                  disabled={disabledButtons}
-                  onClick={toggleDrawer}
-                />
+                {!isStudent && !isProfessor && (
+                  <EditButtonOuted
+                    disabled={disabledButtons}
+                    onClick={toggleDrawer}
+                  />
+                )}
               </Grid>
             </Grid>
             {!isLoadingDates && !isLoadingGroup && (
@@ -376,6 +403,7 @@ export function RotationDateView(props: Props): ReactElement {
                 setStudent={setStudent}
                 dataDates={dataDates}
                 dataStudents={dataStudentsDates}
+                student_user_id={student_user_id}
               />
             )}
           </>

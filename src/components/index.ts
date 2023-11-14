@@ -63,3 +63,7 @@ export * from "./general/InputDateComponent";
 export * from "./general/CreateButtonOuted";
 export * from "./rotations/RotationDatesTable";
 export * from "./rotations/RotationDateCreation";
+export * from "./evaluations/EvaluationsView";
+export * from "./evaluations/EvaluationForm";
+export * from "./evaluations/GradesTable";
+export * from "./general/SaveButton";

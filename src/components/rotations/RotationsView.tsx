@@ -22,6 +22,7 @@ import {
   Navigator,
   PaginatedResult,
   RotationItem,
+  UserItem,
 } from "@/types";
 import {
   AlertColor,
@@ -42,21 +43,24 @@ import React, {
   useState,
 } from "react";
 import { useTheme } from "@mui/material/styles";
-import { useGroup, useLocation, useRotation } from "@/hooks";
+import { useGroup, useLocation, useRotation, useUser } from "@/hooks";
 import { useRouter } from "next/navigation";
 
 interface Props {
   locale: string;
   setLoading: (loading: boolean) => void;
+  isStudent?: boolean;
+  isProfessor?: boolean;
 }
 
 export function RotationsView(props: Props): ReactElement {
-  const { locale, setLoading } = props;
+  const { locale, setLoading, isStudent, isProfessor } = props;
   const t = useTranslations();
   const { useAllGroups } = useGroup();
   const { useAllLocations } = useLocation();
   const { useAllRotationsWithPagination, useDeleteRotation, errorStatus } =
     useRotation();
+  const { useLoggedUser } = useUser();
 
   const router = useRouter();
 
@@ -82,6 +86,8 @@ export function RotationsView(props: Props): ReactElement {
   const [isCreation, setCreation] = useState<boolean>(false);
 
   const [disabledButtons, setDisabledButtons] = useState<boolean>(true);
+
+  const [user_id, setUser_id] = useState<string>("");
 
   const [rotation, setRotation] = useState<RotationItem>({
     rotation_id: 0,
@@ -155,6 +161,24 @@ export function RotationsView(props: Props): ReactElement {
   });
 
   const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+  }: {
+    data: UserItem | undefined;
+    isLoading: boolean;
+    refetch: () => void;
+  } = useLoggedUser();
+
+  useEffect(() => {
+    if (!isLoadingUser && dataUser) {
+      if (dataUser.role === "Estudiante") {
+        setUser_id(dataUser.user_id as unknown as string);
+        refetch();
+      }
+    }
+  }, [isLoadingUser]);
+
+  const {
     data,
     isLoading,
     refetch,
@@ -170,6 +194,7 @@ export function RotationsView(props: Props): ReactElement {
     semester: semesterDebounce,
     page,
     limit,
+    user_id: +user_id,
   });
 
   const {
@@ -181,6 +206,7 @@ export function RotationsView(props: Props): ReactElement {
     refetch: () => void;
   } = useAllGroups({
     state: true,
+    user_id: user_id,
   });
 
   const {
@@ -594,7 +620,7 @@ export function RotationsView(props: Props): ReactElement {
               }}
             />
           </Grid>
-          {lg && (
+          {lg && !isStudent && !isProfessor && (
             <Grid item lg={2} xs={12}>
               <CreateButton
                 onClick={() => {
@@ -610,23 +636,31 @@ export function RotationsView(props: Props): ReactElement {
               disabled={disabledButtons}
               onClick={() => {
                 router.push(
-                  `/${locale}/admin/rotations/${rotation.rotation_id}`
+                  isStudent
+                    ? `/${locale}/student/rotations/${rotation.rotation_id}`
+                    : isProfessor
+                    ? `/${locale}/professor/rotations/${rotation.rotation_id}`
+                    : `/${locale}/admin/rotations/${rotation.rotation_id}`
                 );
               }}
             />
-            <EditButtonOuted
-              disabled={disabledButtons}
-              onClick={() => {
-                toggleDrawer();
-                setCreation(false);
-              }}
-            />
-            <DeleteButton
-              disabled={disabledButtons}
-              onClick={handleCloseModalDelete}
-            />
+            {!isStudent && !isProfessor && (
+              <>
+                <EditButtonOuted
+                  disabled={disabledButtons}
+                  onClick={() => {
+                    toggleDrawer();
+                    setCreation(false);
+                  }}
+                />
+                <DeleteButton
+                  disabled={disabledButtons}
+                  onClick={handleCloseModalDelete}
+                />
+              </>
+            )}
           </Grid>
-          {!lg && (
+          {!lg && !isStudent && !isProfessor && (
             <Grid item lg={12} xs={3} marginTop="20px" marginBottom="10px">
               <CreateButton
                 onClick={() => {
